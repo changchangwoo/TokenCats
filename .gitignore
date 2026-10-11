@@ -1,0 +1,25 @@
+# Build output
+build/
+.build/
+DerivedData/
+
+# Xcode and SwiftPM local state (shared schemes and Package.resolved stay tracked)
+xcuserdata/
+*.xcuserstate
+.swiftpm/
+
+# Editors and macOS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*~
+
+# Pixel-art editor projects: the exported PNG strips in art-src/ are the source of truth
+*.pxo
+*.aseprite
+
+# Local agent and tool state
+.claude/settings.local.json
+.context/
+.superpowers/

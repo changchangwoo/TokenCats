@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "catBox": {
+    "price": 10000000,
+    "tiers": [
+      { "id": "common", "name": { "en": "Common", "ko": "흔함" }, "weight": 50, "coats": ["black", "cheese", "split", "tabby"] },
+      { "id": "uncommon", "name": { "en": "Uncommon", "ko": "드묾" }, "weight": 30, "coats": ["white", "tuxedo", "cream"] },
+      { "id": "rare", "name": { "en": "Rare", "ko": "희귀" }, "weight": 15, "coats": ["siamese"] },
+      { "id": "unique", "name": { "en": "Unique", "ko": "유니크" }, "weight": 5, "coats": ["foxfire"] }
+    ],
+    "showcase": ["black", "siamese", "cream", "tabby", "foxfire", "cheese", "tuxedo", "split"]
+  },
+  "backgrounds": [
+    { "id": "cozy", "price": 0 },
+    { "id": "night", "price": 10000000 },
+    { "id": "sakura", "price": 10000000 },
+    { "id": "forest", "price": 10000000 },
+    { "id": "halloween", "price": 10000000 }
+  ],
+  "props": [
+    { "id": "yarnBall", "price": 1000000 },
+    { "id": "hideCrate", "price": 4000000 },
+    { "id": "catTower", "price": 8000000 }
+  ]
+}

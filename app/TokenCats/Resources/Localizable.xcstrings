@@ -1,0 +1,4866 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "%.1f s": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%.1f초"
+          }
+        }
+      }
+    },
+    "%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@"
+          }
+        }
+      }
+    },
+    "%@ %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@"
+          }
+        }
+      }
+    },
+    "%@ %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %lld"
+          }
+        }
+      }
+    },
+    "%@ / %@ churu": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ / %@ 츄르"
+          }
+        }
+      }
+    },
+    "%@ / %@ churu · %@ more needed": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ / %2$@ 츄르 · %3$@ 더 필요"
+          }
+        }
+      }
+    },
+    "%@ background, %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 배경, %@"
+          }
+        }
+      }
+    },
+    "%@ churu": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 츄르"
+          }
+        }
+      }
+    },
+    "%@ churu short": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "츄르가 %@ 부족해요"
+          }
+        }
+      }
+    },
+    "%@ hook removed": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 훅 제거됨"
+          }
+        }
+      }
+    },
+    "%@ purchased": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 구매 완료"
+          }
+        }
+      }
+    },
+    "%@ room preview": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 방 미리보기"
+          }
+        }
+      }
+    },
+    "%@ to your first adoption": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "첫 입양까지 %@"
+          }
+        }
+      }
+    },
+    "%@ tokens": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 토큰"
+          }
+        }
+      }
+    },
+    "%@ · %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %@"
+          }
+        }
+      }
+    },
+    "%@ · blinking paused": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · 깜빡임 멈춤"
+          }
+        }
+      }
+    },
+    "%@, %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, %@"
+          }
+        }
+      }
+    },
+    "%@: %@ tokens": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %@ 토큰"
+          }
+        }
+      }
+    },
+    "%lld cats": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld cat"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld cats"
+                }
+              }
+            }
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld마리"
+          }
+        }
+      }
+    },
+    "%lld cats in the room": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld cat in the room"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld cats in the room"
+                }
+              }
+            }
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "방 고양이 %lld마리"
+          }
+        }
+      }
+    },
+    "%lld day streak": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld day streak"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld day streak"
+                }
+              }
+            }
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld일 연속 사용"
+          }
+        }
+      }
+    },
+    "%lld days": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld day"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld days"
+                }
+              }
+            }
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld일"
+          }
+        }
+      }
+    },
+    "%lld hours old": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld hour old"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld hours old"
+                }
+              }
+            }
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld시간 전 값"
+          }
+        }
+      }
+    },
+    "%lld minutes old": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld minute old"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld minutes old"
+                }
+              }
+            }
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld분 전 값"
+          }
+        }
+      }
+    },
+    "%lld-hour": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld시간"
+          }
+        }
+      }
+    },
+    "1 cat per box": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "상자 하나에 한 마리"
+          }
+        }
+      }
+    },
+    "365-day graph in Statistics": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "통계 화면에 365일 잔디"
+          }
+        }
+      }
+    },
+    "365-day total": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "365일 합계"
+          }
+        }
+      }
+    },
+    "5-hour": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5시간"
+          }
+        }
+      }
+    },
+    "7 days by provider": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7일 제공자별"
+          }
+        }
+      }
+    },
+    "7-day chart in Statistics": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "통계 화면에 7일 차트"
+          }
+        }
+      }
+    },
+    "About": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "정보"
+          }
+        }
+      }
+    },
+    "Accent color": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "강조색"
+          }
+        }
+      }
+    },
+    "Active now": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지금 적용 중"
+          }
+        }
+      }
+    },
+    "Add card to README…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "README에 카드 넣기…"
+          }
+        }
+      }
+    },
+    "Add the cat room card to the top of your README?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "README 맨 위에 고양이 방 카드를 넣을까요?"
+          }
+        }
+      }
+    },
+    "Add to README": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "README에 넣기"
+          }
+        }
+      }
+    },
+    "Add to my README": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "README에 넣기"
+          }
+        }
+      }
+    },
+    "Added the card to your README": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "README에 카드를 넣었습니다"
+          }
+        }
+      }
+    },
+    "Adds one image line between <!-- tokencats:start --> and end. Nothing else is changed.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "<!-- tokencats:start --> 와 end 사이에 이미지 한 줄을 넣습니다. 다른 내용은 바꾸지 않습니다."
+          }
+        }
+      }
+    },
+    "Adopt": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "입양하기"
+          }
+        }
+      }
+    },
+    "Adopt: meet a new friend": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "입양하기: 새 친구를 만나요"
+          }
+        }
+      }
+    },
+    "Adoption": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "입양"
+          }
+        }
+      }
+    },
+    "Adoption box": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "입양 상자"
+          }
+        }
+      }
+    },
+    "Advanced": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "고급"
+          }
+        }
+      }
+    },
+    "After connecting, approve the hook with /hooks in Codex.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연결한 뒤 Codex에서 /hooks로 승인해 주세요."
+          }
+        }
+      }
+    },
+    "Agent activity graph for the last 365 days": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지난 365일 에이전트 활동 잔디"
+          }
+        }
+      }
+    },
+    "Agent limits": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "에이전트 한도"
+          }
+        }
+      }
+    },
+    "Agent usage limits": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "에이전트 사용 한도"
+          }
+        }
+      }
+    },
+    "Agents": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "에이전트"
+          }
+        }
+      }
+    },
+    "Agree and turn on": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "동의하고 켜기"
+          }
+        }
+      }
+    },
+    "All set!": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "준비 끝!"
+          }
+        }
+      }
+    },
+    "Already owned": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이미 가지고 있어요"
+          }
+        }
+      }
+    },
+    "Already placed": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이미 배치되어 있어요"
+          }
+        }
+      }
+    },
+    "Always": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "항상"
+          }
+        }
+      }
+    },
+    "An estimate at public API prices. It can differ from what a subscription bills, and usage of models without a known price is left out of the amount.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "공개 API 요금으로 환산한 추정치입니다. 구독 청구액과 다를 수 있으며, 가격을 알 수 없는 모델의 사용량은 금액에서 제외됩니다."
+          }
+        }
+      }
+    },
+    "Animation quality": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "애니메이션 품질"
+          }
+        }
+      }
+    },
+    "Applied the %@ background": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 배경을 적용했어요"
+          }
+        }
+      }
+    },
+    "Applies from the next Claude session": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "새 Claude 세션부터 적용됩니다"
+          }
+        }
+      }
+    },
+    "Apply": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "적용"
+          }
+        }
+      }
+    },
+    "Apply it from the collection": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "보관함에서 배경을 적용할 수 있어요"
+          }
+        }
+      }
+    },
+    "Auto-update": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "자동 갱신"
+          }
+        }
+      }
+    },
+    "Average per active day": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "활동일 평균"
+          }
+        }
+      }
+    },
+    "Back": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "뒤로"
+          }
+        }
+      }
+    },
+    "Back up here": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "여기에 백업"
+          }
+        }
+      }
+    },
+    "Backed up to %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "백업했습니다: %@"
+          }
+        }
+      }
+    },
+    "Backgrounds": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "배경"
+          }
+        }
+      }
+    },
+    "Backup": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "백업"
+          }
+        }
+      }
+    },
+    "Balanced (8 fps)": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "보통 (8fps)"
+          }
+        }
+      }
+    },
+    "Battery saver": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "배터리 절전"
+          }
+        }
+      }
+    },
+    "Black": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "검정"
+          }
+        }
+      }
+    },
+    "Blink now and then": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "가끔 눈 깜빡임"
+          }
+        }
+      }
+    },
+    "Bought the %@ background": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 배경을 샀어요"
+          }
+        }
+      }
+    },
+    "Building the graph…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "잔디 집계 중…"
+          }
+        }
+      }
+    },
+    "Built on boring.notch (GPL-3.0)": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "boring.notch 위에서 만들었습니다 (GPL-3.0)"
+          }
+        }
+      }
+    },
+    "Buy": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "구매"
+          }
+        }
+      }
+    },
+    "Buy %@?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@을 살까요?"
+          }
+        }
+      }
+    },
+    "Buy · %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "구매 · %@"
+          }
+        }
+      }
+    },
+    "Calico": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "삼색"
+          }
+        }
+      }
+    },
+    "Can't reach GitHub. Check your connection": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GitHub에 연결할 수 없어요. 인터넷 연결을 확인해 주세요"
+          }
+        }
+      }
+    },
+    "Cancel": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "취소"
+          }
+        }
+      }
+    },
+    "Card contents": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "카드에 넣을 항목"
+          }
+        }
+      }
+    },
+    "Card uploaded": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "카드를 올렸습니다"
+          }
+        }
+      }
+    },
+    "Cat room": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "고양이 방"
+          }
+        }
+      }
+    },
+    "Cat tower": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "캣타워"
+          }
+        }
+      }
+    },
+    "Cats %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "고양이 %lld"
+          }
+        }
+      }
+    },
+    "Cats, the churu ledger, and your backgrounds go back to a fresh start.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "고양이, 츄르 장부, 보유한 배경이 처음 상태로 돌아갑니다."
+          }
+        }
+      }
+    },
+    "Cats, the churu ledger, your collection, and display settings are stored in this folder.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "고양이, 츄르 장부, 보유 목록, 화면 설정이 이 폴더에 저장됩니다."
+          }
+        }
+      }
+    },
+    "Changes made in the file apply when Home is reopened. The notch height follows the sections that are on.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "홈을 다시 열면 파일에서 변경한 값도 적용됩니다. 켜진 영역에 맞춰 노치 높이가 바뀝니다."
+          }
+        }
+      }
+    },
+    "Check again": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다시 확인"
+          }
+        }
+      }
+    },
+    "Cheese": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "치즈"
+          }
+        }
+      }
+    },
+    "Choose this backup": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 백업 선택"
+          }
+        }
+      }
+    },
+    "Churu balance": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "보유 츄르"
+          }
+        }
+      }
+    },
+    "Churu calendar": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "츄르 달력"
+          }
+        }
+      }
+    },
+    "Churu counts the tokens you spend from now on.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "츄르는 지금부터 쓰는 토큰으로 쌓여요."
+          }
+        }
+      }
+    },
+    "Churu earned since the app was installed": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱 설치 후 적립한 츄르"
+          }
+        }
+      }
+    },
+    "Churu ledger": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "츄르 장부"
+          }
+        }
+      }
+    },
+    "Claude Code connected": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude Code 연결"
+          }
+        }
+      }
+    },
+    "Claude limits": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude 한도"
+          }
+        }
+      }
+    },
+    "Claude limits connected. They show from the next Claude response": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude 한도 연결됨. 다음 Claude 응답부터 표시됩니다"
+          }
+        }
+      }
+    },
+    "Claude limits disconnected; the original status line is back": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude 한도 연결을 해제하고 원래 상태줄로 되돌렸습니다"
+          }
+        }
+      }
+    },
+    "Claude status line": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude 상태줄"
+          }
+        }
+      }
+    },
+    "Close": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "닫기"
+          }
+        }
+      }
+    },
+    "Closed notch": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "닫힌 노치"
+          }
+        }
+      }
+    },
+    "Code to enter in the browser": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "브라우저에 입력할 코드"
+          }
+        }
+      }
+    },
+    "Codex connected": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Codex 연결"
+          }
+        }
+      }
+    },
+    "Collection": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "보관함"
+          }
+        }
+      }
+    },
+    "Come back here when done; it checks again by itself.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다 했으면 이 창으로 돌아오세요. 알아서 다시 확인해요."
+          }
+        }
+      }
+    },
+    "Connect": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연결"
+          }
+        }
+      }
+    },
+    "Connect Claude Code limits": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude Code 한도 표시 연결"
+          }
+        }
+      }
+    },
+    "Connect and upload the card": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연결하고 카드 올리기"
+          }
+        }
+      }
+    },
+    "Connect with GitHub": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GitHub로 연결"
+          }
+        }
+      }
+    },
+    "Connect with a GitHub code": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GitHub 코드로 연결"
+          }
+        }
+      }
+    },
+    "Connect with gh login": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "gh 로그인으로 연결"
+          }
+        }
+      }
+    },
+    "Connect your agents": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "에이전트 연결"
+          }
+        }
+      }
+    },
+    "Connected": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연결됨"
+          }
+        }
+      }
+    },
+    "Connected agents show sessions waiting for you\nin the closed notch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연결하면 응답을 기다리는 세션이\n닫힌 노치에 보여요."
+          }
+        }
+      }
+    },
+    "Connected as @%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "@%@로 연결됨"
+          }
+        }
+      }
+    },
+    "Connected. Create your profile repo, then click Check again": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연결됨. 프로필 레포를 만든 뒤 다시 확인을 눌러 주세요"
+          }
+        }
+      }
+    },
+    "Connected. Install the TokenCats App on your profile repo, then click Check again": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연결됨. TokenCats App을 프로필 레포에 설치한 뒤 다시 확인을 눌러 주세요"
+          }
+        }
+      }
+    },
+    "Connected. The card is uploaded": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연결됨. 카드를 올렸습니다"
+          }
+        }
+      }
+    },
+    "Connecting needs the Xcode Command Line Tools. Run this in Terminal, then check again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연결하려면 Xcode 명령줄 도구가 필요해요. 터미널에서 아래 명령을 실행한 뒤 다시 확인해 주세요."
+          }
+        }
+      }
+    },
+    "Connection canceled on GitHub": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GitHub에서 연결을 취소했습니다"
+          }
+        }
+      }
+    },
+    "Connection expired · reconnect": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연결 만료 · 다시 연결해 주세요"
+          }
+        }
+      }
+    },
+    "Connection expired. Connect again": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연결이 만료됐어요. 다시 연결해 주세요"
+          }
+        }
+      }
+    },
+    "Continue": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "계속"
+          }
+        }
+      }
+    },
+    "Contribution graph and streak": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1년 잔디와 연속 사용일"
+          }
+        }
+      }
+    },
+    "Copy": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "복사"
+          }
+        }
+      }
+    },
+    "Cost coverage %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "비용 산정 범위 %@"
+          }
+        }
+      }
+    },
+    "Could not back up: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "백업하지 못했습니다: %@"
+          }
+        }
+      }
+    },
+    "Could not connect Claude limits": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude 한도 연결 실패"
+          }
+        }
+      }
+    },
+    "Could not find that cat": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "고양이를 찾지 못했어요"
+          }
+        }
+      }
+    },
+    "Could not find the Claude Code settings folder.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude Code 설정 폴더를 찾지 못했습니다."
+          }
+        }
+      }
+    },
+    "Could not find the profile repo": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "프로필 레포를 찾을 수 없습니다"
+          }
+        }
+      }
+    },
+    "Could not find the terminal tab": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "터미널 탭을 찾을 수 없음"
+          }
+        }
+      }
+    },
+    "Could not read the JSON in the Claude settings file.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude 설정 파일의 JSON을 읽을 수 없습니다."
+          }
+        }
+      }
+    },
+    "Could not reset: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "초기화하지 못했습니다: %@"
+          }
+        }
+      }
+    },
+    "Could not restore: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "복원하지 못했습니다: %@"
+          }
+        }
+      }
+    },
+    "Could not save. Please try again": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저장하지 못했어요. 다시 해 주세요"
+          }
+        }
+      }
+    },
+    "Could not save: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저장 실패: %@"
+          }
+        }
+      }
+    },
+    "Could not set up %@: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 설정 실패: %@"
+          }
+        }
+      }
+    },
+    "Could not set up Claude limits: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude 한도 설정 실패: %@"
+          }
+        }
+      }
+    },
+    "Counting today's usage": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘 기록을 집계 중입니다"
+          }
+        }
+      }
+    },
+    "Counting…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "집계 중…"
+          }
+        }
+      }
+    },
+    "Cream": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "크림"
+          }
+        }
+      }
+    },
+    "Create profile SVG": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "프로필 SVG 만들기"
+          }
+        }
+      }
+    },
+    "Create profile repo (github.com)": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "프로필 레포 만들기 (github.com)"
+          }
+        }
+      }
+    },
+    "Create your profile repo %@/%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "프로필 레포 %@/%@ 만들기"
+          }
+        }
+      }
+    },
+    "Creates the card as an SVG file with the settings above and shows it in Finder.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "위 항목대로 카드를 SVG 파일로 만들어 Finder에서 보여 줍니다."
+          }
+        }
+      }
+    },
+    "Creating…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "만드는 중…"
+          }
+        }
+      }
+    },
+    "Credits": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "출처"
+          }
+        }
+      }
+    },
+    "Custom": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "직접 지정"
+          }
+        }
+      }
+    },
+    "Daily": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일간"
+          }
+        }
+      }
+    },
+    "Data": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터"
+          }
+        }
+      }
+    },
+    "Decorate the room": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "방 꾸미기"
+          }
+        }
+      }
+    },
+    "Details": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "자세히 보기"
+          }
+        }
+      }
+    },
+    "Developer": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "개발자"
+          }
+        }
+      }
+    },
+    "Disconnect": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연결 해제"
+          }
+        }
+      }
+    },
+    "Disconnect from GitHub?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GitHub 연결을 해제할까요?"
+          }
+        }
+      }
+    },
+    "Disconnected": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연결을 해제했습니다"
+          }
+        }
+      }
+    },
+    "Disconnected and removed the card from your README": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연결을 해제하고 README에서 카드를 지웠습니다"
+          }
+        }
+      }
+    },
+    "Disconnect…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연결 해제…"
+          }
+        }
+      }
+    },
+    "Display": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "디스플레이"
+          }
+        }
+      }
+    },
+    "Displays with a notch": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "노치 있는 디스플레이"
+          }
+        }
+      }
+    },
+    "Displays without a notch": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "노치 없는 디스플레이"
+          }
+        }
+      }
+    },
+    "Done": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "완료"
+          }
+        }
+      }
+    },
+    "Drop rates": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "확률"
+          }
+        }
+      }
+    },
+    "Estimated cost (last 7 days)": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "추정 비용 (최근 7일)"
+          }
+        }
+      }
+    },
+    "Every store price becomes 0 churu and churu is never spent. Takes effect after the app restarts.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "켜면 상점의 모든 가격이 0 츄르가 되고 츄르가 줄지 않습니다. 앱을 다시 시작하면 적용됩니다."
+          }
+        }
+      }
+    },
+    "Export backup…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "백업 내보내기…"
+          }
+        }
+      }
+    },
+    "Failed · retrying in an hour (%@)": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "실패 · 1시간 뒤 재시도 (%@)"
+          }
+        }
+      }
+    },
+    "Failed: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "실패: %@"
+          }
+        }
+      }
+    },
+    "Follow system": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "시스템 설정 따름"
+          }
+        }
+      }
+    },
+    "Foxfire": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "여우불"
+          }
+        }
+      }
+    },
+    "Free": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "무료"
+          }
+        }
+      }
+    },
+    "Fri": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "금"
+          }
+        }
+      }
+    },
+    "General": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일반"
+          }
+        }
+      }
+    },
+    "Gestures": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "제스처"
+          }
+        }
+      }
+    },
+    "Get started": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "시작하기"
+          }
+        }
+      }
+    },
+    "Get started with TokenCats": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TokenCats 시작하기"
+          }
+        }
+      }
+    },
+    "GitHub card": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GitHub 카드"
+          }
+        }
+      }
+    },
+    "GitHub is limiting requests for now": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GitHub가 잠시 요청을 막고 있어요"
+          }
+        }
+      }
+    },
+    "GitHub profile": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GitHub 프로필"
+          }
+        }
+      }
+    },
+    "GitHub profile auto-update": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GitHub 프로필 자동 갱신"
+          }
+        }
+      }
+    },
+    "GitHub returned an error (HTTP %lld)": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GitHub 오류가 났어요 (HTTP %lld)"
+          }
+        }
+      }
+    },
+    "Got it": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "확인"
+          }
+        }
+      }
+    },
+    "Haptic feedback": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "햅틱 피드백"
+          }
+        }
+      }
+    },
+    "Height": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "높이"
+          }
+        }
+      }
+    },
+    "Height %.0f": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "높이 %.0f"
+          }
+        }
+      }
+    },
+    "Hi!": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "안녕!"
+          }
+        }
+      }
+    },
+    "Hide from screen recording": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "화면 녹화에서 숨김"
+          }
+        }
+      }
+    },
+    "Hide over full-screen apps": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "전체 화면 앱 위에서는 숨김"
+          }
+        }
+      }
+    },
+    "Hide the gap below the menu bar": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "메뉴 막대 아래 여백 숨김"
+          }
+        }
+      }
+    },
+    "Hiding box": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "숨는 상자"
+          }
+        }
+      }
+    },
+    "High": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "높음"
+          }
+        }
+      }
+    },
+    "Home display": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "홈 표시"
+          }
+        }
+      }
+    },
+    "Hover delay": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "열리기까지"
+          }
+        }
+      }
+    },
+    "Hover over the notch or press %@ to open it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "노치에 마우스를 올리거나 %@를 누르면 열려요."
+          }
+        }
+      }
+    },
+    "Hover over the notch or press the shortcut (⌘⇧I by default) to open the cat room. Connect your agents and the GitHub profile card in Settings.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "노치에 마우스를 올리거나 단축키(기본 ⌘⇧I)를 누르면 고양이 방이 열려요. 에이전트 연결과 GitHub 프로필 카드는 설정에서 할 수 있어요."
+          }
+        }
+      }
+    },
+    "How many times a second the home cat room redraws. Lower uses less power.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "홈의 고양이 방을 1초에 몇 번 다시 그릴지 정합니다. 낮을수록 전력을 덜 씁니다."
+          }
+        }
+      }
+    },
+    "In Codex, approve it with /hooks, then start a new session": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Codex에서 /hooks 로 승인 후 새 세션을 시작하세요"
+          }
+        }
+      }
+    },
+    "In the room": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "방"
+          }
+        }
+      }
+    },
+    "In use": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사용 중"
+          }
+        }
+      }
+    },
+    "Install the TokenCats App and pick that repo": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TokenCats App을 설치하고 그 레포 고르기"
+          }
+        }
+      }
+    },
+    "Install the TokenCats App and pick the repo (github.com)": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TokenCats App 설치하고 레포 고르기 (github.com)"
+          }
+        }
+      }
+    },
+    "Install the gh CLI and log in to connect": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "gh CLI를 설치하고 로그인하면 연결할 수 있습니다"
+          }
+        }
+      }
+    },
+    "It leaves for good and can't be brought back. The churu spent on it is not returned.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "보관함에서 완전히 떠나고 다시 데려올 수 없어요. 쓴 츄르는 돌려받지 않아요."
+          }
+        }
+      }
+    },
+    "It shows up here by itself once installed.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "설치하면 여기에 자동으로 나타나요."
+          }
+        }
+      }
+    },
+    "Keep the card and disconnect": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "카드는 두고 해제"
+          }
+        }
+      }
+    },
+    "Language": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "언어"
+          }
+        }
+      }
+    },
+    "Last 365 days": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지난 365일"
+          }
+        }
+      }
+    },
+    "Last 7 days": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최근 7일"
+          }
+        }
+      }
+    },
+    "Last 7 days on Home": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "홈에 최근 7일 요약"
+          }
+        }
+      }
+    },
+    "Last updated %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "마지막 갱신 %@"
+          }
+        }
+      }
+    },
+    "Later": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "나중에"
+          }
+        }
+      }
+    },
+    "Later in Settings": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "설정에서 나중에"
+          }
+        }
+      }
+    },
+    "Launch at login": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "로그인할 때 자동으로 실행"
+          }
+        }
+      }
+    },
+    "Left floor": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "바닥 왼쪽"
+          }
+        }
+      }
+    },
+    "Left wall": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "벽 왼쪽"
+          }
+        }
+      }
+    },
+    "Loading": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "불러오는 중"
+          }
+        }
+      }
+    },
+    "Low": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "낮음"
+          }
+        }
+      }
+    },
+    "Medium": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "보통"
+          }
+        }
+      }
+    },
+    "Meet a new friend": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "새 친구를 만나요"
+          }
+        }
+      }
+    },
+    "Meet your next little companion": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "새 친구를 만나 보세요"
+          }
+        }
+      }
+    },
+    "Menu bar height": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "메뉴 막대 높이"
+          }
+        }
+      }
+    },
+    "Menu bar icon": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "메뉴 막대 아이콘"
+          }
+        }
+      }
+    },
+    "Middle floor": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "바닥 가운데"
+          }
+        }
+      }
+    },
+    "Mon": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "월"
+          }
+        }
+      }
+    },
+    "Moved into the room": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "방에 들어왔어요"
+          }
+        }
+      }
+    },
+    "Needs a setup": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "준비 필요"
+          }
+        }
+      }
+    },
+    "Needs connection": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연결 필요"
+          }
+        }
+      }
+    },
+    "Next": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다음"
+          }
+        }
+      }
+    },
+    "Next rooms": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다음 방 보기"
+          }
+        }
+      }
+    },
+    "No GitHub login found. Run gh auth login in Terminal, then try again": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GitHub 로그인을 찾지 못했습니다. 터미널에서 gh auth login 후 다시 눌러 주세요"
+          }
+        }
+      }
+    },
+    "No agents to show": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "표시할 에이전트 없음"
+          }
+        }
+      }
+    },
+    "No cats outside the room": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "방 밖에 있는 고양이가 없어요"
+          }
+        }
+      }
+    },
+    "No limit information": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "한도 정보 없음"
+          }
+        }
+      }
+    },
+    "Not connected: the Xcode command line tools are missing. Run xcode-select --install in Terminal, then connect again": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Xcode 명령줄 도구가 없어 연결하지 않았습니다. 터미널에서 xcode-select --install 후 다시 연결하세요"
+          }
+        }
+      }
+    },
+    "Not installed": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "설치 안 됨"
+          }
+        }
+      }
+    },
+    "Not saved: the file is %lld KB, over the 2 MB limit. Put fewer cat patterns in the room.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "파일이 %lldKB로 2MB를 넘어 저장하지 않았습니다. 방에 둔 고양이 무늬를 줄여 주세요."
+          }
+        }
+      }
+    },
+    "Not uploaded yet": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "아직 올리지 않음"
+          }
+        }
+      }
+    },
+    "Notch": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "노치"
+          }
+        }
+      }
+    },
+    "OK": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "확인"
+          }
+        }
+      }
+    },
+    "On battery or in Low Power Mode, drops to Saver and stops the closed notch's blinking.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "배터리로 쓰는 중이거나 저전력 모드이면 '절약'으로 낮추고 닫힌 노치의 깜빡임을 멈춥니다."
+          }
+        }
+      }
+    },
+    "On your profile": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "프로필에 올라감"
+          }
+        }
+      }
+    },
+    "Once a day": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "하루 한 번"
+          }
+        }
+      }
+    },
+    "Once a day and when the room changes": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "하루 한 번 + 방이 바뀔 때"
+          }
+        }
+      }
+    },
+    "One cat has to stay in the room": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "방에 한 마리는 있어야 해요"
+          }
+        }
+      }
+    },
+    "Only when updated manually": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "직접 갱신할 때만"
+          }
+        }
+      }
+    },
+    "Open": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "열기"
+          }
+        }
+      }
+    },
+    "Open GitHub": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GitHub 열기"
+          }
+        }
+      }
+    },
+    "Open GitHub again": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GitHub 다시 열기"
+          }
+        }
+      }
+    },
+    "Open Settings": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "설정 열기"
+          }
+        }
+      }
+    },
+    "Open adoption box": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "입양 상자 열기"
+          }
+        }
+      }
+    },
+    "Open collection": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "보관함 보기"
+          }
+        }
+      }
+    },
+    "Open data folder": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "데이터 폴더 열기"
+          }
+        }
+      }
+    },
+    "Open on hover": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "마우스를 올리면 열기"
+          }
+        }
+      }
+    },
+    "Open or close the notch": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "노치 열기/닫기"
+          }
+        }
+      }
+    },
+    "Open the adoption box?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "입양 상자를 열까요?"
+          }
+        }
+      }
+    },
+    "Open the cat room": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "고양이 방 열기"
+          }
+        }
+      }
+    },
+    "Open · %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "열기 · %@"
+          }
+        }
+      }
+    },
+    "Opened github.com/login/device. Waiting for approval…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "github.com/login/device를 열었어요. 승인을 기다리는 중…"
+          }
+        }
+      }
+    },
+    "Opening": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "열기"
+          }
+        }
+      }
+    },
+    "Other agents": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다른 에이전트"
+          }
+        }
+      }
+    },
+    "Outside": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "방 밖"
+          }
+        }
+      }
+    },
+    "Owned": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "보유"
+          }
+        }
+      }
+    },
+    "Performance": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최적화"
+          }
+        }
+      }
+    },
+    "Place": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "배치"
+          }
+        }
+      }
+    },
+    "Place it from the collection": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "보관함에서 배치할 수 있어요"
+          }
+        }
+      }
+    },
+    "Placed": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "배치됨"
+          }
+        }
+      }
+    },
+    "Placed %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@을(를) 배치했어요"
+          }
+        }
+      }
+    },
+    "Placed %@ instead of %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$@ 대신 %1$@을(를) 배치했어요"
+          }
+        }
+      }
+    },
+    "Possible cats": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "나올 수 있는 고양이"
+          }
+        }
+      }
+    },
+    "Preferred display": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기본 디스플레이"
+          }
+        }
+      }
+    },
+    "Preview": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "미리보기"
+          }
+        }
+      }
+    },
+    "Previous rooms": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이전 방 보기"
+          }
+        }
+      }
+    },
+    "Progress to the next adoption": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다음 입양 진행도"
+          }
+        }
+      }
+    },
+    "Props": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "소품"
+          }
+        }
+      }
+    },
+    "Props are sold in the store": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "상점에서 소품을 살 수 있어요"
+          }
+        }
+      }
+    },
+    "Publish the card on your GitHub profile?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GitHub 프로필에 카드를 공개할까요?"
+          }
+        }
+      }
+    },
+    "Purchase failed. Your churu is untouched": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "구매하지 못했어요. 츄르는 그대로예요"
+          }
+        }
+      }
+    },
+    "Put away": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "치워 둠"
+          }
+        }
+      }
+    },
+    "Put your cats on GitHub": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GitHub에 고양이 올리기"
+          }
+        }
+      }
+    },
+    "Quit": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "종료"
+          }
+        }
+      }
+    },
+    "Reading past records for the first time… (about 30 seconds)": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "처음 한 번 과거 기록을 읽는 중… (약 30초)"
+          }
+        }
+      }
+    },
+    "Reading past records…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "과거 기록 읽는 중…"
+          }
+        }
+      }
+    },
+    "Reads only the Claude Code and Codex records on this Mac. The only thing that leaves it is your GitHub card, and only if you connect it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 Mac의 Claude Code·Codex 기록만 읽어요. 밖으로 나가는 것은 GitHub 카드뿐이고, 연결했을 때만이에요."
+          }
+        }
+      }
+    },
+    "Real notch height": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "실제 노치 높이"
+          }
+        }
+      }
+    },
+    "Really reset the data?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "정말 초기화할까요?"
+          }
+        }
+      }
+    },
+    "Release": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "놓아주기"
+          }
+        }
+      }
+    },
+    "Release %@?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, 놓아줄까요?"
+          }
+        }
+      }
+    },
+    "Released %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, 잘 가요"
+          }
+        }
+      }
+    },
+    "Release…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "놓아주기…"
+          }
+        }
+      }
+    },
+    "Remember the last tab": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "마지막 탭 기억"
+          }
+        }
+      }
+    },
+    "Remove": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "치우기"
+          }
+        }
+      }
+    },
+    "Remove from README and disconnect": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "README에서도 지우고 해제"
+          }
+        }
+      }
+    },
+    "Requests": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "요청"
+          }
+        }
+      }
+    },
+    "Reset": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "리셋됨"
+          }
+        }
+      }
+    },
+    "Reset and restart": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "초기화하고 다시 시작"
+          }
+        }
+      }
+    },
+    "Reset the data?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "초기화할까요?"
+          }
+        }
+      }
+    },
+    "Resets in %lldd": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld일 뒤 리셋"
+          }
+        }
+      }
+    },
+    "Resets in %lldd %lldh": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld일 %2$lld시간 뒤 리셋"
+          }
+        }
+      }
+    },
+    "Resets in %lldh": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld시간 뒤 리셋"
+          }
+        }
+      }
+    },
+    "Resets in %lldh %lldm": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld시간 %2$lld분 뒤 리셋"
+          }
+        }
+      }
+    },
+    "Resets in %lldm": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld분 뒤 리셋"
+          }
+        }
+      }
+    },
+    "Reset…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "초기화…"
+          }
+        }
+      }
+    },
+    "Restart TokenCats": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TokenCats 다시 시작"
+          }
+        }
+      }
+    },
+    "Restart app": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱 다시 시작"
+          }
+        }
+      }
+    },
+    "Restore and restart": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "복원하고 다시 시작"
+          }
+        }
+      }
+    },
+    "Restore from backup…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "백업에서 복원…"
+          }
+        }
+      }
+    },
+    "Restore this backup?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 백업으로 복원할까요?"
+          }
+        }
+      }
+    },
+    "Restoring moves the current data into the data folder's backups first, then restarts the app.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "복원하면 지금 데이터는 데이터 폴더의 backups 안에 먼저 옮겨 두고, 앱을 다시 시작합니다."
+          }
+        }
+      }
+    },
+    "Returns the cats and churu history to a fresh start. The current data stays in backups.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "고양이와 츄르 기록을 처음 상태로 되돌립니다. 지금 데이터는 backups 안에 남습니다."
+          }
+        }
+      }
+    },
+    "Right floor": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "바닥 오른쪽"
+          }
+        }
+      }
+    },
+    "Room %lld/%lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "방 %lld/%lld"
+          }
+        }
+      }
+    },
+    "Room is full · tap to swap": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "방이 차 있어요 · 누르면 교체"
+          }
+        }
+      }
+    },
+    "Rounder corners when open": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "열릴 때 모서리를 더 둥글게"
+          }
+        }
+      }
+    },
+    "SVG file": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SVG 파일"
+          }
+        }
+      }
+    },
+    "Sat": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "토"
+          }
+        }
+      }
+    },
+    "Saved to %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저장됨: %@"
+          }
+        }
+      }
+    },
+    "Saver (4 fps)": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "절약 (4fps)"
+          }
+        }
+      }
+    },
+    "See your Claude limits": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude 사용 한도 보기"
+          }
+        }
+      }
+    },
+    "Sensitivity": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "감도"
+          }
+        }
+      }
+    },
+    "Session alerts": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "세션 알림"
+          }
+        }
+      }
+    },
+    "Settings": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "설정"
+          }
+        }
+      }
+    },
+    "Settings file": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "설정 파일"
+          }
+        }
+      }
+    },
+    "Settings icon in the notch": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "노치 안에 설정 아이콘"
+          }
+        }
+      }
+    },
+    "Shortcut": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "단축키"
+          }
+        }
+      }
+    },
+    "Show cost": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "비용 표시"
+          }
+        }
+      }
+    },
+    "Show in Finder": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finder에서 보기"
+          }
+        }
+      }
+    },
+    "Show on all displays": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "모든 디스플레이에 표시"
+          }
+        }
+      }
+    },
+    "Show on the lock screen": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "잠금 화면에도 표시"
+          }
+        }
+      }
+    },
+    "Show room cats": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "방 고양이 표시"
+          }
+        }
+      }
+    },
+    "Show the limits section": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "한도 영역 표시"
+          }
+        }
+      }
+    },
+    "Shown to anyone": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "누구나 볼 수 있는 것"
+          }
+        }
+      }
+    },
+    "Shows your 5-hour and weekly limits in the notch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "노치에서 5시간·주간 한도를 보여 드려요."
+          }
+        }
+      }
+    },
+    "Siamese": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "샴"
+          }
+        }
+      }
+    },
+    "Skip": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "건너뛰기"
+          }
+        }
+      }
+    },
+    "Smooth (12 fps)": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "부드럽게 (12fps)"
+          }
+        }
+      }
+    },
+    "Some data couldn't be read, so it started fresh: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "읽을 수 없는 데이터가 있어 새로 시작했어요: %@"
+          }
+        }
+      }
+    },
+    "Something went wrong": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알 수 없는 문제가 생겼어요"
+          }
+        }
+      }
+    },
+    "Spends %@ churu": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 츄르를 써요"
+          }
+        }
+      }
+    },
+    "Start with your Mac?": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mac을 켤 때 같이 켤까요?"
+          }
+        }
+      }
+    },
+    "Startup": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "시작"
+          }
+        }
+      }
+    },
+    "Still reading past records": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "아직 지난 기록을 읽는 중이에요"
+          }
+        }
+      }
+    },
+    "Store": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "상점"
+          }
+        }
+      }
+    },
+    "Store test mode (everything free)": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "상점 테스트 모드 (모두 무료)"
+          }
+        }
+      }
+    },
+    "Streak": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연속 작업일"
+          }
+        }
+      }
+    },
+    "Sun": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일"
+          }
+        }
+      }
+    },
+    "Swipe down on the notch with two fingers to open it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "두 손가락으로 노치를 아래로 쓸면 열립니다."
+          }
+        }
+      }
+    },
+    "Switch displays automatically": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "디스플레이 자동 전환"
+          }
+        }
+      }
+    },
+    "System": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "시스템"
+          }
+        }
+      }
+    },
+    "Tabby": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "고등어"
+          }
+        }
+      }
+    },
+    "Tap a room cat to swap with %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@와 바꿀 방 고양이를 누르세요"
+          }
+        }
+      }
+    },
+    "Tap the cat to swap out": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "바꿀 고양이를 누르세요"
+          }
+        }
+      }
+    },
+    "Tap to move into the room": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "누르면 방으로"
+          }
+        }
+      }
+    },
+    "Testing · free": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "테스트 · 무료"
+          }
+        }
+      }
+    },
+    "The %@ settings file is not valid JSON, so it was left alone": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 설정 파일이 올바른 JSON이 아니라 건드리지 않았습니다"
+          }
+        }
+      }
+    },
+    "The %@ settings folder is missing": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 설정 폴더가 없습니다"
+          }
+        }
+      }
+    },
+    "The Claude settings file is not valid JSON, so it was left alone": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude 설정 파일이 올바른 JSON이 아니라 건드리지 않았습니다"
+          }
+        }
+      }
+    },
+    "The Claude settings folder is missing": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude 설정 폴더가 없습니다"
+          }
+        }
+      }
+    },
+    "The TokenCats App needs access to your profile repo (%@) to upload the card. If the repo does not exist, create it first, then pick it when installing the app.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TokenCats App이 프로필 레포(%@)에 접근할 수 있어야 카드를 올릴 수 있습니다. 레포가 없다면 먼저 만들고, 앱을 설치할 때 그 레포를 고르세요."
+          }
+        }
+      }
+    },
+    "The app has no Claude status line script.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱에 Claude 상태줄 스크립트가 없습니다."
+          }
+        }
+      }
+    },
+    "The card is too big to upload (over 2 MB)": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "카드가 2MB를 넘어 올릴 수 없어요"
+          }
+        }
+      }
+    },
+    "The cat room": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "고양이 방"
+          }
+        }
+      }
+    },
+    "The cat room is always included.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "고양이 방은 늘 들어갑니다."
+          }
+        }
+      }
+    },
+    "The churu count is not finished yet. Try again in a moment.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "츄르 집계가 아직 끝나지 않았습니다. 잠시 후 다시 눌러 주세요."
+          }
+        }
+      }
+    },
+    "The code expired. Try again": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "코드가 만료됐습니다. 다시 눌러 주세요"
+          }
+        }
+      }
+    },
+    "The current data stays in the data folder's backups.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지금 데이터는 데이터 폴더의 backups 안에 남습니다."
+          }
+        }
+      }
+    },
+    "The hook script is missing from the app": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "훅 스크립트를 앱에서 찾을 수 없음"
+          }
+        }
+      }
+    },
+    "The original setting is backed up next to settings.json.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "원래 설정은 settings.json 옆에 백업돼요."
+          }
+        }
+      }
+    },
+    "The repo is private, so others cannot see the card": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "비공개 레포라 다른 사람에게는 카드가 보이지 않습니다"
+          }
+        }
+      }
+    },
+    "The room is empty": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "방이 비어 있어요"
+          }
+        }
+      }
+    },
+    "The room is full, so it waits in the collection": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "방이 차 있어서 보관함에 있어요"
+          }
+        }
+      }
+    },
+    "The room is full. Tap a cat below to swap": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "방이 차 있어요. 아래 고양이를 누르면 교체할 수 있어요"
+          }
+        }
+      }
+    },
+    "The status line script is missing from the app": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "상태줄 스크립트를 앱에서 찾을 수 없음"
+          }
+        }
+      }
+    },
+    "The store is getting ready.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "상점을 준비 중이에요."
+          }
+        }
+      }
+    },
+    "The unreadable files are kept in the data folder.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "읽지 못한 파일은 데이터 폴더에 남겨 뒀어요."
+          }
+        }
+      }
+    },
+    "This background is in use": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지금 쓰는 배경이에요"
+          }
+        }
+      }
+    },
+    "This folder has no backup files.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 폴더에는 백업 파일이 없습니다."
+          }
+        }
+      }
+    },
+    "This session has no Orca tab": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 세션은 Orca 탭 정보가 없어요"
+          }
+        }
+      }
+    },
+    "Thu": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "목"
+          }
+        }
+      }
+    },
+    "Time until reset": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "리셋까지 남은 시간"
+          }
+        }
+      }
+    },
+    "Today": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘"
+          }
+        }
+      }
+    },
+    "Today's tokens": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘 토큰"
+          }
+        }
+      }
+    },
+    "Today's usage": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘 사용량"
+          }
+        }
+      }
+    },
+    "Token numbers": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "토큰 숫자"
+          }
+        }
+      }
+    },
+    "TokenCats Settings": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TokenCats 설정"
+          }
+        }
+      }
+    },
+    "TokenCats can't edit a README over 1 MB": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "README가 1MB를 넘어 TokenCats가 고칠 수 없어요"
+          }
+        }
+      }
+    },
+    "TokenCats wraps your Claude Code status line once.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude Code 상태줄을 TokenCats가 한 번 감싸요."
+          }
+        }
+      }
+    },
+    "Tokens and churu are counted even without connecting.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "토큰과 츄르는 연결하지 않아도 기록돼요."
+          }
+        }
+      }
+    },
+    "Tokens spent while TokenCats is closed\ndon't turn into churu.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TokenCats가 꺼져 있는 동안 쓴 토큰은\n츄르로 쌓이지 않아요."
+          }
+        }
+      }
+    },
+    "Tokens you spend on coding agents turn into churu,\nand churu adopts cats that live in your notch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "코딩 에이전트에게 쓴 토큰이 츄르가 되고,\n츄르로 고양이를 입양해 노치에서 키워요."
+          }
+        }
+      }
+    },
+    "Tue": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "화"
+          }
+        }
+      }
+    },
+    "Turn it off in Settings › Agents to put everything back.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "설정 › 에이전트에서 끄면 원래대로 돌아가요."
+          }
+        }
+      }
+    },
+    "Tuxedo": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "턱시도"
+          }
+        }
+      }
+    },
+    "Two steps on GitHub": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GitHub에서 두 가지만 해 주세요"
+          }
+        }
+      }
+    },
+    "Update": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "갱신"
+          }
+        }
+      }
+    },
+    "Update failed: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "갱신 실패: %@"
+          }
+        }
+      }
+    },
+    "Update now": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지금 갱신"
+          }
+        }
+      }
+    },
+    "Uploading…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "올리는 중…"
+          }
+        }
+      }
+    },
+    "Uploads a single card to the catroom branch of your profile repo. Commits do not pile up, and only the marked section of the README is changed.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "프로필 레포의 catroom 브랜치에 카드 한 장만 올립니다. 커밋이 쌓이지 않고, README는 표시된 구간만 고칩니다."
+          }
+        }
+      }
+    },
+    "Uploads the card to the catroom branch of your public profile repo (login/login) and keeps it updated. Anyone can see: %@. You can change what shows under Card contents below first.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "공개 프로필 레포(아이디/아이디)의 catroom 브랜치에 카드를 올리고 이후 자동으로 갱신합니다. 누구나 볼 수 있는 내용: %@. 보일 항목은 아래 '카드에 넣을 항목'에서 먼저 바꿀 수 있습니다."
+          }
+        }
+      }
+    },
+    "Usage bars": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사용량 칸 게이지"
+          }
+        }
+      }
+    },
+    "Usage figures": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사용량 숫자"
+          }
+        }
+      }
+    },
+    "Usage history": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사용 기록"
+          }
+        }
+      }
+    },
+    "Usage streak": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연속 사용"
+          }
+        }
+      }
+    },
+    "Use gestures": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "제스처 사용"
+          }
+        }
+      }
+    },
+    "Version": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "버전"
+          }
+        }
+      }
+    },
+    "View on GitHub": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GitHub에서 보기"
+          }
+        }
+      }
+    },
+    "Waiting for a response": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "응답 대기"
+          }
+        }
+      }
+    },
+    "Wed": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "수"
+          }
+        }
+      }
+    },
+    "Weekly": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "주간"
+          }
+        }
+      }
+    },
+    "What changes": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "바뀌는 것"
+          }
+        }
+      }
+    },
+    "When an agent session is waiting for a response, a dot appears above a cat: orange needs approval, red is an error, white is a new result. Click that cat to go to the terminal.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "응답을 기다리는 에이전트 세션이 있으면 고양이 위에 점을 찍습니다. 주황은 승인 필요, 빨강은 오류, 흰색은 새 결과이고, 그 고양이를 누르면 터미널로 갑니다."
+          }
+        }
+      }
+    },
+    "When the notch is closed, the cats in the room sit beside it, two on each side. The black area widens to fit them.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "노치를 닫았을 때 방에 있는 고양이가 노치 양옆에 2마리씩 앉습니다. 그만큼 검은 영역이 넓어집니다."
+          }
+        }
+      }
+    },
+    "White": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "하양"
+          }
+        }
+      }
+    },
+    "Window": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "창"
+          }
+        }
+      }
+    },
+    "Window shadow": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "창 그림자"
+          }
+        }
+      }
+    },
+    "With the hook connected, sessions waiting for a response show in the closed notch. Tokens and churu are counted without it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "훅을 연결하면 응답을 기다리는 세션이 닫힌 노치에 표시됩니다. 토큰과 츄르는 훅 없이도 집계됩니다."
+          }
+        }
+      }
+    },
+    "Wraps the Claude Code status line to read the official usage. Your existing status line stays as it is.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude Code 상태줄을 감싸 공식 사용량을 읽습니다. 기존 상태줄 표시는 그대로입니다."
+          }
+        }
+      }
+    },
+    "Xcode Command Line Tools are missing, so nothing was connected. Run xcode-select --install in Terminal, then connect again": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Xcode 명령줄 도구가 없어 연결하지 않았습니다. 터미널에서 xcode-select --install 후 다시 연결하세요"
+          }
+        }
+      }
+    },
+    "Xcode Command Line Tools are required. Run xcode-select --install and try again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Xcode 명령줄 도구가 필요합니다. xcode-select --install 후 다시 시도해 주세요."
+          }
+        }
+      }
+    },
+    "Yarn ball": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "털실 공"
+          }
+        }
+      }
+    },
+    "Your card is on your profile": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "카드가 프로필에 올라갔어요"
+          }
+        }
+      }
+    },
+    "Your cat room goes on top of your profile README\nand keeps itself up to date.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "프로필 README 맨 위에 고양이 방이 붙고\n알아서 최신으로 바뀌어요."
+          }
+        }
+      }
+    },
+    "Your current status line keeps showing as it is.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지금 쓰는 상태줄은 그대로 보여요."
+          }
+        }
+      }
+    },
+    "Your first cat is waiting in the notch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "첫 고양이가 노치에서 기다리고 있어요."
+          }
+        }
+      }
+    },
+    "churu": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "츄르"
+          }
+        }
+      }
+    },
+    "the %@ background": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 배경"
+          }
+        }
+      }
+    },
+    "the adoption box": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "입양 상자"
+          }
+        }
+      }
+    },
+    "tokens": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "토큰"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

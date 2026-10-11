@@ -1,0 +1,383 @@
+{
+  "cats" : {
+    "black" : {
+      "clips" : {
+        "groom" : [
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22
+        ],
+        "idle" : [
+          12
+        ],
+        "pet" : [
+          17,
+          21
+        ],
+        "walkLeft" : [
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "walkRight" : [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "frameSize" : 96,
+      "icon" : "cat-black-icon.png",
+      "sheet" : "cat-black.png"
+    },
+    "cheese" : {
+      "clips" : {
+        "groom" : [
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22
+        ],
+        "idle" : [
+          12
+        ],
+        "pet" : [
+          17,
+          21
+        ],
+        "walkLeft" : [
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "walkRight" : [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "frameSize" : 96,
+      "icon" : "cat-cheese-icon.png",
+      "sheet" : "cat-cheese.png"
+    },
+    "cream" : {
+      "clips" : {
+        "groom" : [
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22
+        ],
+        "idle" : [
+          12
+        ],
+        "pet" : [
+          17,
+          21
+        ],
+        "walkLeft" : [
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "walkRight" : [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "frameSize" : 96,
+      "icon" : "cat-cream-icon.png",
+      "sheet" : "cat-cream.png"
+    },
+    "foxfire" : {
+      "clips" : {
+        "groom" : [
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22
+        ],
+        "idle" : [
+          12
+        ],
+        "pet" : [
+          17,
+          21
+        ],
+        "walkLeft" : [
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "walkRight" : [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "frameSize" : 96,
+      "icon" : "cat-foxfire-icon.png",
+      "sheet" : "cat-foxfire.png"
+    },
+    "siamese" : {
+      "clips" : {
+        "groom" : [
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22
+        ],
+        "idle" : [
+          12
+        ],
+        "pet" : [
+          17,
+          21
+        ],
+        "walkLeft" : [
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "walkRight" : [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "frameSize" : 96,
+      "icon" : "cat-siamese-icon.png",
+      "sheet" : "cat-siamese.png"
+    },
+    "split" : {
+      "clips" : {
+        "groom" : [
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22
+        ],
+        "idle" : [
+          12
+        ],
+        "pet" : [
+          17,
+          21
+        ],
+        "walkLeft" : [
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "walkRight" : [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "frameSize" : 96,
+      "icon" : "cat-split-icon.png",
+      "sheet" : "cat-split.png"
+    },
+    "tabby" : {
+      "clips" : {
+        "groom" : [
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22
+        ],
+        "idle" : [
+          12
+        ],
+        "pet" : [
+          17,
+          21
+        ],
+        "walkLeft" : [
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "walkRight" : [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "frameSize" : 96,
+      "icon" : "cat-tabby-icon.png",
+      "sheet" : "cat-tabby.png"
+    },
+    "tuxedo" : {
+      "clips" : {
+        "groom" : [
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22
+        ],
+        "idle" : [
+          12
+        ],
+        "pet" : [
+          17,
+          21
+        ],
+        "walkLeft" : [
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "walkRight" : [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "frameSize" : 96,
+      "icon" : "cat-tuxedo-icon.png",
+      "sheet" : "cat-tuxedo.png"
+    },
+    "white" : {
+      "clips" : {
+        "groom" : [
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22
+        ],
+        "idle" : [
+          12
+        ],
+        "pet" : [
+          17,
+          21
+        ],
+        "walkLeft" : [
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "walkRight" : [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "frameSize" : 96,
+      "icon" : "cat-white-icon.png",
+      "sheet" : "cat-white.png"
+    }
+  },
+  "version" : 2
+}

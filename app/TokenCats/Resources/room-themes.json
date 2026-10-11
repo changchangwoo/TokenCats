@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 2,
+  "defaultID": "cozy",
+  "backgrounds": [
+    {
+      "id": "cozy",
+      "name": { "en": "Cozy room", "ko": "포근한 방" },
+      "art": { "wall": "room-cozy-wall", "floor": "room-cozy-floor" },
+      "colors": {
+        "wall": "#EEE2D4", "floor": "#CAA688", "edge": "#7D6359",
+        "panel": "#7A6252", "ink": "#F4EFE6", "accent": "#D9F59A", "stamp": "#547434"
+      },
+      "levels": ["#665143", "#6E9A55", "#97C76D", "#D9F59A"]
+    },
+    {
+      "id": "night",
+      "name": { "en": "Night", "ko": "밤" },
+      "art": { "wall": "room-night-wall", "floor": "room-night-floor" },
+      "colors": {
+        "wall": "#333A5C", "floor": "#5B5675", "edge": "#15172A",
+        "panel": "#1F2238", "ink": "#EEF0FF", "accent": "#F2E3A0", "stamp": "#7A5F12"
+      },
+      "levels": ["#30365A", "#4F6AB8", "#86A2EE", "#F2E3A0"]
+    },
+    {
+      "id": "sakura",
+      "name": { "en": "Cherry blossom", "ko": "벚꽃" },
+      "art": { "wall": "room-sakura-wall", "floor": "room-sakura-floor" },
+      "colors": {
+        "wall": "#F2D8DD", "floor": "#DDB0B9", "edge": "#5C2D3D",
+        "panel": "#7A3E52", "ink": "#FFF1F4", "accent": "#FFF0F4", "stamp": "#A8436A"
+      },
+      "levels": ["#5A2A3B", "#B0566F", "#E592A8", "#FFF0F4"]
+    },
+    {
+      "id": "forest",
+      "name": { "en": "Forest", "ko": "숲" },
+      "art": { "wall": "room-forest-wall", "floor": "room-forest-floor" },
+      "colors": {
+        "wall": "#C5D3BC", "floor": "#889E72", "edge": "#213626",
+        "panel": "#2F4A34", "ink": "#EEF6E6", "accent": "#E6F5B0", "stamp": "#4F7A2C"
+      },
+      "levels": ["#233826", "#6E9A4E", "#A5CF78", "#E6F5B0"]
+    },
+    {
+      "id": "halloween",
+      "name": { "en": "Halloween", "ko": "할로윈" },
+      "art": { "wall": "room-halloween-wall", "floor": "room-halloween-floor" },
+      "colors": {
+        "wall": "#5A4470", "floor": "#8A6A7A", "edge": "#1E1428",
+        "panel": "#3A2A4A", "ink": "#F6ECFA", "accent": "#F6B060", "stamp": "#7A3E12"
+      },
+      "levels": ["#1F1529", "#7A4A6A", "#C2703E", "#F6B060"]
+    }
+  ]
+}
