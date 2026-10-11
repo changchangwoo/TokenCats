@@ -10,7 +10,7 @@ enum ProfileReadme {
     static let branch = "catroom"
     static let path = "catroom.svg"
     /// Where a click on the card lands. GitHub links a bare image to itself, so the card is wrapped in this.
-    static let projectURL = "https://github.com/changchangwoo/tokenCats"
+    static let projectURL = "https://github.com/changchangwoo/TokenCats"
 
     /// Public raw URL on the dedicated branch; profile READMEs only show for public repos.
     static func imageURL(owner: String, repo: String) -> String {

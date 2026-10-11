@@ -128,7 +128,7 @@ GitHub에서 내 아이디와 같은 이름의 공개 저장소(예: `changchang
 
 ```md
 <!-- tokencats:start -->
-<a href="https://github.com/changchangwoo/tokenCats"><img src="https://raw.githubusercontent.com/아이디/아이디/catroom/catroom.svg" width="100%" alt="My cat room and agent activity"></a>
+<a href="https://github.com/changchangwoo/TokenCats"><img src="https://raw.githubusercontent.com/아이디/아이디/catroom/catroom.svg" width="100%" alt="My cat room and agent activity"></a>
 <!-- tokencats:end -->
 ```
 </details>

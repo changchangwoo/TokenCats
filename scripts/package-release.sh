@@ -20,6 +20,6 @@ echo "zip:    $ZIP"
 echo "sha256: $SHA"
 echo "cask:   $OUT/tokencats.rb"
 echo
-echo "To publish (the tokenCats repo must be public for anonymous downloads):"
-echo "  gh release create v$VERSION $ZIP --repo changchangwoo/tokenCats --title \"TokenCats $VERSION\""
+echo "To publish (the TokenCats repo must be public for anonymous downloads):"
+echo "  gh release create v$VERSION $ZIP --repo changchangwoo/TokenCats --title \"TokenCats $VERSION\""
 echo "  copy $OUT/tokencats.rb to Casks/tokencats.rb in changchangwoo/homebrew-tap and push"

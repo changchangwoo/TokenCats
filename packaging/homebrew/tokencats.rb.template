@@ -4,10 +4,10 @@ cask "tokencats" do
   version "VERSION"
   sha256 "SHA256"
 
-  url "https://github.com/changchangwoo/tokenCats/releases/download/v#{version}/TokenCats-#{version}.zip"
+  url "https://github.com/changchangwoo/TokenCats/releases/download/v#{version}/TokenCats-#{version}.zip"
   name "TokenCats"
   desc "Cats in your notch that grow on your AI coding tokens"
-  homepage "https://github.com/changchangwoo/tokenCats"
+  homepage "https://github.com/changchangwoo/TokenCats"
 
   livecheck do
     url :url

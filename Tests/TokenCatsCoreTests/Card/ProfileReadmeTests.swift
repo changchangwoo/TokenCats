@@ -9,14 +9,14 @@ struct ProfileReadmeTests {
                 == "https://raw.githubusercontent.com/neko/neko/catroom/catroom.svg")
         #expect(block == """
         <!-- tokencats:start -->
-        <a href="https://github.com/changchangwoo/tokenCats"><img src="https://raw.githubusercontent.com/neko/neko/catroom/catroom.svg" width="100%" alt="My cat room and agent activity"></a>
+        <a href="https://github.com/changchangwoo/TokenCats"><img src="https://raw.githubusercontent.com/neko/neko/catroom/catroom.svg" width="100%" alt="My cat room and agent activity"></a>
         <!-- tokencats:end -->
         """)
     }
 
     /// GitHub wraps a bare image in a link to itself; ours must lead to the project instead.
     @Test func cardLinksToTheProject() {
-        #expect(block.contains(#"<a href="https://github.com/changchangwoo/tokenCats"><img "#))
+        #expect(block.contains(#"<a href="https://github.com/changchangwoo/TokenCats"><img "#))
         #expect(block.contains("></a>\n"))
     }
 
