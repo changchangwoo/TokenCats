@@ -1,5 +1,5 @@
 #!/usr/bin/env swift
-// Turns big AI-generated cat sheets into the six 96 px strip files a coat needs in art-src/cats/<coat>/.
+// Turns big AI-generated cat sheets into the four 96 px strip files a coat needs in art-src/cats/<coat>/.
 //
 //   swift scripts/import-cat-art.swift <coat> --walk-right <sheet> --walk-left <sheet>|mirror --groom <sheet> [options]
 //
@@ -24,8 +24,7 @@
 //   - alpha becomes hard: source alpha >= 160 is opaque, anything else transparent; colours are un-premultiplied;
 //   - every frame is 96×96 with the silhouette's bottom on y = 93 (2 px floor margin), centred, then nudged
 //     sideways (±8 px) so it overlaps its clip's first frame best — the body stays put while legs, tail or a paw move;
-//   - idle.png is groom frame 0, pixel for pixel; icon.png is idle's face crop (icon[x,y] = idle[8 + x*80/24, y*80/24]);
-//     icon-blink.png starts as a copy of icon.png: run scripts/make-blink-icons.swift next (it only rewrites that file).
+//   - idle.png is groom frame 0, pixel for pixel (the store, collection and closed notch show its top 80×80).
 // Afterwards run scripts/build-cat-art.swift --gif-preview, look at the frames next to black, and `swift test`.
 import Foundation
 import ImageIO
@@ -221,14 +220,6 @@ func strip(_ frames: [Bitmap]) -> Bitmap {
     return result
 }
 
-/// The closed-notch icon: the top 80×80 of the idle frame, shifted 8 px in, sampled down to 24×24 (the old
-/// pipeline's portrait crop, so the face fills the notch).
-func icon(from idle: Bitmap) -> Bitmap {
-    var icon = Bitmap(width: 24, height: 24)
-    for y in 0..<24 { for x in 0..<24 { icon[x, y] = idle[8 + x * 80 / 24, y * 80 / 24] } }
-    return icon
-}
-
 // MARK: - A sheet argument: "<file>" or "<file>#<row>".
 
 struct Sheet {
@@ -319,8 +310,6 @@ do {
     try save(strip(walkLeft), to: folder.appendingPathComponent("walk-left.png"))
     try save(idle, to: folder.appendingPathComponent("idle.png"))
     try save(strip(groom), to: folder.appendingPathComponent("groom.png"))
-    try save(icon(from: idle), to: folder.appendingPathComponent("icon.png"))
-    try save(icon(from: idle), to: folder.appendingPathComponent("icon-blink.png"))
 
     func describe(_ name: String, _ frames: [Bitmap], _ factor: Double) {
         let sizes = frames.map(silhouette).map { "\($0.width)×\($0.height)@\($0.minX)" }
@@ -331,7 +320,7 @@ do {
     describe("walk-right", walkRight, walkRightFactor)
     describe("walk-left", walkLeft, walkLeftFactor)
     describe("idle/groom", groom, groomFactor)
-    print("Next: swift scripts/make-blink-icons.swift, then swift scripts/build-cat-art.swift --gif-preview, then swift test.")
+    print("Next: swift scripts/build-cat-art.swift --gif-preview, then swift test.")
 } catch {
     fputs("import failed: \(error)\n", stderr)
     exit(1)

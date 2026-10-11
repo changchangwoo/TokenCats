@@ -7,7 +7,7 @@ struct LoadingDots: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
-        if reduceMotion || !AppSettings.power.blinks {
+        if reduceMotion || !AppSettings.power.smallAnimations {
             Text(verbatim: "…")
         } else {
             TimelineView(.animation(minimumInterval: 1.0 / 20)) { context in

@@ -15,17 +15,17 @@ enum AnimationQuality: String, CaseIterable, Codable, Sendable {
     }
 }
 
-/// Battery saver: on battery or in Low Power Mode, the room drops to the saver rate and the closed notch stops
-/// blinking, whatever quality the user picked.
+/// Battery saver: on battery or in Low Power Mode, the room drops to the saver rate and small decorative
+/// animations (the loading dots) hold still, whatever quality the user picked.
 enum PowerPolicy {
     struct Effective: Equatable, Sendable {
         let quality: AnimationQuality
-        let blinks: Bool
+        let smallAnimations: Bool
     }
 
     static func effective(quality: AnimationQuality, saverEnabled: Bool, onBattery: Bool, lowPower: Bool) -> Effective {
-        guard saverEnabled, onBattery || lowPower else { return Effective(quality: quality, blinks: true) }
-        return Effective(quality: .saver, blinks: false)
+        guard saverEnabled, onBattery || lowPower else { return Effective(quality: quality, smallAnimations: true) }
+        return Effective(quality: .saver, smallAnimations: false)
     }
 }
 
@@ -64,7 +64,6 @@ enum PreferenceDefaults {
     static let animationQuality = AnimationQuality.default.rawValue
     static let batterySaver = true
     static let closedNotchCats = true
-    static let closedNotchBlink = true
     static let sessionAlerts = false
     static let profileShowsNumbers = ProfileCardOptions.default.showsNumbers
     static let profileShowsYear = ProfileCardOptions.default.showsYear

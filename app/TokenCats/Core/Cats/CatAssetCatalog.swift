@@ -9,9 +9,8 @@ struct CatAssetCatalog: Codable, Equatable, Sendable {
 
 struct CatAssetDefinition: Codable, Equatable, Sendable {
     let sheet: String
-    let icon: String
     let frameSize: Int
     let clips: [String: [Int]]
 
-    var assetNames: [String] { [sheet, icon] }
+    var assetNames: [String] { [sheet] }
 }

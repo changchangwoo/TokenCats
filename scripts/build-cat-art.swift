@@ -8,7 +8,7 @@
 //
 // Output: app/TokenCats/Resources/CatArt/cat-<coat>.png (one 96×96 frame after another, in the order of `clips`;
 //         petting reuses two grooming frames, see `petFromGroom`),
-//         cat-<coat>-icon.png and cat-<coat>-icon-blink.png (copied), cat-assets.json (which frames each clip uses).
+//         and cat-assets.json (which frames each clip uses).
 // --gif-preview also writes build/cat-art-preview/<coat>-<clip>.gif for looking at the motion.
 import AppKit
 import Foundation
@@ -161,14 +161,9 @@ do {
         for (index, frame) in frames.enumerated() {
             for y in 0..<frameSize { for x in 0..<frameSize { sheet[index * frameSize + x, y] = frame[x, y] } }
         }
-        let sheetName = "cat-\(coat).png", iconName = "cat-\(coat)-icon.png"
+        let sheetName = "cat-\(coat).png"
         try save(sheet, to: output.appendingPathComponent(sheetName))
-        for (source, target) in [("icon.png", iconName), ("icon-blink.png", "cat-\(coat)-icon-blink.png")] {
-            let to = output.appendingPathComponent(target)
-            try? FileManager.default.removeItem(at: to)
-            try FileManager.default.copyItem(at: folder.appendingPathComponent(source), to: to)
-        }
-        catalog[coat] = ["sheet": sheetName, "icon": iconName, "frameSize": frameSize, "clips": clipFrames]
+        catalog[coat] = ["sheet": sheetName, "frameSize": frameSize, "clips": clipFrames]
         print("Built \(coat): \(frames.count) frames at \(frameSize)×\(frameSize)px")
     }
     try JSONSerialization.data(withJSONObject: ["version": 2, "cats": catalog], options: [.prettyPrinted, .sortedKeys])

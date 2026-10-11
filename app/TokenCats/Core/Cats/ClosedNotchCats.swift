@@ -13,7 +13,8 @@ enum ClosedNotchCats {
         return Wings(left: Array(cats.prefix(half)), right: Array(cats.dropFirst(half)))
     }
 
-    /// Points per icon step: a 24-pixel icon on a 2x screen lands on whole device pixels at multiples of 12pt.
+    /// Points per size step. The cats use the store's 80-pixel portrait, so a notch of usual height shows them at
+    /// 24pt, the size the store's adoption cards use.
     static let iconStep = 12.0
     /// Space kept above and below the icon inside the notch.
     static let iconMargin = 8.0

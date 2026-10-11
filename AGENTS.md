@@ -10,10 +10,10 @@
 
 ### 원본과 생성물
 
-- **원본은 `art-src/cats/<코트>/` 뿐**입니다. 코트 하나가 폴더 하나이고, 폴더가 곧 코트 목록입니다. 폴더에는 정확히 6개
-  파일이 있습니다: `walk-right.png`(576×96, 6칸), `walk-left.png`(576×96, 6칸), `idle.png`(96×96), `groom.png`(960×96, 10칸),
-  `icon.png`(24×24), `icon-blink.png`(24×24). 쓰다듬기 파일은 없습니다(아래).
-- `app/TokenCats/Resources/CatArt/*`(`cat-<코트>.png`, `cat-<코트>-icon(-blink).png`, `cat-assets.json`)는
+- **원본은 `art-src/cats/<코트>/` 뿐**입니다. 코트 하나가 폴더 하나이고, 폴더가 곧 코트 목록입니다. 폴더에는 정확히 4개
+  파일이 있습니다: `walk-right.png`(576×96, 6칸), `walk-left.png`(576×96, 6칸), `idle.png`(96×96), `groom.png`(960×96, 10칸).
+  쓰다듬기 파일은 없습니다(아래). 상점·보관함·닫힌 노치의 작은 고양이는 따로 그리지 않고 `idle.png`의 위쪽 80×80을 잘라 씁니다.
+- `app/TokenCats/Resources/CatArt/*`(`cat-<코트>.png`, `cat-assets.json`)는
   `scripts/build-cat-art.swift`가 원본을 **픽셀 그대로** 이어 붙여 만드는 생성물입니다. **절대 손으로 고치지 않습니다.**
   고치면 다음 빌드에 덮어써지고 `shippedArtIsExactlyTheSourceFolder` 테스트가 실패합니다.
 - `build/`(미리보기 GIF, 들어온 원화 등)는 커밋하지 않습니다.
@@ -30,14 +30,13 @@
 | 그루밍 시작 | `groom.png`의 **0번 칸은 `idle.png`와 픽셀까지 같음**. 9번 칸은 idle과 거의 같은 자세로 돌아옴 | `groomingStartsFromTheIdlePose` |
 | 그루밍 크기 | 그루밍 칸은 idle과 바닥선이 같고 높이 차 6px 이내, 실루엣 겹침(IoU) idle↔groom[0] ≥ 0.8 | 같은 테스트 |
 | 쓰다듬기 | 파일 없음. **`groom.png`의 4번·8번 칸**(0부터 셈)을 그대로 씀. 두 칸은 **앞발 하나를 들고 눈을 감은 자세**이고 idle과 IoU ≥ 0.75. 앞발은 든 것 하나 + 디딘 것 하나(디딘 앞발이 둘이면 결함) | `petFromGroom`, `idleGroomAndPetHaveMatchingSizeAndFloor` |
-| 아이콘 | `icon.png`는 idle의 얼굴 부분: `icon[x,y] = idle[8 + x*80/24, y*80/24]`. `icon-blink.png`는 같은 그림에서 눈만 감은 것(`scripts/make-blink-icons.swift`가 만들거나 손으로 그림) | 눈으로 |
+| 작은 그림 | 따로 없음. 상점·보관함·닫힌 노치는 `idle.png`의 (8, 0)부터 80×80을 씀. 얼굴과 앞모습이 그 안에 들어오게 그림 | 눈으로 |
 | 기준 코트 | 동작의 타이밍·크기 기준은 `black`입니다. 새 코트는 검은 고양이 옆에 놓고 비교합니다 | 눈으로 |
 
 ### 명령
 
 ```bash
-swift scripts/import-cat-art.swift <코트> --walk-right <시트> --walk-left <시트>|mirror --groom <시트>   # 큰 원화 → art-src/cats/<코트>/ 6개 파일
-swift scripts/make-blink-icons.swift [미리보기.png]   # icon.png → icon-blink.png (모든 코트, 눈 픽셀만 바뀜)
+swift scripts/import-cat-art.swift <코트> --walk-right <시트> --walk-left <시트>|mirror --groom <시트>   # 큰 원화 → art-src/cats/<코트>/ 4개 파일
 swift scripts/build-cat-art.swift --gif-preview       # Resources/CatArt 생성 + build/cat-art-preview/<코트>-<동작>.gif
 swift test                                            # CatAssetCatalogTests 등 전체
 ```
@@ -50,8 +49,7 @@ swift test                                            # CatAssetCatalogTests 등
    - 시트 구성: 오른쪽 걷기 6칸, 왼쪽 걷기 6칸, 그루밍 10칸(0번 = 앉은 자세, 4·8번 = 앞발 들고 눈 감음). 칸끼리 닿지 않는
      투명 배경이어야 임포터가 칸을 찾습니다. 체커보드나 단색이 구워진 배경은 쓰지 않습니다(외곽선과 구분되지 않음).
    - 몸에서 떨어진 조각(여우불의 불꽃 같은 것)은 가장 큰 덩어리의 1/4보다 작으면 임포터가 가장 가까운 칸에 붙입니다.
-     그보다 크면 칸으로 잘못 잡히니, 칸 수가 6·6·10으로 나오는지 확인합니다. `make-blink-icons.swift`는 투명에 닿은 파란
-     덩어리를 눈으로 보지 않으므로 얼굴 밖 불꽃은 그대로 남습니다.
+     그보다 크면 칸으로 잘못 잡히니, 칸 수가 6·6·10으로 나오는지 확인합니다.
    - 포즈가 빠졌으면(예: 왼쪽 걷기 없음, 그루밍 10칸 미만) **그리지 말고 멈춰서** PR에 적습니다. 대칭 무늬 코트만 `--walk-left mirror`로 대신할 수 있습니다.
    - 결함(디딘 앞발이 둘, 잘린 꼬리, 떠 있는 조각)은 적어 두고, 96px에서 몇 픽셀로 고칠 수 있는 것만 고칩니다.
 2. **임포트**: `swift scripts/import-cat-art.swift <코트> --walk-right … --walk-left … --groom …`. 출력된 크기(폭×높이@왼쪽)와
@@ -59,23 +57,19 @@ swift test                                            # CatAssetCatalogTests 등
 3. **눈으로 비교**: 각 strip을 `black`의 같은 strip과 나란히 3배로 보고 머리·몸통 크기, 걷는 방향, 쓰다듬기 칸(4·8번)의 앞발 수를
    확인합니다. 작은 결함은 strip에서 픽셀로 고치고(Pixelorama 또는 스크립트) 어떤 칸을 어떻게 고쳤는지 PR 설명에 적습니다.
    **임포터를 다시 돌리면 손 수정이 사라집니다**(`--force` 필요). 원화가 바뀌었을 때만 다시 임포트합니다.
-4. **깜빡임 아이콘**: `swift scripts/make-blink-icons.swift build/blink-preview.png` → 새 코트의 눈이 실제로 감겼는지 보고,
-   `git status art-src`로 다른 코트의 `icon-blink.png`가 바뀌지 않았는지 확인합니다. 눈 색이 노란·초록·파랑이 아니거나
-   얼굴 반쪽이 어두우면 스크립트의 `isEye`/`darkSides`를 그 코트에만 맞게 고칩니다.
-5. **빌드**: `swift scripts/build-cat-art.swift --gif-preview` → `build/cat-art-preview/<코트>-*.gif`를 봅니다.
-6. **테스트**: `swift test` 전부 통과. `CatAssetCatalogTests`는 카탈로그의 모든 코트에 대해 돕니다.
-7. **이름·등급**: `app/TokenCats/Core/Cats/CatNames.swift`에 한국어 이름, `app/TokenCats/Resources/store-catalog.json`의 입양 상자
+4. **빌드**: `swift scripts/build-cat-art.swift --gif-preview` → `build/cat-art-preview/<코트>-*.gif`를 봅니다.
+5. **테스트**: `swift test` 전부 통과. `CatAssetCatalogTests`는 카탈로그의 모든 코트에 대해 돕니다.
+6. **이름·등급**: `app/TokenCats/Core/Cats/CatNames.swift`에 한국어 이름, `app/TokenCats/Resources/store-catalog.json`의 입양 상자
    등급에 코트 id. 코트를 나열하는 테스트도 함께 고칩니다: `StoreCatalogTests`(`bundledCatalogMatchesThePriceList`의 등급별 배열. 등급을 비우는 테스트들은 카탈로그에서 등급을 읽으므로 손댈 필요 없음), `StoreServiceTests`(coats 집합),
    `CatRoomTests`(코트 목록 2곳), `CatNamesTests`. `art-src/README.md`의 코트 목록도 갱신합니다.
-8. **앱 빌드·스냅샷·커밋**: Debug 빌드가 되는지, `scripts/snapshot.sh` + `scripts/compare-snapshots.py`에서 새 코트가 보이는
+7. **앱 빌드·스냅샷·커밋**: Debug 빌드가 되는지, `scripts/snapshot.sh` + `scripts/compare-snapshots.py`에서 새 코트가 보이는
    화면(상점 입양) 말고는 달라진 것이 없는지 확인하고 `feat: …`로 커밋합니다. 들어온 원화는 커밋하지 않습니다.
 
 ### 기존 고양이 수정 절차
 
 1. `art-src/cats/<코트>/`의 strip을 Pixelorama(또는 픽셀 단위 스크립트)로 고칩니다. 칸 배치·크기·바닥선은 그대로 둡니다.
    `groom.png` 0번 칸을 고쳤으면 `idle.png`도 같은 그림으로 맞춥니다(반대도 같음). 4·8번 칸을 고치면 쓰다듬기도 바뀝니다.
-2. `icon.png`를 고쳤으면 `icon-blink.png`를 손으로 그리거나 `make-blink-icons.swift`로 다시 만듭니다.
-3. `swift scripts/build-cat-art.swift --gif-preview` → GIF 확인 → `swift test` → 커밋(`art: …` 또는 `fix: …`).
+2. `swift scripts/build-cat-art.swift --gif-preview` → GIF 확인 → `swift test` → 커밋(`art: …` 또는 `fix: …`).
 
 ### 규격에 맞지 않을 때
 

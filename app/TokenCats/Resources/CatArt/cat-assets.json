@@ -39,7 +39,6 @@
         ]
       },
       "frameSize" : 96,
-      "icon" : "cat-black-icon.png",
       "sheet" : "cat-black.png"
     },
     "cheese" : {
@@ -81,7 +80,6 @@
         ]
       },
       "frameSize" : 96,
-      "icon" : "cat-cheese-icon.png",
       "sheet" : "cat-cheese.png"
     },
     "cream" : {
@@ -123,7 +121,6 @@
         ]
       },
       "frameSize" : 96,
-      "icon" : "cat-cream-icon.png",
       "sheet" : "cat-cream.png"
     },
     "foxfire" : {
@@ -165,7 +162,6 @@
         ]
       },
       "frameSize" : 96,
-      "icon" : "cat-foxfire-icon.png",
       "sheet" : "cat-foxfire.png"
     },
     "siamese" : {
@@ -207,7 +203,6 @@
         ]
       },
       "frameSize" : 96,
-      "icon" : "cat-siamese-icon.png",
       "sheet" : "cat-siamese.png"
     },
     "split" : {
@@ -249,7 +244,6 @@
         ]
       },
       "frameSize" : 96,
-      "icon" : "cat-split-icon.png",
       "sheet" : "cat-split.png"
     },
     "tabby" : {
@@ -291,7 +285,6 @@
         ]
       },
       "frameSize" : 96,
-      "icon" : "cat-tabby-icon.png",
       "sheet" : "cat-tabby.png"
     },
     "tuxedo" : {
@@ -333,7 +326,6 @@
         ]
       },
       "frameSize" : 96,
-      "icon" : "cat-tuxedo-icon.png",
       "sheet" : "cat-tuxedo.png"
     },
     "white" : {
@@ -375,7 +367,6 @@
         ]
       },
       "frameSize" : 96,
-      "icon" : "cat-white-icon.png",
       "sheet" : "cat-white.png"
     }
   },

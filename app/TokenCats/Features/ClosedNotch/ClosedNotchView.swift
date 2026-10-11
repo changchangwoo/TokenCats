@@ -1,6 +1,7 @@
 import SwiftUI
 
-/// Closed notch: the cats living in the room sit beside it, two on each wing, and now and then one of them blinks.
+/// Closed notch: the cats living in the room sit beside it, two on each wing, drawn from the same sitting picture
+/// as the store.
 /// With session alerts on (Settings › 닫힌 노치, off by default), a waiting session marks a cat with a dot; tapping
 /// that cat jumps to its terminal.
 /// Both wings take the same width so the notch rectangle stays on the physical notch.
@@ -10,11 +11,7 @@ struct ClosedNotchView: View {
     @EnvironmentObject var vm: NotchViewModel
     @ObservedObject private var store = StoreModel.shared
     @ObservedObject private var hub = AgentHub.shared
-    @ObservedObject private var battery = BatteryStatusViewModel.shared
-    @StateObject private var blinks = ClosedNotchBlinks()
-    @AppStorage(AppSettings.Key.closedNotchBlink) private var blinkSetting = AppSettings.Default.closedNotchBlink
     @AppStorage(AppSettings.Key.sessionAlerts) private var sessionAlerts = AppSettings.Default.sessionAlerts
-    @AppStorage(AppSettings.Key.batterySaver) private var batterySaver = AppSettings.Default.batterySaver
 
     /// Width of one wing; ContentView uses it to size the notch chin, so both must agree.
     static func wingWidth(iconSize: CGFloat, count: Int) -> CGFloat {
@@ -34,7 +31,6 @@ struct ClosedNotchView: View {
         let wing = Self.wingWidth(iconSize: side, count: cats.count)
         let alerts = sessionAlerts ? ClosedNotchCats.alerts(sessions: hub.waitingSessions, cats: cats.map(\.id))
                                    : ClosedNotchCats.Alerts(byCat: [:], overflow: 0)
-        let blinkIDs = blinkSetting && AppSettings.power.blinks ? cats.map(\.id) : []
         HStack {
             wingView(wings.left, cats: cats, size: side, alerts: alerts)
                 .frame(width: wing, alignment: .trailing)
@@ -47,9 +43,6 @@ struct ClosedNotchView: View {
                 .frame(width: wing, alignment: .leading)
         }
         .frame(height: vm.effectiveClosedNotchHeight, alignment: .center)
-        .onAppear { blinks.start(cats: blinkIDs) }
-        .onChange(of: blinkIDs) { _, ids in blinks.start(cats: ids) }
-        .onDisappear { blinks.stop() }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(cats.count) cats in the room")
     }
@@ -59,9 +52,7 @@ struct ClosedNotchView: View {
         HStack(spacing: Self.slotSpacing) {
             ForEach(ids, id: \.self) { id in
                 if let cat = cats.first(where: { $0.id == id }) {
-                    let image = blinks.blinking == id
-                        ? CatSprites.shared.blinkIcon(coat: cat.coat) : CatSprites.shared.icon(coat: cat.coat)
-                    if let image {
+                    if let image = CatSprites.shared.portrait(coat: cat.coat) {
                         Image(decorative: image, scale: 1)
                             .interpolation(.none)
                             .resizable()

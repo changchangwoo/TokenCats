@@ -10,7 +10,6 @@ enum AppSettings {
         static let animationQuality = "companionAnimationQuality"
         static let batterySaver = "companionBatterySaver"
         static let closedNotchCats = "companionClosedNotchCats"
-        static let closedNotchBlink = "companionClosedNotchBlink"
         static let sessionAlerts = "companionSessionAlerts"
         static let profileShowsNumbers = "profileShowsTokenNumbers"
         static let profileShowsYear = "profileShowsYear"
@@ -41,7 +40,6 @@ enum AppSettings {
     }
     static var batterySaver: Bool { bool(Key.batterySaver, default: Default.batterySaver) }
     static var closedNotchCats: Bool { bool(Key.closedNotchCats, default: Default.closedNotchCats) }
-    static var closedNotchBlink: Bool { bool(Key.closedNotchBlink, default: Default.closedNotchBlink) }
     static var sessionAlerts: Bool { bool(Key.sessionAlerts, default: Default.sessionAlerts) }
     static var roomThemeID: String { defaults.string(forKey: Key.roomTheme) ?? Default.roomTheme }
 

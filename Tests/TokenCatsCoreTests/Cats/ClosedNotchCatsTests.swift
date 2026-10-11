@@ -17,7 +17,7 @@ struct ClosedNotchCatsTests {
     }
 
     @Test func iconsKeepWholeArtPixels() {
-        // 24-pixel icons on a 2x screen stay crisp at multiples of 12pt, with room above and below.
+        // Sizes step by 12pt with room above and below; a usual notch shows the cats at 24pt, like the store.
         #expect(ClosedNotchCats.iconSize(notchHeight: 38) == 24)
         #expect(ClosedNotchCats.iconSize(notchHeight: 32) == 24)
         #expect(ClosedNotchCats.iconSize(notchHeight: 31) == 12)

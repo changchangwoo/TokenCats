@@ -12,8 +12,12 @@ struct TokenCatsApp: App {
     @Environment(\.openWindow) var openWindow
 
     var body: some Scene {
-        MenuBarExtra("TokenCats", systemImage: "pawprint.fill", isInserted: $showMenuBarIcon) {
+        // A template image (art-src/menubar, scripts/build-menubar-icon.swift): white on a dark menu bar,
+        // black on a light one.
+        MenuBarExtra(isInserted: $showMenuBarIcon) {
             menu.localized()
+        } label: {
+            Image("MenuBarIcon").accessibilityLabel(Text(verbatim: "TokenCats"))
         }
     }
 

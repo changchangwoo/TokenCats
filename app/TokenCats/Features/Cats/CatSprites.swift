@@ -5,15 +5,9 @@ import AppKit
 @MainActor
 final class CatSprites {
     static let shared = CatSprites()
-    /// Coat used where a single cat stands for the app (closed notch icon).
-    static let defaultCoat = "black"
-
     private struct CoatArt {
         let asset: CatAssetDefinition
         let sheet: CGImage?
-        let icon: CGImage?
-        /// The icon with its eyes shut (`<icon>-blink.png`, made by scripts/make-blink-icons.swift); nil if absent.
-        let blink: CGImage?
     }
 
     private let catalog: CatAssetCatalog?
@@ -33,16 +27,11 @@ final class CatSprites {
             .flatMap { try? JSONDecoder().decode(CatAssetCatalog.self, from: $0) }
     }
 
-    var icon: CGImage? { icon(coat: Self.defaultCoat) }
-
     /// Every coat named in the manifest, with or without art.
     var coatNames: Set<String> { Set(catalog.map { Array($0.cats.keys) } ?? []) }
     func hasArt(coat: String) -> Bool { art(coat) != nil }
-    func icon(coat: String) -> CGImage? { art(coat)?.icon }
-    /// The icon mid-blink, falling back to the open-eyed icon for coats without a blink frame.
-    func blinkIcon(coat: String) -> CGImage? { art(coat).flatMap { $0.blink ?? $0.icon } }
-
-    /// The icon is only 24 px for the closed notch. Larger store and collection faces use the 96 px idle art.
+    /// The cat's face and front for small places (store, collection, closed notch): the top 80×80 of the idle
+    /// frame, shifted 8 px in.
     func portrait(coat: String) -> CGImage? {
         if let cached = portraits[coat] { return cached }
         guard let idle = frame(clip: "idle", index: 0, coat: coat),
@@ -75,8 +64,7 @@ final class CatSprites {
     private func art(_ coat: String) -> CoatArt? {
         if let cached = coats[coat] { return cached }
         guard let asset = catalog?.cats[coat] else { return nil }
-        let art = CoatArt(asset: asset, sheet: Self.load(asset.sheet), icon: Self.load(asset.icon),
-                          blink: Self.load(asset.icon.replacingOccurrences(of: ".png", with: "-blink.png")))
+        let art = CoatArt(asset: asset, sheet: Self.load(asset.sheet))
         coats[coat] = art
         return art
     }

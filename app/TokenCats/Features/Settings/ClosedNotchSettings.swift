@@ -1,16 +1,14 @@
 import SwiftUI
 
-/// 닫힌 노치: the room's cats beside the closed notch, their blinking, and session alerts (off by default).
+/// 닫힌 노치: the room's cats beside the closed notch and session alerts (off by default).
 struct ClosedNotchSettings: View {
     @AppStorage(AppSettings.Key.closedNotchCats) private var cats = AppSettings.Default.closedNotchCats
-    @AppStorage(AppSettings.Key.closedNotchBlink) private var blink = AppSettings.Default.closedNotchBlink
     @AppStorage(AppSettings.Key.sessionAlerts) private var sessionAlerts = AppSettings.Default.sessionAlerts
 
     var body: some View {
         Form {
             Section {
                 Toggle("Show room cats", isOn: $cats)
-                Toggle("Blink now and then", isOn: $blink).disabled(!cats)
             } footer: {
                 Text("When the notch is closed, the cats in the room sit beside it, two on each side. The black area widens to fit them.")
                     .foregroundStyle(.secondary)

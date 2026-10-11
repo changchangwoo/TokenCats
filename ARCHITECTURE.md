@@ -57,7 +57,7 @@ Xcode 없이 돌고, 카드·장부·방 배치 같은 규칙은 전부 테스�
 ## 확장 지점
 
 ### 고양이를 더하려면
-`art-src/cats/<새 코트>/`에 동작별 그림 6개(걷기 둘, 쉬기, 그루밍, 아이콘 둘. 쓰다듬기는 그루밍에서 가져옴)를 두고
+`art-src/cats/<새 코트>/`에 동작별 그림 4개(걷기 둘, 쉬기, 그루밍. 쓰다듬기는 그루밍에서, 작은 고양이는 쉬기에서 가져옴)를 두고
 `swift scripts/build-cat-art.swift`를 돌리면 코트가 생깁니다. 무엇을 어느 파일에 그리는지는 [art-src/README.md](art-src/README.md)에
 있습니다. `Resources/store-catalog.json`의 입양 상자 등급에 코트를 넣으면 상점에 나옵니다. `CatAssetCatalogTests`가 모든 코트의
 크기·바닥선·이음새와, 앱 리소스가 원본 폴더와 똑같은지를 검사합니다.

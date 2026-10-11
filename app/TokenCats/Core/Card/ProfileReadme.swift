@@ -9,16 +9,20 @@ enum ProfileReadme {
     private static let markerPairs = [(start, end), (LegacyIdentity.readmeStart, LegacyIdentity.readmeEnd)]
     static let branch = "catroom"
     static let path = "catroom.svg"
+    /// Where a click on the card lands. GitHub links a bare image to itself, so the card is wrapped in this.
+    static let projectURL = "https://github.com/changchangwoo/tokenCats"
 
     /// Public raw URL on the dedicated branch; profile READMEs only show for public repos.
     static func imageURL(owner: String, repo: String) -> String {
         "https://raw.githubusercontent.com/\(owner)/\(repo)/\(branch)/\(path)"
     }
 
-    /// No height: the card has a fixed aspect ratio, so the README width sizes all of it.
+    /// No height: the card has a fixed aspect ratio, so the README width sizes all of it. One line, linked to
+    /// the project.
     static func block(owner: String, repo: String) -> String {
         [start,
-         #"<img src="\#(imageURL(owner: owner, repo: repo))" width="100%" alt="My cat room and agent activity">"#,
+         #"<a href="\#(projectURL)"><img src="\#(imageURL(owner: owner, repo: repo))" width="100%" "#
+             + #"alt="My cat room and agent activity"></a>"#,
          end].joined(separator: "\n")
     }
 

@@ -166,13 +166,13 @@
         }
       }
     },
-    "%@ · blinking paused": {
+    "%@ · small animations paused": {
       "extractionState": "manual",
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ · 깜빡임 멈춤"
+            "value": "%@ · 작은 애니메이션 멈춤"
           }
         }
       }
@@ -886,17 +886,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "검정"
-          }
-        }
-      }
-    },
-    "Blink now and then": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "가끔 눈 깜빡임"
           }
         }
       }
@@ -2782,13 +2771,13 @@
         }
       }
     },
-    "On battery or in Low Power Mode, drops to Saver and stops the closed notch's blinking.": {
+    "On battery or in Low Power Mode, drops to Saver and pauses small animations.": {
       "extractionState": "manual",
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "배터리로 쓰는 중이거나 저전력 모드이면 '절약'으로 낮추고 닫힌 노치의 깜빡임을 멈춥니다."
+            "value": "배터리로 쓰는 중이거나 저전력 모드이면 '절약'으로 낮추고 작은 애니메이션을 멈춥니다."
           }
         }
       }

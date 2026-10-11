@@ -46,7 +46,7 @@ struct CatFace: View {
 
     var body: some View {
         Group {
-            if let image = CatSprites.shared.portrait(coat: coat) ?? CatSprites.shared.icon(coat: coat) {
+            if let image = CatSprites.shared.portrait(coat: coat) {
                 Image(decorative: image, scale: 1).interpolation(.none).resizable().scaledToFit()
             } else {
                 Image(systemName: "cat.fill").resizable().scaledToFit()

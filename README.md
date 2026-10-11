@@ -1,62 +1,200 @@
-# TokenCats
+<p align="center">
+  <img src="app/TokenCats/Assets.xcassets/AppIcon.appiconset/icon_128x128@2x.png" width="96" alt="TokenCats">
+</p>
 
-코딩 에이전트에게 쓴 토큰이 츄르가 되고, 츄르로 고양이를 입양해 맥북 노치 위 작은 방에서 키웁니다.
-방과 1년 사용 잔디는 GitHub 프로필 카드로 내보낼 수 있습니다.
+<h1 align="center">TokenCats</h1>
 
-![TokenCats profile card](docs/design/card-example.svg)
+<p align="center">
+  <img src="https://img.shields.io/badge/macOS-14+-2F6FDE?logo=apple&logoColor=white" alt="macOS 14+">
+  <img src="https://img.shields.io/badge/Swift-6-F05138?logo=swift&logoColor=white" alt="Swift 6">
+  <img src="https://img.shields.io/badge/Apple%20Silicon%20%C2%B7%20Intel-universal-555555" alt="Apple Silicon · Intel">
+  <img src="https://img.shields.io/badge/Claude%20Code%20%C2%B7%20Codex-supported-D97757" alt="Claude Code · Codex">
+  <img src="https://img.shields.io/badge/license-GPL--3.0-4CAF50" alt="license GPL-3.0">
+</p>
 
-## 무엇을 하나
+<p align="center">
+  <b>English</b> · <a href="README.ko.md">한국어</a>
+</p>
 
-- Claude Code · Codex의 사용 로그에서 토큰을 집계해 **츄르**로 바꿉니다. 훅을 연결하면 응답을 기다리는 세션도 닫힌 노치에 표시됩니다.
-- 츄르로 **입양 상자**를 열어 고양이를 들이고, 방 **배경**과 **소품**을 삽니다.
-- 노치를 닫으면 방 고양이들이 노치 양옆에 앉아 있고, 열면 방·장부·사용 한도·통계가 보입니다.
-- 방과 1년 잔디를 **GitHub 프로필 README**의 SVG 카드로 자동 갱신합니다.
+<p align="center">
+  <b>Raise cats with your AI agent tokens, and show them off on your GitHub profile.</b><br>
+  Tokens you spend in Claude Code and Codex become churu, and the cats you adopt with churu live in a room inside your MacBook notch.
+</p>
 
-## 요구 사항
+<p align="center">
+  <img src="docs/readme/cards.gif" width="840" alt="TokenCats profile card cycling through five backgrounds">
+</p>
 
-macOS 14 이상, Apple Silicon과 Intel 모두. 노치가 없는 Mac에서는 메뉴 막대 높이의 창으로 동작합니다.
+<p align="center">
+  Once a day, and whenever your room changes, the app redraws a GitHub profile card that tracks your tokens.
+</p>
 
-## 설치
+<hr>
 
-```bash
+> TokenCats currently reads tokens from **Claude Code** and **Codex**.<br>
+> Going forward, we plan to support more agents such as Gemini CLI and Kiro. Contributors are always welcome!
+
+<p align="center">
+  <img src="docs/readme/notch.gif" width="720" alt="Hover the notch and the room opens; pet a cat and it floats a heart">
+</p>
+
+- With the notch closed, the cats sit on either side of it.
+- Hover the notch and the room opens. Inside, the cats walk around, groom themselves, and float a heart when you pet them.
+- Below the room you can see your churu, today's tokens, and your Claude and Codex usage limits.
+
+### How it works
+
+<table>
+<tr>
+<td width="50%"><img src="docs/readme/store.png" width="100%" alt="The store, selling adoption boxes and room backgrounds"></td>
+<td>
+
+1. 🪙 **Code.** TokenCats counts the tokens you spend in Claude Code and Codex.
+2. 🐟 **Churu piles up.** One token is one churu.
+3. 📦 **Adopt.** An adoption box costs 10 million churu.
+4. 🏠 **Decorate.** Buy backgrounds and props for the room.
+5. 🖼️ **Show off.** Your room becomes your GitHub profile card.
+
+</td>
+</tr>
+</table>
+
+<details>
+<summary>How exactly is churu counted?</summary>
+
+- Three kinds of tokens count as churu: uncached input, cache writes, and output.
+- Tokens read back from the cache don't count. Counting every re-read of the same content would inflate the number far too much.
+- Each past day's total is frozen once the day ends, so churu you've already earned never shrinks even if log files are deleted.
+</details>
+
+### Your usage at a glance
+
+<table>
+<tr>
+<td width="50%"><img src="docs/readme/stats.png" width="100%" alt="Stats screen with a year of contribution squares, tokens per weekday for the last 7 days, and the Claude/Codex split"></td>
+<td>
+
+- **A year of squares:** each day's tokens are painted like a GitHub contribution graph. Heavy days get a paw stamp.
+- **365-day total, daily average, and usage streak** at a glance.
+- **Last 7 days:** tokens per weekday, the Claude/Codex split, and estimated cost at API prices.
+
+</td>
+</tr>
+</table>
+
+### Make the room yours
+
+<table>
+<tr>
+<td width="50%"><img src="docs/readme/collection.png" width="100%" alt="The collection, where you pick one of five backgrounds and the cats that live in the room"></td>
+<td>
+
+Choose from five backgrounds and props, and pick what goes on your card (token counts, the year of squares).
+- Tap a background in the collection and the room changes right away.
+- Four cats live in the room; the rest wait in the collection.
+
+</td>
+</tr>
+</table>
+
+### Put your cats on your GitHub profile
+
+<table>
+<tr>
+<td width="50%"><img src="docs/readme/profile-card.png" alt="TokenCats profile card with the cozy room background"></td>
+<td>
+
+Your cat room goes at the very top of your GitHub profile README as a card.
+
+1. In the first-run setup, click **Connect with GitHub**.
+2. Click **Add to README**. That's it.
+
+- There's no server. The card is a single SVG on the `catroom` branch of your profile repository, and only the marked section of your README is touched.
+
+</td>
+</tr>
+</table>
+
+<details>
+<summary>New to profile repositories?</summary>
+
+Create a public repository on GitHub named after your username (for example `changchangwoo/changchangwoo`), and its README shows up at the top of your profile. If you don't have one yet, the app gives you a link that creates it.
+</details>
+
+<details>
+<summary>Want to add it by hand?</summary>
+
+The app inserts the block below into your README. You can paste the same thing yourself (replace `username`).
+
+```md
+<!-- tokencats:start -->
+<a href="https://github.com/changchangwoo/tokenCats"><img src="https://raw.githubusercontent.com/username/username/catroom/catroom.svg" width="100%" alt="My cat room and agent activity"></a>
+<!-- tokencats:end -->
+```
+</details>
+
+### Cute cats waiting for you!
+
+Open an adoption box and a cat comes out, depending on its rarity.
+Who will you meet? Isn't that exciting?
+
+| Rarity | Odds | Cats |
+|---|---|---|
+| Common | 50% | <img src="docs/readme/cat-black.png" width="64" alt="Black"> <img src="docs/readme/cat-cheese.png" width="64" alt="Cheese"> <img src="docs/readme/cat-split.png" width="64" alt="Calico"> <img src="docs/readme/cat-tabby.png" width="64" alt="Tabby"> |
+| Uncommon | 30% | <img src="docs/readme/cat-white.png" width="64" alt="White"> <img src="docs/readme/cat-tuxedo.png" width="64" alt="Tuxedo"> <img src="docs/readme/cat-cream.png" width="64" alt="Cream"> |
+| Rare | 15% | <img src="docs/readme/cat-siamese.png" width="64" alt="Siamese"> |
+| Unique | 5% | <img src="docs/readme/cat-foxfire.png" width="64" alt="Foxfire"> Worth bragging about if it's on your profile. |
+
+### Install
+
+```sh
 brew install --cask changchangwoo/tap/tokencats
 ```
 
-- 전체 이름(`changchangwoo/tap/tokencats`)으로 설치해야 합니다. Homebrew 7은 처음 보는 tap의 짧은 이름을 거부합니다.
-- TokenCats는 Apple 공증을 받지 않은 무료 배포라, 이 cask는 설치할 때 앱의 격리 표시(quarantine)를 지웁니다.
-  그래서 처음 열 때 막히지 않습니다. 지우는 것은 TokenCats.app 하나뿐입니다.
-- [Releases](https://github.com/changchangwoo/tokenCats/releases)에서 zip을 직접 받으면 처음 열 때 macOS가 막습니다.
-  시스템 설정 › 개인정보 보호 및 보안에서 **그래도 열기**를 누르면 열립니다.
-- 지우기: `brew uninstall --cask --zap tokencats` (에이전트 훅은 먼저 설정 › 에이전트에서 연결을 해제하세요)
+- Runs on macOS 14 or later. On a Mac without a notch, it sits at menu bar height.
+- Type the full name as shown above. Homebrew refuses to install the short `tokencats` on its own.
+- To update, run `brew upgrade --cask tokencats`.
 
-## 빌드와 실행
+<details>
+<summary><b>Privacy</b> — what it reads, writes, and sends</summary>
+<br>
 
-```bash
-scripts/build-app.sh        # Release 빌드(Apple Silicon·Intel 범용) → build/DerivedData/Build/Products/Release/
-scripts/run-app.sh          # 실행 중인 앱을 내리고 새 빌드를 띄움
-scripts/package-release.sh  # 릴리스 zip과 Homebrew cask를 build/release/에 만듦(올리지는 않음)
-swift test                  # 코어 테스트 (SwiftPM, Swift Testing)
-```
+| | |
+|---|---|
+| **Reads** | Usage logs under `~/.claude` and `~/.codex`. Only token counts and model names are counted. Prompt contents are never stored or sent |
+| **Writes** | Only when enabled: one hook line in the Claude Code and Codex settings files, and one status line entry for Claude Code. The original settings are backed up, and turning it off restores them |
+| **Sends** | Only when the GitHub card is on: the card SVG and one section of your README, to `api.github.com`. Nothing else is sent anywhere |
+| **Analytics** | None |
+| **Accounts** | Connecting GitHub is optional. Use your gh login, or grant the TokenCats GitHub App access to your profile repository only |
 
-## 에이전트 연결
+- When editing settings files, existing settings and hooks from other tools are left alone.
+- Hooks take effect in sessions opened or reopened after connecting.
+- For Codex, approve the hook once with `/hooks` inside Codex after connecting.
+</details>
 
-설정 › **에이전트**에서 Claude Code / Codex 훅을 설치합니다. 훅은 세션 알림에만 쓰이고, 토큰과 츄르는 훅 없이도 집계됩니다.
-Claude Code의 공식 사용 한도를 보려면 같은 화면에서 **상태줄**을 연결합니다(Claude Code만).
+### Contributing
 
-## 설정
+- The structure is in [ARCHITECTURE.md](ARCHITECTURE.md).
+- Working rules are in [CONTRIBUTING.md](CONTRIBUTING.md).
+- To add cats or room art, see [art-src/README.md](art-src/README.md).
 
-TokenCats: 일반 · 홈 표시 · 닫힌 노치 · 최적화 · 에이전트 · GitHub 프로필 · 데이터
-고급: 노치(창·높이·제스처·단축키) · 정보 (Debug 빌드에는 개발자 탭이 더 있습니다)
+This project is open source and always open.<br>
+New cats, new rooms, new items, and anything else new — we're always looking for contributors to build it with us!
 
-데이터는 `~/Library/Application Support/TokenCats/`에 JSON으로 저장되고, 설정 › 데이터에서 백업·복원·초기화할 수 있습니다.
+### Thanks to
 
-## 구조와 기여
+- TokenCats started from [boring.notch](https://github.com/TheBoredTeam/boring.notch) (GPL-3.0).<br>
+  The notch window and its open/close motion come from there; the full list is in [NOTICE.md](NOTICE.md).
+- The card font is [Baloo 2](https://fonts.google.com/specimen/Baloo+2).
 
-구조는 [ARCHITECTURE.md](ARCHITECTURE.md), 작업 규칙은 [CONTRIBUTING.md](CONTRIBUTING.md)에 있습니다.
-고양이·방 그림을 고치려면 [art-src/README.md](art-src/README.md)를 보세요.
-고양이·방 테마·에이전트를 더하는 방법도 거기에 적혀 있습니다.
+### License
 
-## 출처
+GPL-3.0
 
-노치 창과 열고 닫는 애니메이션은 [boring.notch](https://github.com/TheBoredTeam/boring.notch) (GPL-3.0)에서 가져와
-`app/TokenCats/NotchShell/`에 두었습니다. 전체 목록은 [NOTICE.md](NOTICE.md)에 있습니다. TokenCats도 GPL-3.0입니다.
+<p align="center">
+  <img src="docs/readme/black-groom.gif" width="100%" alt="A black cat grooming in the middle of the cozy room">
+</p>
+
+<p align="center">
+  If you like the cats, please ⭐ star the repo. It really helps development! 🐟
+</p>

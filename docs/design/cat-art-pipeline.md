@@ -9,11 +9,10 @@
 build/incoming-<코트>/*.png                                   (들어온 큰 원화 시트, 커밋 안 됨)
         │  swift scripts/import-cat-art.swift <코트> …   — 칸 찾기, 시트당 스케일 하나, 바닥선 y=93, 알파 0/255, idle = groom[0]
         ▼
-art-src/cats/<코트>/walk-right.png, walk-left.png, idle.png, groom.png, icon.png, icon-blink.png      (원본, 96px 칸. 손 수정은 여기서)
+art-src/cats/<코트>/walk-right.png, walk-left.png, idle.png, groom.png      (원본, 96px 칸. 손 수정은 여기서)
         │  swift scripts/build-cat-art.swift   — 이어 붙이고 크기만 검사. 축소·보정 없음
         ▼
 app/TokenCats/Resources/CatArt/cat-<코트>.png          (23칸 시트)
-                               cat-<코트>-icon(-blink).png (복사)
                                cat-assets.json            (동작 → 시트 칸 번호)
         │  앱이 실행 중에 읽음
         ▼
@@ -43,7 +42,7 @@ CatSprites (Features/Cats) — 동작 이름과 칸 순서로 시트에서 잘�
   그만큼 몸이 작아지니 결과는 머리·몸통 크기로 판단합니다.
 - 가장 가까운 픽셀 하나를 고르는 방식으로 줄이고(도트 유지), 알파는 160 기준으로 0/255로 나누고, 색은 프리멀티플라이를 풀어 씁니다.
 - 칸마다 바닥선 y=93에 맞추고 가운데 둔 뒤, 같은 동작의 0번 칸과 실루엣이 가장 많이 겹치는 위치로 ±8px 옮깁니다(몸은 그대로, 발·꼬리만 움직이게).
-- `icon.png`는 idle의 얼굴 부분(`idle[8 + x*80/24, y*80/24]`), `icon-blink.png`는 일단 복사본이라 `make-blink-icons.swift`를 돌려야 합니다.
+- 작은 그림(상점·보관함·닫힌 노치)은 따로 만들지 않습니다. 앱이 idle 칸의 (8, 0)부터 80×80을 잘라 씁니다(`CatSprites.portrait`).
 
 ## 검사 (`swift test`, `CatAssetCatalogTests`)
 

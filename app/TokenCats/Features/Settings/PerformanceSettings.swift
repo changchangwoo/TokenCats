@@ -27,14 +27,14 @@ struct PerformanceSettings: View {
             Section {
                 Toggle("Battery saver", isOn: $batterySaver)
                 LabeledContent("Active now") {
-                    if AppSettings.power.blinks {
+                    if AppSettings.power.smallAnimations {
                         Text(name(AppSettings.power.quality))
                     } else {
-                        Text("\(name(AppSettings.power.quality)) · blinking paused" as LocalizedStringResource)
+                        Text("\(name(AppSettings.power.quality)) · small animations paused" as LocalizedStringResource)
                     }
                 }
             } footer: {
-                Text("On battery or in Low Power Mode, drops to Saver and stops the closed notch's blinking.")
+                Text("On battery or in Low Power Mode, drops to Saver and pauses small animations.")
                     .foregroundStyle(.secondary)
             }
         }

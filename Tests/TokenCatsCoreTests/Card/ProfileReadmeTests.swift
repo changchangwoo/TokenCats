@@ -4,14 +4,20 @@ import Testing
 struct ProfileReadmeTests {
     private let block = ProfileReadme.block(owner: "neko", repo: "neko")
 
-    @Test func imageLineUsesTheCatroomBranch() {
+    @Test func cardLineUsesTheCatroomBranch() {
         #expect(ProfileReadme.imageURL(owner: "neko", repo: "neko")
                 == "https://raw.githubusercontent.com/neko/neko/catroom/catroom.svg")
         #expect(block == """
         <!-- tokencats:start -->
-        <img src="https://raw.githubusercontent.com/neko/neko/catroom/catroom.svg" width="100%" alt="My cat room and agent activity">
+        <a href="https://github.com/changchangwoo/tokenCats"><img src="https://raw.githubusercontent.com/neko/neko/catroom/catroom.svg" width="100%" alt="My cat room and agent activity"></a>
         <!-- tokencats:end -->
         """)
+    }
+
+    /// GitHub wraps a bare image in a link to itself; ours must lead to the project instead.
+    @Test func cardLinksToTheProject() {
+        #expect(block.contains(#"<a href="https://github.com/changchangwoo/tokenCats"><img "#))
+        #expect(block.contains("></a>\n"))
     }
 
     @Test func insertsAtTheTopWhenThereAreNoMarkers() {

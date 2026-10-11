@@ -17,7 +17,7 @@ struct CatAssetCatalogTests {
         #expect(cat.clips["groom"]?.count == 10)
         #expect(cat.clips["pet"]?.count == 2)
         #expect(cat.assetNames.allSatisfy { $0.hasSuffix(".png") })
-        #expect(cat.assetNames.count == 2)
+        #expect(cat.assetNames == ["cat-black.png"])
         #expect(cat.assetNames.allSatisfy {
             FileManager.default.fileExists(atPath: art.appendingPathComponent($0).path)
         })
@@ -63,8 +63,8 @@ struct CatAssetCatalogTests {
 
     /// Every coat folder in art-src/cats has a complete atlas and valid clips.
     /// art-src/cats/<coat>/ is the only place a cat is drawn. The shipped sheet must be exactly its clip files laid
-    /// side by side, and the shipped icons exact copies: editing CatArt by hand, or changing a source without running
-    /// scripts/build-cat-art.swift, fails here.
+    /// side by side: editing CatArt by hand, or changing a source without running scripts/build-cat-art.swift, fails
+    /// here. A coat folder holds exactly the four strips; small places (store, closed notch) crop the idle pose.
     @Test(arguments: catalogCoats())
     func shippedArtIsExactlyTheSourceFolder(coat: String) throws {
         let art = resourcesURL.appendingPathComponent("CatArt")
@@ -74,6 +74,9 @@ struct CatAssetCatalogTests {
         let cat = try #require(catalog.cats[coat])
         let sheet = try rgba(art.appendingPathComponent(cat.sheet))
         let files = ["walkRight": "walk-right", "walkLeft": "walk-left", "idle": "idle", "groom": "groom"]
+        // Pictures only: an editor's project file next to a strip (ignored by git) is not part of the coat.
+        let present = try FileManager.default.contentsOfDirectory(atPath: source.path).filter { $0.hasSuffix(".png") }
+        #expect(Set(present) == Set(files.values.map { "\($0).png" }), "\(coat): \(present.sorted())")
         #expect(Set(cat.clips.keys) == Set(files.keys).union(["pet"]))
         // Petting has no file of its own: it is grooming's 5th and 9th poses, so retouching groom.png moves it too.
         let groom = try #require(cat.clips["groom"])
@@ -93,10 +96,6 @@ struct CatAssetCatalogTests {
                 }
             }
         }
-        for (file, shipped) in [("icon.png", cat.icon), ("icon-blink.png", cat.icon.replacingOccurrences(of: ".png", with: "-blink.png"))] {
-            #expect(try Data(contentsOf: source.appendingPathComponent(file)) == Data(contentsOf: art.appendingPathComponent(shipped)),
-                    "\(coat)/\(file)")
-        }
     }
 
     @Test(arguments: catalogCoats())
@@ -106,7 +105,7 @@ struct CatAssetCatalogTests {
                                                from: Data(contentsOf: art.appendingPathComponent("cat-assets.json")))
         let cat = try #require(catalog.cats[coat])
         let atlas = try rgba(art.appendingPathComponent(cat.sheet))
-        #expect(cat.assetNames.count == 2)
+        #expect(cat.assetNames == ["cat-\(coat).png"])
         let idle = try #require(cat.clips["idle"]?.first)
         #expect(visibleBounds(atlas, frame: idle).height > 40)
         // The sheet holds exactly the frames its clips use: no spare poses, no gaps, nothing past the end.

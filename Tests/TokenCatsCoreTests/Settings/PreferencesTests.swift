@@ -13,13 +13,13 @@ struct PreferencesTests {
 
     @Test func batterySaverDropsToSaverAndStopsBlinking() {
         let plugged = PowerPolicy.effective(quality: .smooth, saverEnabled: true, onBattery: false, lowPower: false)
-        #expect(plugged == .init(quality: .smooth, blinks: true))
+        #expect(plugged == .init(quality: .smooth, smallAnimations: true))
         let battery = PowerPolicy.effective(quality: .smooth, saverEnabled: true, onBattery: true, lowPower: false)
-        #expect(battery == .init(quality: .saver, blinks: false))
+        #expect(battery == .init(quality: .saver, smallAnimations: false))
         let lowPower = PowerPolicy.effective(quality: .balanced, saverEnabled: true, onBattery: false, lowPower: true)
-        #expect(lowPower == .init(quality: .saver, blinks: false))
+        #expect(lowPower == .init(quality: .saver, smallAnimations: false))
         let off = PowerPolicy.effective(quality: .balanced, saverEnabled: false, onBattery: true, lowPower: true)
-        #expect(off == .init(quality: .balanced, blinks: true))
+        #expect(off == .init(quality: .balanced, smallAnimations: true))
     }
 
     /// The card shows everything by default: the numbers are the point of sharing it.
@@ -29,7 +29,7 @@ struct PreferencesTests {
 
     /// New users get the room cats on the closed notch, blinking, battery saver, and a full card.
     @Test func defaultsFavourTheCatsAndTheBattery() {
-        #expect(PreferenceDefaults.closedNotchCats && PreferenceDefaults.closedNotchBlink && PreferenceDefaults.batterySaver)
+        #expect(PreferenceDefaults.closedNotchCats && PreferenceDefaults.batterySaver)
         #expect(!PreferenceDefaults.sessionAlerts)
         #expect(PreferenceDefaults.profileShowsNumbers && PreferenceDefaults.profileShowsYear)
         #expect(PreferenceDefaults.language == "system")
