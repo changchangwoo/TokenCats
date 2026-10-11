@@ -24,18 +24,4 @@ struct ClosedNotchCatsTests {
         #expect(ClosedNotchCats.iconSize(notchHeight: 48) == 36)
         #expect(ClosedNotchCats.iconSize(notchHeight: 0) == 0)
     }
-
-    @Test func waitingSessionsSitOnTheRoomCatsInOrder() {
-        func session(_ id: String, _ state: AgentState) -> AgentSession {
-            AgentSession(provider: .claude, sessionId: id, cwd: "/p/\(id)", state: state, orcaTerminal: nil, lastEventAt: 1)
-        }
-        let alerts = ClosedNotchCats.alerts(sessions: [session("a", .needsApproval), session("b", .error),
-                                                       session("c", .turnDone)],
-                                            cats: ["black-1", "white-1"])
-        #expect(alerts.byCat["black-1"]?.id == "claude:a")
-        #expect(alerts.byCat["black-1"]?.mood == .needsApproval)
-        #expect(alerts.byCat["white-1"]?.mood == .error)
-        #expect(alerts.overflow == 1)
-        #expect(ClosedNotchCats.alerts(sessions: [], cats: ["black-1"]).byCat.isEmpty)
-    }
 }

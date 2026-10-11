@@ -1,5 +1,5 @@
 #!/bin/zsh
-# Debug 빌드로 프로필 카드 5종(SVG)과 화면 4장, 온보딩 시안 12장(PNG)을 뽑는다. 리팩토링 전후 비교용.
+# Debug 빌드로 프로필 카드 5종(SVG)과 화면 5장, 온보딩 시안 12장(PNG)을 뽑는다. 리팩토링 전후 비교용.
 # 데이터는 고정 사본(NC_SUPPORT_DIR)을 읽는다: 기준 폴더에 support/가 없으면 지금 데이터를 거기에 복사해 둔다.
 # 사용: scripts/snapshot.sh <out-dir> [--no-build]   (기준 폴더: $TOKENCATS_SNAPSHOT_BASE, 기본 ~/.cache/tokencats/snapshot-base)
 # 앱에 인자를 더 넘기려면 TOKENCATS_LAUNCH_ARGS="-companionLanguage en" 처럼 준다.
@@ -38,6 +38,6 @@ run() {
   sleep 2; kill "$pid" 2>/dev/null || true; wait "$pid" 2>/dev/null || true
 }
 run "$OUT/cards" 5 NC_SNAPSHOT_CARDS=1
-run "$OUT/screens" 4
+run "$OUT/screens" 5
 run "$OUT/onboarding" 12 NC_SNAPSHOT_ONBOARDING=1 NC_SNAPSHOT_CARD_SVG="$ROOT/docs/design/card-example.svg"
 ls "$OUT/cards" "$OUT/screens" "$OUT/onboarding"

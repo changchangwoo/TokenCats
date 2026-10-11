@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// Home of the open notch: the room flows into a compact ledger in the same background theme.
-/// Sessions are not shown here; waiting sessions appear in the closed notch. Hook connections live in Settings › Agents.
+/// Sessions are not shown here. Hook connections live in Settings › Agents.
 struct HomeView: View {
     @EnvironmentObject private var vm: NotchViewModel
     @AppStorage(AppSettings.Key.roomTheme) private var backgroundID = AppSettings.Default.roomTheme

@@ -637,6 +637,17 @@
         }
       }
     },
+    "Agent hooks": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "에이전트 훅"
+          }
+        }
+      }
+    },
     "Agent limits": {
       "extractionState": "manual",
       "localizations": {
@@ -1407,17 +1418,6 @@
         }
       }
     },
-    "Connected agents show sessions waiting for you\nin the closed notch.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "연결하면 응답을 기다리는 세션이\n닫힌 노치에 보여요."
-          }
-        }
-      }
-    },
     "Connected as @%@": {
       "extractionState": "manual",
       "localizations": {
@@ -1957,6 +1957,17 @@
         }
       }
     },
+    "Drawing your card…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "카드를 그리는 중…"
+          }
+        }
+      }
+    },
     "Drop rates": {
       "extractionState": "manual",
       "localizations": {
@@ -2283,6 +2294,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "홈 표시"
+          }
+        }
+      }
+    },
+    "Hooks let TokenCats follow\nyour agent sessions.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "훅을 연결하면 TokenCats가\n에이전트 세션을 따라가요."
           }
         }
       }
@@ -3134,6 +3156,17 @@
         }
       }
     },
+    "Power saving": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "절전 모드"
+          }
+        }
+      }
+    },
     "Preferred display": {
       "extractionState": "manual",
       "localizations": {
@@ -3684,17 +3717,6 @@
         }
       }
     },
-    "Session alerts": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "세션 알림"
-          }
-        }
-      }
-    },
     "Settings": {
       "extractionState": "manual",
       "localizations": {
@@ -4201,6 +4223,17 @@
         }
       }
     },
+    "The hook lets TokenCats follow each session's events. Tokens and churu are counted without it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "훅을 연결하면 TokenCats가 세션 이벤트를 따라갑니다. 토큰과 츄르는 훅 없이도 집계됩니다."
+          }
+        }
+      }
+    },
     "The hook script is missing from the app": {
       "extractionState": "manual",
       "localizations": {
@@ -4685,17 +4718,6 @@
         }
       }
     },
-    "When an agent session is waiting for a response, a dot appears above a cat: orange needs approval, red is an error, white is a new result. Click that cat to go to the terminal.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "응답을 기다리는 에이전트 세션이 있으면 고양이 위에 점을 찍습니다. 주황은 승인 필요, 빨강은 오류, 흰색은 새 결과이고, 그 고양이를 누르면 터미널로 갑니다."
-          }
-        }
-      }
-    },
     "When the notch is closed, the cats in the room sit beside it, two on each side. The black area widens to fit them.": {
       "extractionState": "manual",
       "localizations": {
@@ -4736,17 +4758,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "창 그림자"
-          }
-        }
-      }
-    },
-    "With the hook connected, sessions waiting for a response show in the closed notch. Tokens and churu are counted without it.": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "훅을 연결하면 응답을 기다리는 세션이 닫힌 노치에 표시됩니다. 토큰과 츄르는 훅 없이도 집계됩니다."
           }
         }
       }

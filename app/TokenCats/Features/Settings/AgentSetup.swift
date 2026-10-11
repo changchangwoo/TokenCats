@@ -20,8 +20,7 @@ enum AgentSetup {
                                pythonUsable: integration.pythonIsUsable())
     }
 
-    /// Installs the hook and turns session alerts on: they are what the hook is for, and the setting is off until
-    /// someone connects.
+    /// Installs the hook that reports session events.
     static func connectHook(_ integration: HookIntegration, name: String) -> Outcome {
         guard let script = Bundle.main.url(forResource: "tokencats-hook", withExtension: "py") else {
             return Outcome(ok: false, notice: "The hook script is missing from the app")
@@ -37,7 +36,6 @@ enum AgentSetup {
         } catch {
             return Outcome(ok: false, notice: "Could not set up \(name): \(error.localizedDescription)")
         }
-        UserDefaults.standard.set(true, forKey: AppSettings.Key.sessionAlerts)
         return Outcome(ok: true, notice: integration.agent.provider == .codex
             ? "In Codex, approve it with /hooks, then start a new session"
             : "Applies from the next Claude session")

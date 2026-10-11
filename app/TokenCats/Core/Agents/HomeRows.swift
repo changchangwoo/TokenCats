@@ -32,17 +32,6 @@ enum HomeRows {
         return ranked.sorted { ($0.rank, -$0.time, $0.row.id) < ($1.rank, -$1.time, $1.row.id) }.map(\.row)
     }
 
-    /// The closed notch shows at most this many waiting animals.
-    static let maxWaiting = 4
-
-    /// Sessions that want the user: needs response, error, unseen completion. Shown in the closed notch.
-    static func waiting(sessions: [AgentSession]) -> [AgentSession] {
-        Array(strip(sessions: sessions, results: [], now: 0).compactMap { row -> AgentSession? in
-            guard case .session(let s) = row, s.state == .needsApproval || s.state == .error || s.unseenDone else { return nil }
-            return s
-        }.prefix(maxWaiting))
-    }
-
     private static func rank(_ session: AgentSession, now: Double) -> Int {
         switch session.state {
         case .needsApproval: return 0

@@ -87,5 +87,6 @@
   "%@: %@ tokens": "%@: %@ 토큰",
   "Usage streak": "연속 사용",
   "Restart TokenCats": "TokenCats 다시 시작",
-  "Quit": "종료"
+  "Quit": "종료",
+  "Power saving": "절전 모드"
 }

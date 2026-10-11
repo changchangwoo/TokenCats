@@ -62,9 +62,8 @@ enum ProfileSyncMode: String, CaseIterable, Codable, Sendable {
 enum PreferenceDefaults {
     static let language = "system"
     static let animationQuality = AnimationQuality.default.rawValue
-    static let batterySaver = true
+    static let batterySaver = false
     static let closedNotchCats = true
-    static let sessionAlerts = false
     static let profileShowsNumbers = ProfileCardOptions.default.showsNumbers
     static let profileShowsYear = ProfileCardOptions.default.showsYear
     static let profileSyncMode = ProfileSyncMode.default.rawValue

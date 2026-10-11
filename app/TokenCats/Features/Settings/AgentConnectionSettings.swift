@@ -27,11 +27,11 @@ struct AgentConnectionSettings: View {
                 connectionRow("Codex", installed: $codexInstalled, integration: .codex,
                               color: AgentProvider.codex.badgeColor)
             } header: {
-                Text("Session alerts")
+                Text("Agent hooks")
             } footer: {
                 VStack(alignment: .leading, spacing: 4) {
                     if let notice { Text(notice) }
-                    Text("With the hook connected, sessions waiting for a response show in the closed notch. Tokens and churu are counted without it.")
+                    Text("The hook lets TokenCats follow each session's events. Tokens and churu are counted without it.")
                         .foregroundStyle(.secondary)
                 }
             }

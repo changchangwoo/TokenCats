@@ -24,18 +24,6 @@ enum ClosedNotchCats {
         (max(0, notchHeight - iconMargin) / iconStep).rounded(.down) * iconStep
     }
 
-    /// Waiting sessions shown as dots on the room's cats: one session per cat in order; the rest are counted.
-    struct Alerts: Equatable {
-        let byCat: [String: NotchSlot]
-        let overflow: Int
-    }
-
-    static func alerts(sessions: [AgentSession], cats: [String]) -> Alerts {
-        let layout = NotchSlots.layout(for: sessions, limit: cats.count)
-        guard !sessions.isEmpty else { return Alerts(byCat: [:], overflow: 0) }
-        return Alerts(byCat: Dictionary(uniqueKeysWithValues: zip(cats, layout.slots)), overflow: layout.overflow)
-    }
-
     /// Icon slots on each wing.
     static func wingSlots(count: Int) -> Int { (count + 1) / 2 }
 }

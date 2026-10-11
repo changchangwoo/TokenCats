@@ -27,10 +27,9 @@ struct PreferencesTests {
         #expect(ProfileCardOptions.default == ProfileCardOptions(showsNumbers: true, showsYear: true))
     }
 
-    /// New users get the room cats on the closed notch, blinking, battery saver, and a full card.
-    @Test func defaultsFavourTheCatsAndTheBattery() {
-        #expect(PreferenceDefaults.closedNotchCats && PreferenceDefaults.batterySaver)
-        #expect(!PreferenceDefaults.sessionAlerts)
+    /// New users get the room cats on the closed notch, full-speed animation, and a full card.
+    @Test func defaultsFavourTheCatsWithoutSurpriseSlowdown() {
+        #expect(PreferenceDefaults.closedNotchCats && !PreferenceDefaults.batterySaver)
         #expect(PreferenceDefaults.profileShowsNumbers && PreferenceDefaults.profileShowsYear)
         #expect(PreferenceDefaults.language == "system")
         #expect(PreferenceDefaults.animationQuality == AnimationQuality.default.rawValue)

@@ -29,15 +29,16 @@ struct OnboardingPrimaryButtonStyle: ButtonStyle {
 }
 
 /// A quieter button: on the page it sits on the darker surface; inside a card (`onCard`) on the page colour.
+/// Next to the main button it is the same height, so a pair of buttons lines up.
 struct OnboardingSecondaryButtonStyle: ButtonStyle {
     let theme: RoomTheme
     var onCard = false
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.system(size: 13, weight: .bold, design: .rounded))
+            .font(.system(size: onCard ? 13 : 14, weight: .bold, design: .rounded))
             .foregroundStyle(theme.ink.swiftUI.opacity(0.9))
-            .padding(.horizontal, 20).padding(.vertical, 8)
+            .padding(.horizontal, onCard ? 20 : 24).padding(.vertical, onCard ? 8 : 10)
             .background(Capsule().fill((onCard ? theme.panel : theme.surface).swiftUI
                     .opacity(configuration.isPressed ? 0.7 : 1)))
     }

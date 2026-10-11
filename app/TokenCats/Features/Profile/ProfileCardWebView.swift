@@ -5,15 +5,41 @@ import WebKit
 /// (NSImage draws every animation frame at once and ignores the card's font.)
 struct ProfileCardWebView: NSViewRepresentable {
     let svg: String
+    /// Runs once the card is on screen, so a placeholder over it can be lifted.
+    var onDraw: () -> Void = {}
 
-    func makeNSView(context _: Context) -> WKWebView {
+    func makeCoordinator() -> Coordinator { Coordinator(onDraw: onDraw) }
+
+    func makeNSView(context: Context) -> WKWebView {
         let view = WKWebView()
         view.setValue(false, forKey: "drawsBackground")
-        view.loadHTMLString(ProfileCardPage.html(svg), baseURL: nil)
+        view.navigationDelegate = context.coordinator
+        context.coordinator.load(svg, into: view)
         return view
     }
 
-    func updateNSView(_: WKWebView, context _: Context) {}
+    /// A new card (other options, a connected owner) replaces the page; the same card is left alone.
+    func updateNSView(_ view: WKWebView, context: Context) {
+        context.coordinator.onDraw = onDraw
+        if context.coordinator.svg != svg { context.coordinator.load(svg, into: view) }
+    }
+
+    final class Coordinator: NSObject, WKNavigationDelegate {
+        var onDraw: () -> Void
+        private(set) var svg = ""
+
+        init(onDraw: @escaping () -> Void) { self.onDraw = onDraw }
+
+        func load(_ svg: String, into view: WKWebView) {
+            self.svg = svg
+            view.loadHTMLString(ProfileCardPage.html(svg), baseURL: nil)
+        }
+
+        func webView(_: WKWebView, didFinish _: WKNavigation!) {
+            // A beat for the embedded font, as the snapshot waits.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [onDraw] in onDraw() }
+        }
+    }
 }
 
 enum ProfileCardPage {

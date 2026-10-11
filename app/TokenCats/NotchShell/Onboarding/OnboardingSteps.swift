@@ -5,7 +5,7 @@ import SwiftUI
 // examples in the design snapshots), so both draw the same views.
 
 /// The window size every page is laid out for.
-let onboardingWindowSize = CGSize(width: 480, height: 640)
+let onboardingWindowSize = CGSize(width: 480, height: 680)
 
 /// Where a page sits in the flow, for the progress dots (the limits page is left out without Claude Code).
 struct OnboardingProgress {
@@ -69,10 +69,12 @@ struct OnboardingTitle: View {
                 Text(title).font(.system(size: 24, weight: .heavy, design: .rounded))
                 PixelPaw(color: theme.accent.swiftUI, size: 20)
             }
+            // Two lines are always reserved: a one-line subtitle must not lift the page's content.
             Text(subtitle)
                 .font(.system(size: 13, weight: .semibold, design: .rounded))
                 .foregroundStyle(theme.ink.swiftUI.opacity(0.75))
                 .lineSpacing(3)
+                .lineLimit(2, reservesSpace: true)
         }
         .multilineTextAlignment(.center)
         .padding(.horizontal, 36)
@@ -92,20 +94,22 @@ struct OnboardingCard<Content: View>: View {
     }
 }
 
-/// The result of the last action on a page, under its content.
+/// The result of the last action on a page, under its content. Its two lines are always laid out, so a notice
+/// appearing or going away never moves what is around it.
 struct OnboardingNotice: View {
     let theme: RoomTheme
     let notice: LocalizedStringResource?
 
     var body: some View {
-        if let notice {
-            Text(notice)
-                .font(.system(size: 12, weight: .semibold, design: .rounded))
-                .foregroundStyle(theme.ink.swiftUI.opacity(0.8))
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 36)
-                .padding(.top, 12)
-        }
+        Text(notice ?? "")
+            .font(.system(size: 12, weight: .semibold, design: .rounded))
+            .foregroundStyle(theme.ink.swiftUI.opacity(0.8))
+            .multilineTextAlignment(.center)
+            .lineLimit(2, reservesSpace: true)
+            .padding(.horizontal, 36)
+            .padding(.top, 12)
+            .opacity(notice == nil ? 0 : 1)
+            .animation(.easeInOut(duration: 0.2), value: notice == nil)
     }
 }
 
@@ -124,10 +128,10 @@ struct OnboardingFooter: View {
                 Button(secondary, action: onSecondary).buttonStyle(OnboardingSecondaryButtonStyle(theme: theme))
             }
             Button(action: onPrimary) {
-                HStack(spacing: 6) {
-                    if busy { ProgressView().controlSize(.small) }
-                    Text(primary)
-                }
+                // The spinner sits over the label: the button keeps its width while busy.
+                Text(primary)
+                    .opacity(busy ? 0 : 1)
+                    .overlay { if busy { ProgressView().controlSize(.small) } }
             }
             .buttonStyle(OnboardingPrimaryButtonStyle(theme: theme))
             .keyboardShortcut(.defaultAction)
@@ -159,7 +163,8 @@ struct OnboardingWelcomeStep: View {
                     .clipShape(RoundedRectangle(cornerRadius: 14))
                     .overlay(RoundedRectangle(cornerRadius: 14).strokeBorder(theme.panelEdge.swiftUI, lineWidth: 2))
                     .padding(.horizontal, 32)
-                    .padding(.bottom, 24)
+                    .padding(.bottom, 8)
+                Spacer(minLength: 16)
                 HStack(spacing: 10) {
                     Text(verbatim: "TokenCats").font(.system(size: 30, weight: .heavy, design: .rounded))
                     PixelPaw(color: theme.accent.swiftUI, size: 24)
@@ -215,7 +220,7 @@ struct OnboardingAgentsStep: View {
             VStack(spacing: 0) {
                 OnboardingHeader(theme: theme, progress: progress, onBack: onBack, onSkip: onNext)
                 OnboardingTitle(theme: theme, title: "Connect your agents",
-                                subtitle: "Connected agents show sessions waiting for you\nin the closed notch.")
+                                subtitle: "Hooks let TokenCats follow\nyour agent sessions.")
                     .padding(.top, OnboardingTitle.top).padding(.bottom, 20)
                 VStack(spacing: 10) {
                     card(theme, provider: .claude, name: "Claude Code", state: claude)
@@ -386,6 +391,13 @@ struct OnboardingGitHubStep: View {
     var showsYear: Binding<Bool> = .constant(true)
     var busy = false
     var notice: LocalizedStringResource?
+    /// Why the card is not there yet (the first scan), under the placeholder's spinner.
+    var loading: LocalizedStringResource?
+    /// The card has been drawn once (kept outside the view, so coming back to the page shows it at once).
+    var cardDrawn = false
+    var onCardDrawn: () -> Void = {}
+    /// The card could not be made: the room stays, the spinner goes.
+    var cardFailed = false
     var actions = OnboardingGitHubActions()
     var onBack: () -> Void = {}
     var onNext: () -> Void = {}
@@ -406,20 +418,41 @@ struct OnboardingGitHubStep: View {
                 Spacer()
                 footer(theme)
             }
+            .animation(.easeInOut(duration: 0.2), value: phase)
         }
     }
 
+    /// The card's slot is laid out at the card's size from the start; until the card is drawn, a small room and
+    /// a spinner sit in it, so the page never jumps when the card arrives.
     @ViewBuilder private func preview(_ theme: RoomTheme) -> some View {
-        Group {
+        let ready = card != nil || (cardSVG != nil && cardDrawn)
+        ZStack {
+            RoundedRectangle(cornerRadius: 10).fill(theme.surface.swiftUI)
             if let cardSVG {
-                ProfileCardWebView(svg: cardSVG).aspectRatio(840 / 504, contentMode: .fit)
+                ProfileCardWebView(svg: cardSVG, onDraw: onCardDrawn)
             } else if let card {
                 Image(nsImage: card).resizable().aspectRatio(contentMode: .fit)
-            } else {
-                RoomPreview(theme: theme)
+            }
+            if !ready {
+                VStack(spacing: 12) {
+                    RoomPreview(theme: theme)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .padding(.horizontal, 28)
+                    if !cardFailed {
+                        HStack(spacing: 6) {
+                            ProgressView().controlSize(.small)
+                            Text(loading ?? "Drawing your card…")
+                        }
+                        .font(.system(size: 12, weight: .semibold, design: .rounded))
+                        .foregroundStyle(theme.ink.swiftUI.opacity(0.7))
+                    }
+                }
+                .transition(.opacity)
             }
         }
+        .aspectRatio(840 / 504, contentMode: .fit)
         .clipShape(RoundedRectangle(cornerRadius: 10))
+        .animation(.easeInOut(duration: 0.25), value: ready)
         .overlay(alignment: .topLeading) {
             if case .done = phase {
                 Label("On your profile", systemImage: "checkmark.seal.fill")

@@ -90,17 +90,6 @@ struct HomeRowsTests {
         #expect(rows.last?.id == "claude:w")
     }
 
-    @Test func waitingIsOnlySessionsThatWantTheUserMostUrgentFirst() {
-        let sessions = [
-            session("w", .working, ts: 9), session("i", .idle, ts: 9),
-            session("u1", .idle, unseen: true, ts: 3), session("u2", .turnDone, unseen: true, ts: 5),
-            session("e", .error, ts: 1), session("n", .needsApproval, ts: 1),
-        ]
-        #expect(HomeRows.waiting(sessions: sessions).map(\.id) == ["claude:n", "claude:e", "claude:u2", "claude:u1"])
-        let many = (0..<6).map { session("n\($0)", .needsApproval, ts: Double($0)) }
-        #expect(HomeRows.waiting(sessions: many).count == HomeRows.maxWaiting)
-    }
-
     @Test func liveSessionAndItsResultAreOneRow() {
         let live = session("a", .turnDone, unseen: true)
         var results = RecentResults()

@@ -7,8 +7,6 @@ final class AgentHub: ObservableObject {
     static let shared = AgentHub(source: SocketServer.shared)
 
     @Published private(set) var sessions: [AgentSession] = []
-    /// Sessions that want the user; the closed notch shows only these.
-    @Published private(set) var waitingSessions: [AgentSession] = []
     @Published private(set) var mood: CharacterMood = .idle
     @Published private(set) var summary = SessionSummary()
     @Published private(set) var results: [RecentResult] = []
@@ -150,8 +148,6 @@ final class AgentHub: ObservableObject {
         let ordered = book.orderedSessions
         if ordered != sessions { sessions = ordered }
         // Also re-run by the 10s liveness timer, so sessions fall asleep without new events
-        let waiting = HomeRows.waiting(sessions: ordered)
-        if waiting != waitingSessions { waitingSessions = waiting }
         if book.mood != mood { mood = book.mood }
         if book.summary != summary { summary = book.summary }
         if recent.items != results { results = recent.items }

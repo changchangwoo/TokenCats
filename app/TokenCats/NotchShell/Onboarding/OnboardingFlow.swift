@@ -15,11 +15,18 @@ final class OnboardingModel: ObservableObject {
     @Published private(set) var notice: LocalizedStringResource?
     @Published private(set) var githubBusy = false
     @Published private(set) var cardSVG: String?
+    /// Shown in the card's slot while the first card is being made.
+    @Published private(set) var cardStatus: LocalizedStringResource?
+    /// The web view has drawn a card once; later visits to the page show it without a placeholder.
+    @Published private(set) var cardDrawn = false
+    /// No card could be made (no records to read, or an error): the slot keeps the room and drops the spinner.
+    @Published private(set) var cardFailed = false
 
     private let sync = ProfileSync.shared
-    private var showingScanNote = false
     private var connectTask: Task<Void, Never>?
     private var cardTask: Task<Void, Never>?
+    /// Something changed while a card was being made: make another when it is done.
+    private var cardStale = false
     private let onClose: () -> Void
     private let onOpenCatRoom: () -> Void
 
@@ -30,6 +37,8 @@ final class OnboardingModel: ObservableObject {
         pages = OnboardingPlan.pages(claudePresent: claude != .notInstalled)
         launchAtLogin = OnboardingPlan.launchAtLoginDefault(firstLaunch: NotchCoordinator.shared.firstLaunch,
                                                             currentlyEnabled: LaunchAtLogin.isEnabled)
+        // The first card can take a while (a scan of every log); start it now so it is ready by the GitHub page.
+        loadCard()
     }
 
     var page: OnboardingStepKind { pages[index] }
@@ -80,7 +89,6 @@ final class OnboardingModel: ObservableObject {
 
     private func leave(_ page: OnboardingStepKind, applying: Bool) {
         notice = nil
-        showingScanNote = false
         switch page {
         case .welcome:
             // Until this flips, the notch ignores hover and every launch replays the first-run window.
@@ -96,7 +104,7 @@ final class OnboardingModel: ObservableObject {
         switch page {
         case .agents: refreshAgents()
         case .limits: limitsOn = StatusLineIntegration.claude.isInstalled()
-        case .github: loadCard()
+        case .github: if cardSVG == nil { loadCard() }
         default: break
         }
     }
@@ -131,24 +139,45 @@ final class OnboardingModel: ObservableObject {
 
     var githubLogin: String { sync.state.owner ?? "" }
 
-    /// The card exactly as it would be uploaded, redrawn when the shown items change.
+    /// The card exactly as it would be uploaded, redrawn when the shown items change. One card is made at a time:
+    /// a change during the making queues one more, instead of starting another scan alongside.
     func loadCard() {
-        cardTask?.cancel()
+        if cardTask != nil {
+            cardStale = true
+            return
+        }
         // The first card waits for a full scan of past records; say so instead of a silent spinner.
-        let firstScan = ProfileCard.needsFirstScan
-        if firstScan && notice == nil {
-            notice = "Reading past records for the first time… (about 30 seconds)"
-            showingScanNote = true
+        if cardSVG == nil && ProfileCard.needsFirstScan {
+            cardStatus = "Reading past records for the first time… (about 30 seconds)"
         }
         cardTask = Task { [weak self] in
-            let svg = try? await ProfileCard.render(owner: self?.sync.state.owner)
-            guard !Task.isCancelled, let self else { return }
-            self.cardSVG = svg
-            if self.showingScanNote {
-                self.notice = nil
-                self.showingScanNote = false
+            let svg = await Self.renderCard(owner: self?.sync.state.owner)
+            guard let self, !Task.isCancelled else { return }
+            if let svg { self.cardSVG = svg }
+            self.cardFailed = svg == nil && self.cardSVG == nil
+            self.cardStatus = nil
+            self.cardTask = nil
+            if self.cardStale {
+                self.cardStale = false
+                self.loadCard()
             }
         }
+    }
+
+    func markCardDrawn() { cardDrawn = true }
+
+    /// Right after launch the churu count may still be running; wait for it rather than give up on the card.
+    private static func renderCard(owner: String?) async -> String? {
+        for _ in 0..<30 {
+            do {
+                return try await ProfileCard.render(owner: owner)
+            } catch ProfileCardError.notReady {
+                guard (try? await Task.sleep(for: .seconds(1))) != nil else { return nil }
+            } catch {
+                return nil
+            }
+        }
+        return nil
     }
 
     /// The gh login when there is one, otherwise a code to enter on github.com.
@@ -235,7 +264,6 @@ final class OnboardingModel: ObservableObject {
         return items
     }
 
-    var churu: Int { ChuruModel.shared.snapshot?.balance ?? 0 }
     var adoptionPrice: Int { StoreModel.shared.catalog?.catBox.price ?? 10_000_000 }
 }
 
@@ -243,6 +271,7 @@ final class OnboardingModel: ObservableObject {
 struct OnboardingFlowView: View {
     @ObservedObject var model: OnboardingModel
     @ObservedObject private var sync = ProfileSync.shared
+    @ObservedObject private var churu = ChuruModel.shared
     @AppStorage(AppSettings.Key.profileShowsNumbers) private var showsNumbers = AppSettings.Default.profileShowsNumbers
     @AppStorage(AppSettings.Key.profileShowsYear) private var showsYear = AppSettings.Default.profileShowsYear
 
@@ -274,7 +303,8 @@ struct OnboardingFlowView: View {
             OnboardingGitHubStep(
                 phase: model.githubPhase, login: model.githubLogin, progress: model.progress,
                 cardSVG: model.cardSVG, showsNumbers: $showsNumbers, showsYear: $showsYear,
-                busy: model.githubBusy || sync.busy, notice: model.notice,
+                busy: model.githubBusy || sync.busy, notice: model.notice, loading: model.cardStatus,
+                cardDrawn: model.cardDrawn, onCardDrawn: model.markCardDrawn, cardFailed: model.cardFailed,
                 actions: OnboardingGitHubActions(
                     connect: model.connectGitHub, openDevicePage: model.openDevicePage,
                     cancel: model.cancelGitHubCode, createRepo: model.createProfileRepo,
@@ -285,7 +315,8 @@ struct OnboardingFlowView: View {
             OnboardingLoginItemStep(isOn: $model.launchAtLogin, progress: model.progress,
                                     onBack: model.back, onSkip: model.skip, onNext: model.next)
         case .finish:
-            OnboardingFinishStep(summary: model.summary, churu: model.churu, adoptionPrice: model.adoptionPrice,
+            OnboardingFinishStep(summary: model.summary, churu: churu.snapshot?.balance ?? 0,
+                                 adoptionPrice: model.adoptionPrice,
                                  progress: model.progress, onBack: model.back, onFinish: model.finish)
         }
     }

@@ -44,8 +44,10 @@ enum DebugSnapshots {
                     ("3-limits", AnyView(OnboardingLimitsStep())),
                     ("4a-github-start", AnyView(OnboardingGitHubStep(phase: .start, login: login, card: card))),
                     ("4b-github-code", AnyView(OnboardingGitHubStep(phase: .code("A1B2-C3D4"), login: login, card: card))),
+                    // The tallest state, with a notice: checks that the footer still fits.
                     ("4c-github-access", AnyView(OnboardingGitHubStep(phase: .needsAccess(appInstall: true), login: login,
-                                                                      card: card))),
+                                                                      card: card,
+                                                                      notice: "The code expired. Try again"))),
                     ("4d-github-ready", AnyView(OnboardingGitHubStep(phase: .ready, login: login, card: card))),
                     ("4e-github-done", AnyView(OnboardingGitHubStep(phase: .done, login: login, card: card))),
                     ("5-login-item", AnyView(OnboardingLoginItemStep())),
@@ -97,6 +99,11 @@ enum DebugSnapshots {
                         .panel.swiftUI)
                     .frame(width: 616))),
             ]
+            // The room holds an AppKit view (petting), which ImageRenderer cannot draw: it goes through a window
+            // kept off screen, like the onboarding pages. Its corner badges (power saving, hidden cats) show here.
+            await drawInWindow(CatRoomView(theme: store.theme(id: AppSettings.roomThemeID)),
+                               size: CGSize(width: 616, height: 190),
+                               to: URL(fileURLWithPath: dir).appendingPathComponent("cat-room.png"))
             for (name, view) in pages {
                 switch name {
                 case "store-adopt": store.route = .adopt
@@ -114,6 +121,20 @@ enum DebugSnapshots {
             store.route = .main
             NSApp.terminate(nil)
         }
+    }
+
+    private static func drawInWindow<Content: View>(_ view: Content, size: CGSize, to url: URL) async {
+        let window = NSWindow(contentRect: CGRect(origin: CGPoint(x: -20_000, y: 0), size: size),
+                              styleMask: [.titled, .fullSizeContentView], backing: .buffered, defer: false)
+        let host = NSHostingView(rootView: view.frame(width: size.width, height: size.height).localized())
+        window.contentView = host
+        window.orderFrontRegardless()
+        try? await Task.sleep(for: .seconds(1))
+        if let rep = host.bitmapImageRepForCachingDisplay(in: host.bounds) {
+            host.cacheDisplay(in: host.bounds, to: rep)
+            try? rep.representation(using: .png, properties: [:])?.write(to: url)
+        }
+        window.orderOut(nil)
     }
 }
 #endif
