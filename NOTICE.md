@@ -16,6 +16,9 @@ TokenCats is not affiliated with or endorsed by TheBoredTeam.
 - UX references only (no code copied): Claude Island / Vibe Notch (farouqaldori), Buddi.
 - Cat and room art is drawn for this project. A folder at `~/Library/Application Support/TokenCats/art/` may
   override the bundled cat art for local experiments (`CatSprites.artDirectory`).
+- Swift packages linked into the app, all MIT (license texts in `THIRD_PARTY_LICENSES`): Defaults 9.0.6,
+  KeyboardShortcuts 2.4.0 and LaunchAtLogin-Modern 1.1.0 by Sindre Sorhus, https://github.com/sindresorhus;
+  SkyLightWindow 1.0.0 by Lakr Aream, https://github.com/Lakr233/SkyLightWindow.
 - Profile card font: Baloo 2 by The Baloo 2 Project Authors, https://github.com/EkType/Baloo2, SIL Open Font
   License 1.1 (`app/TokenCats/Resources/Fonts/Baloo2-OFL.txt`). Subset and embedded by `scripts/build-card-font.sh`
   into `Core/Card/CardFont.swift`.
