@@ -129,5 +129,7 @@
   "Restart app": "앱 다시 시작",
   "Every store price becomes 0 churu and churu is never spent. Takes effect after the app restarts.": "켜면 상점의 모든 가격이 0 츄르가 되고 츄르가 줄지 않습니다. 앱을 다시 시작하면 적용됩니다.",
   "The cat room is always included.": "고양이 방은 늘 들어갑니다.",
-  "Xcode Command Line Tools are missing, so nothing was connected. Run xcode-select --install in Terminal, then connect again": "Xcode 명령줄 도구가 없어 연결하지 않았습니다. 터미널에서 xcode-select --install 후 다시 연결하세요"
+  "Xcode Command Line Tools are missing, so nothing was connected. Run xcode-select --install in Terminal, then connect again": "Xcode 명령줄 도구가 없어 연결하지 않았습니다. 터미널에서 xcode-select --install 후 다시 연결하세요",
+  "Show first-run setup again": "처음 설정 다시 보기",
+  "Connect agents, Claude limits and the GitHub card step by step.": "에이전트, Claude 사용 한도, GitHub 카드를 한 단계씩 연결해요."
 }

@@ -34,8 +34,6 @@
   "Shown to anyone": "누구나 볼 수 있는 것",
   "Always": "항상",
   "Opened github.com/login/device. Waiting for approval…": "github.com/login/device를 열었어요. 승인을 기다리는 중…",
-  "Two steps on GitHub": "GitHub에서 두 가지만 해 주세요",
-  "Create your profile repo %@/%@": "프로필 레포 %@/%@ 만들기",
   "Install the TokenCats App and pick that repo": "TokenCats App을 설치하고 그 레포 고르기",
   "Come back here when done; it checks again by itself.": "다 했으면 이 창으로 돌아오세요. 알아서 다시 확인해요.",
   "Connected as @%@": "@%@로 연결됨",
@@ -58,5 +56,8 @@
   "GitHub card": "GitHub 카드",
   "Hover over the notch or press %@ to open it.": "노치에 마우스를 올리거나 %@를 누르면 열려요.",
   "Hi!": "안녕!",
-  "Start with your Mac?": "Mac을 켤 때 같이 켤까요?"
+  "Start with your Mac?": "Mac을 켤 때 같이 켤까요?",
+  "A step on GitHub": "GitHub에서 할 일",
+  "Claude limits are on": "Claude 사용 한도가 켜져 있어요",
+  "Create your profile repo %@/%@ if you don't have it": "프로필 레포 %@/%@ 만들기 (없을 때만)"
 }

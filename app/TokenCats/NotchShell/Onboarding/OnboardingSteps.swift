@@ -1,16 +1,22 @@
 import KeyboardShortcuts
 import SwiftUI
 
-// The six first-run pages. Each page takes its state from outside, so the
-// design snapshots (DebugSnapshots, NC_SNAPSHOT_ONBOARDING) and the real flow draw the same views.
+// The first-run pages. Each page takes its state and actions from outside (OnboardingFlowView in the app, fixed
+// examples in the design snapshots), so both draw the same views.
 
 /// The window size every page is laid out for.
 let onboardingWindowSize = CGSize(width: 480, height: 640)
 
+/// Where a page sits in the flow, for the progress dots (the limits page is left out without Claude Code).
+struct OnboardingProgress {
+    var step: Int
+    var total = 6
+}
+
 /// Top bar: progress dots, back, and skip.
 struct OnboardingHeader: View {
     let theme: RoomTheme
-    let step: Int
+    let progress: OnboardingProgress
     var onBack: (() -> Void)?
     var onSkip: (() -> Void)?
 
@@ -26,10 +32,11 @@ struct OnboardingHeader: View {
             .frame(width: 90, alignment: .leading)
             Spacer()
             HStack(spacing: 6) {
-                ForEach(1...6, id: \.self) { index in
+                ForEach(1...max(progress.total, 1), id: \.self) { index in
                     Capsule()
-                        .fill(index == step ? theme.accent.swiftUI : theme.ink.swiftUI.opacity(index < step ? 0.55 : 0.2))
-                        .frame(width: index == step ? 18 : 6, height: 6)
+                        .fill(index == progress.step ? theme.accent.swiftUI
+                              : theme.ink.swiftUI.opacity(index < progress.step ? 0.55 : 0.2))
+                        .frame(width: index == progress.step ? 18 : 6, height: 6)
                 }
             }
             Spacer()
@@ -85,11 +92,29 @@ struct OnboardingCard<Content: View>: View {
     }
 }
 
+/// The result of the last action on a page, under its content.
+struct OnboardingNotice: View {
+    let theme: RoomTheme
+    let notice: LocalizedStringResource?
+
+    var body: some View {
+        if let notice {
+            Text(notice)
+                .font(.system(size: 12, weight: .semibold, design: .rounded))
+                .foregroundStyle(theme.ink.swiftUI.opacity(0.8))
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 36)
+                .padding(.top, 12)
+        }
+    }
+}
+
 /// The page's buttons, pinned to the bottom.
 struct OnboardingFooter: View {
     let theme: RoomTheme
     let primary: LocalizedStringKey
     var secondary: LocalizedStringKey?
+    var busy = false
     var onPrimary: () -> Void = {}
     var onSecondary: () -> Void = {}
 
@@ -98,17 +123,29 @@ struct OnboardingFooter: View {
             if let secondary {
                 Button(secondary, action: onSecondary).buttonStyle(OnboardingSecondaryButtonStyle(theme: theme))
             }
-            Button(primary, action: onPrimary)
-                .buttonStyle(OnboardingPrimaryButtonStyle(theme: theme))
-                .keyboardShortcut(.defaultAction)
+            Button(action: onPrimary) {
+                HStack(spacing: 6) {
+                    if busy { ProgressView().controlSize(.small) }
+                    Text(primary)
+                }
+            }
+            .buttonStyle(OnboardingPrimaryButtonStyle(theme: theme))
+            .keyboardShortcut(.defaultAction)
+            .disabled(busy)
         }
         .padding(.bottom, 32)
     }
 }
 
+private func copyToClipboard(_ text: String) {
+    NSPasteboard.general.clearContents()
+    NSPasteboard.general.setString(text, forType: .string)
+}
+
 // MARK: - 1 Welcome
 
 struct OnboardingWelcomeStep: View {
+    var progress = OnboardingProgress(step: 1)
     var onNext: () -> Void = {}
     var onSkip: () -> Void = {}
     @ObservedObject private var language = AppLanguage.shared
@@ -116,7 +153,7 @@ struct OnboardingWelcomeStep: View {
     var body: some View {
         OnboardingPage { theme in
             VStack(spacing: 0) {
-                OnboardingHeader(theme: theme, step: 1, onSkip: onSkip)
+                OnboardingHeader(theme: theme, progress: progress, onSkip: onSkip)
                     .padding(.bottom, OnboardingTitle.top)
                 RoomPreview(theme: theme)
                     .clipShape(RoundedRectangle(cornerRadius: 14))
@@ -161,50 +198,52 @@ struct OnboardingWelcomeStep: View {
 
 // MARK: - 2 Agents
 
-/// What the agents page shows for one agent.
-enum OnboardingAgentState {
-    case connected, notConnected, notInstalled, needsPython
-}
-
 struct OnboardingAgentsStep: View {
-    let claude: OnboardingAgentState
-    let codex: OnboardingAgentState
+    let claude: AgentSetupState
+    let codex: AgentSetupState
+    var progress = OnboardingProgress(step: 2)
+    var notice: LocalizedStringResource?
+    var onConnect: (AgentProvider) -> Void = { _ in }
+    var onCheckAgain: () -> Void = {}
     var onBack: () -> Void = {}
     var onNext: () -> Void = {}
+
+    private static let toolsCommand = "xcode-select --install"
 
     var body: some View {
         OnboardingPage { theme in
             VStack(spacing: 0) {
-                OnboardingHeader(theme: theme, step: 2, onBack: onBack, onSkip: onNext)
+                OnboardingHeader(theme: theme, progress: progress, onBack: onBack, onSkip: onNext)
                 OnboardingTitle(theme: theme, title: "Connect your agents",
                                 subtitle: "Connected agents show sessions waiting for you\nin the closed notch.")
                     .padding(.top, OnboardingTitle.top).padding(.bottom, 20)
                 VStack(spacing: 10) {
-                    card(theme, name: "Claude Code", color: AgentProvider.claude.badgeColor, state: claude)
-                    card(theme, name: "Codex", color: AgentProvider.codex.badgeColor, state: codex)
+                    card(theme, provider: .claude, name: "Claude Code", state: claude)
+                    card(theme, provider: .codex, name: "Codex", state: codex)
                 }
                 .padding(.horizontal, 32)
                 Text("Tokens and churu are counted even without connecting.")
                     .font(.system(size: 12, weight: .semibold, design: .rounded))
                     .foregroundStyle(theme.ink.swiftUI.opacity(0.6))
                     .padding(.top, 14)
+                OnboardingNotice(theme: theme, notice: notice)
                 Spacer()
                 OnboardingFooter(theme: theme, primary: "Next", onPrimary: onNext)
             }
         }
     }
 
-    private func card(_ theme: RoomTheme, name: String, color: Color, state: OnboardingAgentState) -> some View {
+    private func card(_ theme: RoomTheme, provider: AgentProvider, name: String, state: AgentSetupState) -> some View {
         OnboardingCard(theme: theme) {
             HStack(spacing: 8) {
-                Circle().fill(color).frame(width: 10, height: 10)
+                Circle().fill(provider.badgeColor).frame(width: 10, height: 10)
                 Text(verbatim: name).font(.system(size: 15, weight: .heavy, design: .rounded))
                 Spacer()
                 switch state {
                 case .connected:
                     Label("Connected", systemImage: "checkmark.circle.fill").foregroundStyle(theme.accent.swiftUI)
                 case .notConnected:
-                    Button("Connect") {}.buttonStyle(OnboardingPrimaryButtonStyle(theme: theme))
+                    Button("Connect") { onConnect(provider) }.buttonStyle(OnboardingPrimaryButtonStyle(theme: theme))
                 case .notInstalled:
                     Text("Not installed").foregroundStyle(theme.ink.swiftUI.opacity(0.5))
                 case .needsPython:
@@ -213,24 +252,24 @@ struct OnboardingAgentsStep: View {
             }
             .font(.system(size: 12, weight: .bold, design: .rounded))
             switch state {
-            case .connected:
-                EmptyView()
-            case .notConnected where name == "Codex":
+            case .connected where provider == .codex, .notConnected where provider == .codex:
                 note(theme, "After connecting, approve the hook with /hooks in Codex.")
-            case .notConnected:
+            case .connected, .notConnected:
                 EmptyView()
             case .notInstalled:
                 note(theme, "It shows up here by itself once installed.")
             case .needsPython:
                 note(theme, "Connecting needs the Xcode Command Line Tools. Run this in Terminal, then check again.")
                 HStack {
-                    Text(verbatim: "xcode-select --install")
+                    Text(verbatim: Self.toolsCommand)
                         .font(.system(size: 12, weight: .semibold, design: .monospaced))
                         .padding(.horizontal, 8).padding(.vertical, 4)
                         .background(RoundedRectangle(cornerRadius: 6).fill(theme.panel.swiftUI))
-                    Button("Copy") {}.buttonStyle(OnboardingSecondaryButtonStyle(theme: theme, onCard: true))
+                    Button("Copy") { copyToClipboard(Self.toolsCommand) }
+                        .buttonStyle(OnboardingSecondaryButtonStyle(theme: theme, onCard: true))
                     Spacer()
-                    Button("Check again") {}.buttonStyle(OnboardingSecondaryButtonStyle(theme: theme, onCard: true))
+                    Button("Check again", action: onCheckAgain)
+                        .buttonStyle(OnboardingSecondaryButtonStyle(theme: theme, onCard: true))
                 }
             }
         }
@@ -247,13 +286,17 @@ struct OnboardingAgentsStep: View {
 // MARK: - 3 Claude limits
 
 struct OnboardingLimitsStep: View {
+    var isOn = false
+    var progress = OnboardingProgress(step: 3)
+    var notice: LocalizedStringResource?
+    var onTurnOn: () -> Void = {}
     var onBack: () -> Void = {}
     var onNext: () -> Void = {}
 
     var body: some View {
         OnboardingPage { theme in
             VStack(spacing: 0) {
-                OnboardingHeader(theme: theme, step: 3, onBack: onBack, onSkip: onNext)
+                OnboardingHeader(theme: theme, progress: progress, onBack: onBack, onSkip: onNext)
                 OnboardingTitle(theme: theme, title: "See your Claude limits",
                                 subtitle: "Shows your 5-hour and weekly limits in the notch.")
                     .padding(.top, OnboardingTitle.top).padding(.bottom, 20)
@@ -263,17 +306,31 @@ struct OnboardingLimitsStep: View {
                         bar(theme, "Weekly", 0.18)
                     }
                     OnboardingCard(theme: theme) {
-                        Text("What changes").font(.system(size: 13, weight: .heavy, design: .rounded))
-                        bullet(theme, "TokenCats wraps your Claude Code status line once.")
-                        bullet(theme, "Your current status line keeps showing as it is.")
-                        bullet(theme, "The original setting is backed up next to settings.json.")
-                        bullet(theme, "Turn it off in Settings › Agents to put everything back.")
+                        if isOn {
+                            Label("Claude limits are on", systemImage: "checkmark.circle.fill")
+                                .font(.system(size: 13, weight: .heavy, design: .rounded))
+                                .foregroundStyle(theme.accent.swiftUI)
+                            Text("Turn it off in Settings › Agents to put everything back.")
+                                .font(.system(size: 12, weight: .semibold, design: .rounded))
+                                .foregroundStyle(theme.ink.swiftUI.opacity(0.7))
+                        } else {
+                            Text("What changes").font(.system(size: 13, weight: .heavy, design: .rounded))
+                            bullet(theme, "TokenCats wraps your Claude Code status line once.")
+                            bullet(theme, "Your current status line keeps showing as it is.")
+                            bullet(theme, "The original setting is backed up next to settings.json.")
+                            bullet(theme, "Turn it off in Settings › Agents to put everything back.")
+                        }
                     }
                 }
                 .padding(.horizontal, 32)
+                OnboardingNotice(theme: theme, notice: notice)
                 Spacer()
-                OnboardingFooter(theme: theme, primary: "Agree and turn on", secondary: "Later",
-                                 onPrimary: onNext, onSecondary: onNext)
+                if isOn {
+                    OnboardingFooter(theme: theme, primary: "Next", onPrimary: onNext)
+                } else {
+                    OnboardingFooter(theme: theme, primary: "Agree and turn on", secondary: "Later",
+                                     onPrimary: onTurnOn, onSecondary: onNext)
+                }
             }
         }
     }
@@ -305,25 +362,38 @@ struct OnboardingLimitsStep: View {
 
 // MARK: - 4 GitHub card
 
-/// Where the GitHub page is in connecting.
-enum OnboardingGitHubPhase {
-    case start, code(String), needsAccess(repoCreated: Bool), ready, done
+/// What the GitHub page does when its buttons are pressed.
+struct OnboardingGitHubActions {
+    var connect: () -> Void = {}
+    var openDevicePage: () -> Void = {}
+    var cancel: () -> Void = {}
+    var createRepo: () -> Void = {}
+    var installApp: () -> Void = {}
+    var checkAgain: () -> Void = {}
+    var addToReadme: () -> Void = {}
+    var viewProfile: () -> Void = {}
 }
 
 struct OnboardingGitHubStep: View {
     let phase: OnboardingGitHubPhase
     let login: String
+    var progress = OnboardingProgress(step: 4)
     /// The card as it will be uploaded, shown live through WebKit so its cats move.
     var cardSVG: String?
     /// A still of the card (design snapshots draw off screen, where a web view stays blank).
     var card: NSImage?
+    var showsNumbers: Binding<Bool> = .constant(true)
+    var showsYear: Binding<Bool> = .constant(true)
+    var busy = false
+    var notice: LocalizedStringResource?
+    var actions = OnboardingGitHubActions()
     var onBack: () -> Void = {}
     var onNext: () -> Void = {}
 
     var body: some View {
         OnboardingPage { theme in
             VStack(spacing: 0) {
-                OnboardingHeader(theme: theme, step: 4, onBack: onBack, onSkip: onNext)
+                OnboardingHeader(theme: theme, progress: progress, onBack: onBack, onSkip: onNext)
                 OnboardingTitle(theme: theme, title: "Put your cats on GitHub",
                                 subtitle: "Your cat room goes on top of your profile README\nand keeps itself up to date.")
                     .padding(.top, OnboardingTitle.top).padding(.bottom, 20)
@@ -332,6 +402,7 @@ struct OnboardingGitHubStep: View {
                     .padding(.bottom, 14)
                 content(theme)
                     .padding(.horizontal, 32)
+                OnboardingNotice(theme: theme, notice: notice)
                 Spacer()
                 footer(theme)
             }
@@ -366,17 +437,18 @@ struct OnboardingGitHubStep: View {
         case .start:
             OnboardingCard(theme: theme) {
                 Text("Shown to anyone").font(.system(size: 13, weight: .heavy, design: .rounded))
-                check(theme, "The cat room", on: true, locked: true)
-                check(theme, "Token numbers", on: true)
-                check(theme, "Contribution graph and streak", on: true)
+                check(theme, "The cat room", isOn: .constant(true), locked: true)
+                check(theme, "Token numbers", isOn: showsNumbers)
+                check(theme, "Contribution graph and streak", isOn: showsYear)
             }
         case let .code(code):
             OnboardingCard(theme: theme) {
                 Text("Code to enter in the browser").font(.system(size: 13, weight: .heavy, design: .rounded))
                 HStack {
-                    Text(verbatim: code).font(.system(size: 26, weight: .heavy, design: .monospaced))
+                    Text(verbatim: code).font(.system(size: 26, weight: .heavy, design: .monospaced)).textSelection(.enabled)
                     Spacer()
-                    Button("Copy") {}.buttonStyle(OnboardingSecondaryButtonStyle(theme: theme, onCard: true))
+                    Button("Copy") { copyToClipboard(code) }
+                        .buttonStyle(OnboardingSecondaryButtonStyle(theme: theme, onCard: true))
                 }
                 HStack(spacing: 6) {
                     ProgressView().controlSize(.small)
@@ -385,11 +457,13 @@ struct OnboardingGitHubStep: View {
                 .font(.system(size: 12, weight: .semibold, design: .rounded))
                 .foregroundStyle(theme.ink.swiftUI.opacity(0.7))
             }
-        case let .needsAccess(repoCreated):
+        case let .needsAccess(appInstall):
             OnboardingCard(theme: theme) {
-                Text("Two steps on GitHub").font(.system(size: 13, weight: .heavy, design: .rounded))
-                task(theme, done: repoCreated, "Create your profile repo \(login)/\(login)")
-                task(theme, done: false, "Install the TokenCats App and pick that repo")
+                Text("A step on GitHub").font(.system(size: 13, weight: .heavy, design: .rounded))
+                task(theme, "Create your profile repo \(login)/\(login) if you don't have it", action: actions.createRepo)
+                if appInstall {
+                    task(theme, "Install the TokenCats App and pick that repo", action: actions.installApp)
+                }
                 Text("Come back here when done; it checks again by itself.")
                     .font(.system(size: 12, weight: .semibold, design: .rounded))
                     .foregroundStyle(theme.ink.swiftUI.opacity(0.6))
@@ -414,34 +488,43 @@ struct OnboardingGitHubStep: View {
 
     @ViewBuilder private func footer(_ theme: RoomTheme) -> some View {
         switch phase {
-        case .start: OnboardingFooter(theme: theme, primary: "Connect with GitHub", secondary: "Later",
-                                      onSecondary: onNext)
-        case .code: OnboardingFooter(theme: theme, primary: "Open GitHub again", secondary: "Cancel")
-        case .needsAccess: OnboardingFooter(theme: theme, primary: "Open GitHub", secondary: "Later",
-                                            onSecondary: onNext)
-        case .ready: OnboardingFooter(theme: theme, primary: "Add to my README", secondary: "Later",
-                                      onSecondary: onNext)
-        case .done: OnboardingFooter(theme: theme, primary: "Next", secondary: "View on GitHub", onPrimary: onNext)
+        case .start:
+            OnboardingFooter(theme: theme, primary: "Connect with GitHub", secondary: "Later", busy: busy,
+                             onPrimary: actions.connect, onSecondary: onNext)
+        case .code:
+            OnboardingFooter(theme: theme, primary: "Open GitHub again", secondary: "Cancel",
+                             onPrimary: actions.openDevicePage, onSecondary: actions.cancel)
+        case .needsAccess:
+            OnboardingFooter(theme: theme, primary: "Check again", secondary: "Later", busy: busy,
+                             onPrimary: actions.checkAgain, onSecondary: onNext)
+        case .ready:
+            OnboardingFooter(theme: theme, primary: "Add to my README", secondary: "Later", busy: busy,
+                             onPrimary: actions.addToReadme, onSecondary: onNext)
+        case .done:
+            OnboardingFooter(theme: theme, primary: "Next", secondary: "View on GitHub",
+                             onPrimary: onNext, onSecondary: actions.viewProfile)
         }
     }
 
-    private func check(_ theme: RoomTheme, _ label: LocalizedStringKey, on: Bool, locked: Bool = false) -> some View {
-        HStack {
-            Image(systemName: on ? "checkmark.square.fill" : "square")
-                .foregroundStyle(theme.accent.swiftUI.opacity(locked ? 0.5 : 1))
-            Text(label)
-            if locked { Text("Always").foregroundStyle(theme.ink.swiftUI.opacity(0.5)) }
+    private func check(_ theme: RoomTheme, _ label: LocalizedStringKey, isOn: Binding<Bool>, locked: Bool = false) -> some View {
+        Button { if !locked { isOn.wrappedValue.toggle() } } label: {
+            HStack {
+                Image(systemName: isOn.wrappedValue ? "checkmark.square.fill" : "square")
+                    .foregroundStyle(theme.accent.swiftUI.opacity(locked ? 0.5 : 1))
+                Text(label)
+                if locked { Text("Always").foregroundStyle(theme.ink.swiftUI.opacity(0.5)) }
+            }
         }
+        .buttonStyle(.plain)
         .font(.system(size: 12, weight: .semibold, design: .rounded))
     }
 
-    private func task(_ theme: RoomTheme, done: Bool, _ label: LocalizedStringKey) -> some View {
+    private func task(_ theme: RoomTheme, _ label: LocalizedStringKey, action: @escaping () -> Void) -> some View {
         HStack {
-            Image(systemName: done ? "checkmark.circle.fill" : "circle")
-                .foregroundStyle(done ? theme.accent.swiftUI : theme.ink.swiftUI.opacity(0.5))
-            Text(label).strikethrough(done, color: theme.ink.swiftUI.opacity(0.5))
-            Spacer()
-            if !done { Button("Open") {}.buttonStyle(OnboardingSecondaryButtonStyle(theme: theme, onCard: true)) }
+            Image(systemName: "circle").foregroundStyle(theme.ink.swiftUI.opacity(0.5))
+            Text(label).fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 8)
+            Button("Open", action: action).buttonStyle(OnboardingSecondaryButtonStyle(theme: theme, onCard: true))
         }
         .font(.system(size: 12, weight: .semibold, design: .rounded))
     }
@@ -450,14 +533,17 @@ struct OnboardingGitHubStep: View {
 // MARK: - 5 Launch at login
 
 struct OnboardingLoginItemStep: View {
-    @State var isOn = true
+    var isOn: Binding<Bool> = .constant(true)
+    var progress = OnboardingProgress(step: 5)
     var onBack: () -> Void = {}
+    /// Moves on without changing the setting; "Next" applies the switch.
+    var onSkip: (() -> Void)?
     var onNext: () -> Void = {}
 
     var body: some View {
         OnboardingPage { theme in
             VStack(spacing: 0) {
-                OnboardingHeader(theme: theme, step: 5, onBack: onBack, onSkip: onNext)
+                OnboardingHeader(theme: theme, progress: progress, onBack: onBack, onSkip: onSkip ?? onNext)
                 OnboardingTitle(theme: theme, title: "Start with your Mac?",
                                 subtitle: "Tokens spent while TokenCats is closed\ndon't turn into churu.")
                     .padding(.top, OnboardingTitle.top).padding(.bottom, 20)
@@ -467,7 +553,7 @@ struct OnboardingLoginItemStep: View {
                     .foregroundStyle(theme.accent.swiftUI)
                     .padding(.bottom, 20)
                 OnboardingCard(theme: theme) {
-                    Toggle(isOn: $isOn) {
+                    Toggle(isOn: isOn) {
                         Text("Launch at login").font(.system(size: 14, weight: .heavy, design: .rounded))
                     }
                     .toggleStyle(OnboardingSwitchStyle(theme: theme))
@@ -493,13 +579,14 @@ struct OnboardingFinishStep: View {
     let summary: [OnboardingSummaryItem]
     let churu: Int
     let adoptionPrice: Int
+    var progress = OnboardingProgress(step: 6)
     var onBack: () -> Void = {}
     var onFinish: () -> Void = {}
 
     var body: some View {
         OnboardingPage { theme in
             VStack(spacing: 0) {
-                OnboardingHeader(theme: theme, step: 6, onBack: onBack)
+                OnboardingHeader(theme: theme, progress: progress, onBack: onBack)
                 OnboardingTitle(theme: theme, title: "All set!", subtitle: "Your first cat is waiting in the notch.")
                     .padding(.top, OnboardingTitle.top).padding(.bottom, 20)
                 VStack(spacing: 10) {
@@ -523,15 +610,24 @@ struct OnboardingFinishStep: View {
                             Text(verbatim: TokenCount.compact(churu)).font(.system(size: 22, weight: .heavy, design: .rounded))
                             Text("churu").font(.system(size: 12, weight: .bold, design: .rounded))
                             Spacer()
-                            Text("\(TokenCount.compact(adoptionPrice)) to your first adoption")
-                                .font(.system(size: 12, weight: .bold, design: .rounded))
-                                .foregroundStyle(theme.ink.swiftUI.opacity(0.7))
-                        }
-                        Capsule().fill(theme.panel.swiftUI).frame(height: 8)
-                            .overlay(alignment: .leading) {
-                                Capsule().fill(theme.accent.swiftUI)
-                                    .frame(width: max(8, 352 * Double(churu) / Double(max(adoptionPrice, 1))))
+                            // A free store (testing) has no price to count towards.
+                            if adoptionPrice > 0 {
+                                Text("\(TokenCount.compact(adoptionPrice)) to your first adoption")
+                                    .font(.system(size: 12, weight: .bold, design: .rounded))
+                                    .foregroundStyle(theme.ink.swiftUI.opacity(0.7))
                             }
+                        }
+                        if adoptionPrice > 0 {
+                            GeometryReader { geometry in
+                                ZStack(alignment: .leading) {
+                                    Capsule().fill(theme.panel.swiftUI)
+                                    Capsule().fill(theme.accent.swiftUI)
+                                        .frame(width: max(8, geometry.size.width
+                                                          * min(1, Double(churu) / Double(adoptionPrice))))
+                                }
+                            }
+                            .frame(height: 8)
+                        }
                         Text("Churu counts the tokens you spend from now on.")
                             .font(.system(size: 12, weight: .semibold, design: .rounded))
                             .foregroundStyle(theme.ink.swiftUI.opacity(0.6))
@@ -539,7 +635,7 @@ struct OnboardingFinishStep: View {
                     Text("Hover over the notch or press \(KeyboardShortcuts.getShortcut(for: .toggleNotchOpen)?.description ?? "⌘⇧I") to open it.")
                         .font(.system(size: 12, weight: .semibold, design: .rounded))
                         .foregroundStyle(theme.ink.swiftUI.opacity(0.75))
-                    .padding(.top, 6)
+                        .padding(.top, 6)
                 }
                 .padding(.horizontal, 32)
                 Spacer()

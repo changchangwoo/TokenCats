@@ -53,26 +53,17 @@ struct AgentConnectionSettings: View {
 
     private func toggleLimits() {
         let integration = StatusLineIntegration.claude
-        do {
-            if limitsInstalled {
+        if limitsInstalled {
+            do {
                 try integration.uninstall()
                 notice = "Claude limits disconnected; the original status line is back"
-            } else {
-                guard let script = Bundle.main.url(forResource: "tokencats-statusline", withExtension: "py") else {
-                    notice = "The status line script is missing from the app"
-                    return
-                }
-                try integration.install(bundledScript: script)
-                notice = "Claude limits connected. They show from the next Claude response"
+            } catch HookIntegration.Failure.invalidConfig {
+                notice = "The Claude settings file is not valid JSON, so it was left alone"
+            } catch {
+                notice = "Could not set up Claude limits: \(error.localizedDescription)"
             }
-        } catch HookIntegration.Failure.agentNotInstalled {
-            notice = "The Claude settings folder is missing"
-        } catch HookIntegration.Failure.invalidConfig {
-            notice = "The Claude settings file is not valid JSON, so it was left alone"
-        } catch StatusLineIntegration.Failure.pythonUnavailable {
-            notice = "Not connected: the Xcode command line tools are missing. Run xcode-select --install in Terminal, then connect again"
-        } catch {
-            notice = "Could not set up Claude limits: \(error.localizedDescription)"
+        } else {
+            notice = AgentSetup.connectLimits().notice
         }
         limitsInstalled = integration.isInstalled()
     }
@@ -94,28 +85,17 @@ struct AgentConnectionSettings: View {
     }
 
     private func toggle(_ name: String, installed: Binding<Bool>, integration: HookIntegration) {
-        do {
-            if installed.wrappedValue {
+        if installed.wrappedValue {
+            do {
                 try integration.uninstall()
                 notice = "\(name) hook removed"
-            } else {
-                guard let script = Bundle.main.url(forResource: "tokencats-hook", withExtension: "py") else {
-                    notice = "The hook script is missing from the app"
-                    return
-                }
-                try integration.install(bundledScript: script)
-                notice = integration.agent.provider == .codex
-                    ? "In Codex, approve it with /hooks, then start a new session"
-                    : "Applies from the next Claude session"
+            } catch HookIntegration.Failure.invalidConfig {
+                notice = "The \(name) settings file is not valid JSON, so it was left alone"
+            } catch {
+                notice = "Could not set up \(name): \(error.localizedDescription)"
             }
-        } catch HookIntegration.Failure.agentNotInstalled {
-            notice = "The \(name) settings folder is missing"
-        } catch HookIntegration.Failure.invalidConfig {
-            notice = "The \(name) settings file is not valid JSON, so it was left alone"
-        } catch HookIntegration.Failure.pythonUnavailable {
-            notice = "Xcode Command Line Tools are missing, so nothing was connected. Run xcode-select --install in Terminal, then connect again"
-        } catch {
-            notice = "Could not set up \(name): \(error.localizedDescription)"
+        } else {
+            notice = AgentSetup.connectHook(integration, name: name).notice
         }
         installed.wrappedValue = integration.isInstalled()
     }

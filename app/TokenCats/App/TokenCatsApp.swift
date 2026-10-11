@@ -48,6 +48,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var closeNotchTask: Task<Void, Never>?
     private var previousScreens: [NSScreen]?
     private var onboardingWindowController: NSWindowController?
+    private var onboardingModel: OnboardingModel?
     private var screenLockedObserver: Any?
     private var screenUnlockedObserver: Any?
     private var isScreenLocked: Bool = false
@@ -313,6 +314,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             adjustWindowPosition(changeAlpha: true)
         }
 
+        NotificationCenter.default.addObserver(self, selector: #selector(showOnboardingWindow),
+                                               name: .showOnboardingRequested, object: nil)
+
         if coordinator.firstLaunch {
             // After the first-run scene in the notch; the timer covers a launch where no notch played it.
             var shown = false
@@ -417,10 +421,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    private func showOnboardingWindow(step: OnboardingStep = .welcome) {
+    /// The first-run window; also opened again from Settings › General. Each opening starts a fresh flow from the
+    /// welcome page, with every step reflecting what is already connected.
+    @objc func showOnboardingWindow() {
         if onboardingWindowController == nil {
             let window = NSWindow(
-                contentRect: NSRect(x: 0, y: 0, width: 400, height: 600),
+                contentRect: NSRect(origin: .zero, size: onboardingWindowSize),
                 styleMask: [.titled, .fullSizeContentView],
                 backing: .buffered,
                 defer: false
@@ -429,27 +435,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             window.title = AppLanguage.shared.string("Get started with TokenCats")
             window.titlebarAppearsTransparent = true
             window.titleVisibility = .hidden
-            window.contentView = NSHostingView(
-                rootView: OnboardingView(
-                    step: step,
-                    onFinish: {
-                        window.orderOut(nil)
-//                        NSApp.setActivationPolicy(.accessory)
-                        window.close()
-                        NSApp.deactivate()
-                    },
-                    onOpenSettings: {
-                        window.close()
-                        SettingsWindowController.shared.showWindow()
-                    }
-                ).localized())
+            let model = OnboardingModel(
+                onClose: { [weak self] in
+                    window.orderOut(nil)
+                    window.close()
+                    self?.onboardingWindowController = nil
+                    self?.onboardingModel = nil
+                    NSApp.deactivate()
+                },
+                onOpenCatRoom: { [weak self] in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { self?.vm.open() }
+                })
+            onboardingModel = model
+            window.contentView = NSHostingView(rootView: OnboardingFlowView(model: model).localized())
             window.isRestorable = false
             window.identifier = NSUserInterfaceItemIdentifier("OnboardingWindow")
 
             onboardingWindowController = NSWindowController(window: window)
         }
 
-//        NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)
         onboardingWindowController?.window?.makeKeyAndOrderFront(nil)
         onboardingWindowController?.window?.orderFrontRegardless()
@@ -462,6 +466,8 @@ extension Notification.Name {
     static let showOnAllDisplaysChanged = Notification.Name("showOnAllDisplaysChanged")
     static let automaticallySwitchDisplayChanged = Notification.Name("automaticallySwitchDisplayChanged")
     static let firstRunSceneFinished = Notification.Name("firstRunSceneFinished")
+    /// Settings › General › "Show first-run setup again".
+    static let showOnboardingRequested = Notification.Name("showOnboardingRequested")
 }
 
 extension CGRect: @retroactive Hashable {

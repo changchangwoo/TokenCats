@@ -450,6 +450,17 @@
         }
       }
     },
+    "A step on GitHub": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GitHub에서 할 일"
+          }
+        }
+      }
+    },
     "About": {
       "extractionState": "manual",
       "localizations": {
@@ -1187,6 +1198,17 @@
         }
       }
     },
+    "Claude limits are on": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude 사용 한도가 켜져 있어요"
+          }
+        }
+      }
+    },
     "Claude limits connected. They show from the next Claude response": {
       "extractionState": "manual",
       "localizations": {
@@ -1304,6 +1326,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Claude Code 한도 표시 연결"
+          }
+        }
+      }
+    },
+    "Connect agents, Claude limits and the GitHub card step by step.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "에이전트, Claude 사용 한도, GitHub 카드를 한 단계씩 연결해요."
           }
         }
       }
@@ -1715,13 +1748,13 @@
         }
       }
     },
-    "Create your profile repo %@/%@": {
+    "Create your profile repo %@/%@ if you don't have it": {
       "extractionState": "manual",
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "프로필 레포 %@/%@ 만들기"
+            "value": "프로필 레포 %@/%@ 만들기 (없을 때만)"
           }
         }
       }
@@ -3717,6 +3750,17 @@
         }
       }
     },
+    "Show first-run setup again": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "처음 설정 다시 보기"
+          }
+        }
+      }
+    },
     "Show in Finder": {
       "extractionState": "manual",
       "localizations": {
@@ -4450,17 +4494,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "턱시도"
-          }
-        }
-      }
-    },
-    "Two steps on GitHub": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "GitHub에서 두 가지만 해 주세요"
           }
         }
       }

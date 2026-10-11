@@ -17,6 +17,14 @@ struct GeneralSettings: View {
             Section("Startup") {
                 LaunchAtLogin.Toggle("Launch at login")
             }
+            Section {
+                Button("Show first-run setup again") {
+                    NotificationCenter.default.post(name: .showOnboardingRequested, object: nil)
+                }
+            } footer: {
+                Text("Connect agents, Claude limits and the GitHub card step by step.")
+                    .foregroundStyle(.secondary)
+            }
         }
         .navigationTitle("General")
     }

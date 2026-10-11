@@ -19,6 +19,14 @@ enum DebugSnapshots {
             }
             return
         }
+        // With NC_ONBOARDING_WALKTHROUGH=1, drives the real first-run flow and writes walkthrough.txt.
+        if ProcessInfo.processInfo.environment["NC_ONBOARDING_WALKTHROUGH"] != nil {
+            Task { @MainActor in
+                await OnboardingWalkthrough.run(dir: URL(fileURLWithPath: dir))
+                NSApp.terminate(nil)
+            }
+            return
+        }
         // With NC_SNAPSHOT_ONBOARDING=1, writes the first-run pages in each designed state instead
         // (NC_SNAPSHOT_CARD_SVG: a profile card to show on the GitHub page).
         if ProcessInfo.processInfo.environment["NC_SNAPSHOT_ONBOARDING"] != nil {
@@ -36,7 +44,7 @@ enum DebugSnapshots {
                     ("3-limits", AnyView(OnboardingLimitsStep())),
                     ("4a-github-start", AnyView(OnboardingGitHubStep(phase: .start, login: login, card: card))),
                     ("4b-github-code", AnyView(OnboardingGitHubStep(phase: .code("A1B2-C3D4"), login: login, card: card))),
-                    ("4c-github-access", AnyView(OnboardingGitHubStep(phase: .needsAccess(repoCreated: true), login: login,
+                    ("4c-github-access", AnyView(OnboardingGitHubStep(phase: .needsAccess(appInstall: true), login: login,
                                                                       card: card))),
                     ("4d-github-ready", AnyView(OnboardingGitHubStep(phase: .ready, login: login, card: card))),
                     ("4e-github-done", AnyView(OnboardingGitHubStep(phase: .done, login: login, card: card))),
