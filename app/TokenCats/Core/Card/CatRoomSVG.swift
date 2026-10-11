@@ -32,8 +32,8 @@ struct CatTrack: Equatable, Sendable {
 
 /// The cat room as one self-contained SVG for a GitHub profile README.
 ///
-/// No viewBox or outer size, so `<img width="100%" height="160">` sizes it (stage-0 probe,
-/// `changchangwoo/catroom-probe`). The profile does not walk: each cat sits where the notch room (`CatRoom`)
+/// No viewBox or outer size, so `<img width="100%" height="160">` sizes it (checked on a throwaway
+/// profile repo). The profile does not walk: each cat sits where the notch room (`CatRoom`)
 /// first places it, drawn in % of the README width. Grooming follows the notch room's own rhythm, taken from a
 /// replay of the room; the moments a cat would be walking show it sitting instead.
 /// The room carries no text elements, day numbers or token counts; the wall calendar's month is pixel letters.
