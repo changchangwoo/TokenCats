@@ -6,5 +6,13 @@
 	<string>Iv23likuaoKyVMbJY7Nn</string>
 	<key>NCGitHubAppSlug</key>
 	<string>tokencatsapp</string>
+	<key>SUFeedURL</key>
+	<string>https://raw.githubusercontent.com/changchangwoo/TokenCats/main/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>rxoxFBOMv73BlAnRgktwj8rusWDZf5EyS7LlubBmN0s=</string>
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+	<key>SUScheduledCheckInterval</key>
+	<integer>86400</integer>
 </dict>
 </plist>

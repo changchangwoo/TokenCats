@@ -11,6 +11,7 @@
 		14CEF41A2C5CAED400855D72 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 14CEF4192C5CAED400855D72 /* Assets.xcassets */; };
 		14CEF41D2C5CAED400855D72 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 14CEF41C2C5CAED400855D72 /* Preview Assets.xcassets */; };
 		14D0321A2C68F32E0096E6A1 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 14D032192C68F32E0096E6A1 /* LaunchAtLogin */; };
+		5A5A0A032EA7000000000003 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 5A5A0A022EA7000000000002 /* Sparkle */; };
 		B18654392C6F4990000B926A /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = B18654382C6F4990000B926A /* KeyboardShortcuts */; };
 		B19016222CC15B3D00E3F12E /* Defaults in Frameworks */ = {isa = PBXBuildFile; productRef = B19016212CC15B3D00E3F12E /* Defaults */; };
 /* End PBXBuildFile section */
@@ -58,6 +59,7 @@
 				14D0321A2C68F32E0096E6A1 /* LaunchAtLogin in Frameworks */,
 				B18654392C6F4990000B926A /* KeyboardShortcuts in Frameworks */,
 				B19016222CC15B3D00E3F12E /* Defaults in Frameworks */,
+				5A5A0A032EA7000000000003 /* Sparkle in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,6 +126,7 @@
 				B18654382C6F4990000B926A /* KeyboardShortcuts */,
 				B19016212CC15B3D00E3F12E /* Defaults */,
 				1194E8842EA57D23009C82D6 /* SkyLightWindow */,
+				5A5A0A022EA7000000000002 /* Sparkle */,
 			);
 			productName = TokenCats;
 			productType = "com.apple.product-type.application";
@@ -159,6 +162,7 @@
 				B18654372C6F4990000B926A /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 				B19016202CC15B3D00E3F12E /* XCRemoteSwiftPackageReference "Defaults" */,
 				1194E8832EA57D23009C82D6 /* XCRemoteSwiftPackageReference "SkyLightWindow" */,
+				5A5A0A012EA7000000000001 /* XCRemoteSwiftPackageReference "Sparkle" */,
 			);
 			projectDirPath = "";
 			projectRoot = "";
@@ -331,7 +335,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"TokenCats/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
@@ -354,7 +358,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 0.1.2;
+				MARKETING_VERSION = 0.1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.changchangwoo.tokencats;
 				PRODUCT_NAME = TokenCats;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -381,7 +385,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"TokenCats/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
@@ -403,7 +407,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 0.1.2;
+				MARKETING_VERSION = 0.1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.changchangwoo.tokencats;
 				PRODUCT_NAME = TokenCats;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -473,6 +477,14 @@
 				minimumVersion = 9.0.2;
 			};
 		};
+		5A5A0A012EA7000000000001 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.10.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -495,6 +507,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B19016202CC15B3D00E3F12E /* XCRemoteSwiftPackageReference "Defaults" */;
 			productName = Defaults;
+		};
+		5A5A0A022EA7000000000002 /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5A5A0A012EA7000000000001 /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

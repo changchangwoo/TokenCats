@@ -1,8 +1,11 @@
 #!/bin/bash
-# Builds the release zip and its Homebrew cask locally. Publishes nothing: it prints the commands that do.
+# Builds the release zip, its Homebrew cask and the Sparkle appcast locally. Publishes nothing: it prints the
+# commands that do.
 #   build/release/TokenCats-<version>.zip   (universal, ad-hoc signed; ditto keeps the bundle's signature)
 #   build/release/tokencats.rb              (packaging/homebrew/tokencats.rb.template with version and sha256)
-# Usage: scripts/package-release.sh
+#   appcast.xml                             (the update feed the app reads; signed with the EdDSA key in the keychain)
+# Usage: scripts/package-release.sh [release-notes.md]
+#   The notes file's "- " lines become the update's release notes, shown by the app before installing.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
@@ -12,14 +15,35 @@ VERSION="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$APP/
 OUT="build/release"
 ZIP="$OUT/TokenCats-$VERSION.zip"
 mkdir -p "$OUT"
-rm -f "$ZIP"
+# Older zips would end up in the appcast too, pointing at this release's download folder: keep only this one.
+rm -f "$OUT"/*.zip
 ditto -c -k --keepParent "$APP" "$ZIP"
 SHA="$(shasum -a 256 "$ZIP" | cut -d' ' -f1)"
 sed -e "s/\"VERSION\"/\"$VERSION\"/" -e "s/\"SHA256\"/\"$SHA\"/" packaging/homebrew/tokencats.rb.template > "$OUT/tokencats.rb"
-echo "zip:    $ZIP"
-echo "sha256: $SHA"
-echo "cask:   $OUT/tokencats.rb"
+
+# The appcast: generate_appcast signs every zip in the folder with the key in the keychain and embeds the notes
+# next to it (<zip name>.html). Only the current zip is kept there, so the feed carries the newest version.
+NOTES="${1:-}"
+HTML="$OUT/TokenCats-$VERSION.html"
+rm -f "$OUT"/*.html "$OUT"/*.delta
+if [[ -n "$NOTES" ]]; then
+  { echo "<ul>"; grep '^- ' "$NOTES" | sed -e 's/^- //' -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/^/<li>/' -e 's/$/<\/li>/'; echo "</ul>"; } > "$HTML"
+fi
+# generate_appcast updates an existing feed in place and keeps entries whose zips are gone, so start fresh: the
+# feed lists only the version in the folder, which is all an older app needs to find.
+rm -f appcast.xml
+GENERATE_APPCAST="$(find build/DerivedData/SourcePackages/artifacts -type f -name generate_appcast | head -1)"
+[[ -n "$GENERATE_APPCAST" ]] || { echo "error: generate_appcast not found; build once so the Sparkle package is resolved"; exit 1; }
+"$GENERATE_APPCAST" --download-url-prefix "https://github.com/changchangwoo/TokenCats/releases/download/v$VERSION/" \
+  --link "https://github.com/changchangwoo/TokenCats" \
+  --full-release-notes-url "https://github.com/changchangwoo/TokenCats/releases/tag/v$VERSION" \
+  --embed-release-notes -o appcast.xml "$OUT"
+echo "zip:     $ZIP"
+echo "sha256:  $SHA"
+echo "cask:    $OUT/tokencats.rb"
+echo "appcast: appcast.xml (commit it with the release; the app reads it from main)"
 echo
 echo "To publish (the TokenCats repo must be public for anonymous downloads):"
+echo "  commit appcast.xml and push main, then"
 echo "  gh release create v$VERSION $ZIP --repo changchangwoo/TokenCats --title \"TokenCats $VERSION\""
 echo "  copy $OUT/tokencats.rb to Casks/tokencats.rb in changchangwoo/homebrew-tap and push"

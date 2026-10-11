@@ -10,6 +10,7 @@ struct TokenCatsApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @Default(.menubarIcon) var showMenuBarIcon
     @Environment(\.openWindow) var openWindow
+    @ObservedObject private var updater = AppUpdater.shared
 
     var body: some Scene {
         // A template image (art-src/menubar, scripts/build-menubar-icon.swift): white on a dark menu bar,
@@ -28,6 +29,11 @@ struct TokenCatsApp: App {
             }
         }
         .keyboardShortcut(KeyEquivalent(","), modifiers: .command)
+        if let version = updater.pendingVersion {
+            Button("Update to TokenCats \(version)…") { updater.checkForUpdates() }
+        } else {
+            Button("Check for Updates…") { updater.checkForUpdates() }
+        }
         Divider()
         Button("Restart TokenCats") {
             Relaunch.now()
@@ -198,6 +204,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             hookScript: Bundle.main.url(forResource: "tokencats-hook", withExtension: "py"),
             statusLineScript: Bundle.main.url(forResource: "tokencats-statusline", withExtension: "py"))
         ProfileSync.shared.start()
+        AppUpdater.shared.start()
 
         NotificationCenter.default.addObserver(
             self,

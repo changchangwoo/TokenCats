@@ -164,7 +164,7 @@ brew install --cask changchangwoo/tap/tokencats
 |---|---|
 | **Reads** | Usage logs under `~/.claude` and `~/.codex`. Only token counts and model names are counted. Prompt contents are never stored or sent |
 | **Writes** | Only when enabled: one hook line in the Claude Code and Codex settings files, and one status line entry for Claude Code. The original settings are backed up, and turning it off restores them |
-| **Sends** | If you connect with the GitHub App, device authorization uses `github.com`. When you turn on the GitHub card, the app uploads the card SVG through `api.github.com` and reads and saves your profile README there, changing only the marked section. Agent usage logs and prompts stay on your Mac |
+| **Sends** | If you connect with the GitHub App, device authorization uses `github.com`. When you turn on the GitHub card, the app uploads the card SVG through `api.github.com` and reads and saves your profile README there, changing only the marked section. Once a day the app reads `raw.githubusercontent.com` to see if a newer version exists, and asks before installing one (Settings › About to turn off). Agent usage logs and prompts stay on your Mac |
 | **Analytics** | None |
 | **Accounts** | Connecting GitHub is optional. Use your gh login, or grant the TokenCats GitHub App access to your profile repository only |
 

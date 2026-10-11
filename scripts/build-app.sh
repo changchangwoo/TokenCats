@@ -1,6 +1,6 @@
 #!/bin/bash
-# Release build of the app, ad-hoc signed (no team): the bundle has no nested frameworks or XPC services, so the
-# single signature xcodebuild applies is all it needs.
+# Release build of the app, ad-hoc signed (no team). Sparkle.framework is the one nested bundle; xcodebuild signs
+# it ad hoc on embedding, and `codesign --verify --deep` below checks the whole tree.
 # Built for any Mac (Apple Silicon and Intel): without a generic destination xcodebuild builds only this Mac's
 # architecture. The debugger entitlement (get-task-allow) is left out of the release signature.
 # Usage: scripts/build-app.sh [project-root]

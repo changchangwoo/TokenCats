@@ -8,6 +8,7 @@ struct HomeView: View {
     @ObservedObject private var store = StoreModel.shared
     @ObservedObject private var uiDisplay = UIDisplayModel.shared
     @AppStorage(AppSettings.Key.unreadDataNoticedAt) private var unreadNoticedAt = 0.0
+    @ObservedObject private var updater = AppUpdater.shared
     /// Data files that could not be read and started fresh since the user last dismissed the notice.
     @State private var unreadFiles: [String] = []
     private var theme: RoomTheme { store.theme(id: backgroundID) }
@@ -17,14 +18,22 @@ struct HomeView: View {
             CatRoomView(theme: theme)
                 .frame(height: 190)
                 .overlay(alignment: .top) {
-                    if !unreadFiles.isEmpty {
-                        UnreadDataBanner(files: unreadFiles, theme: theme) {
-                            unreadNoticedAt = Date().timeIntervalSince1970
-                            withAnimation(.smooth) { unreadFiles = [] }
+                    VStack(spacing: 6) {
+                        if let version = updater.pendingVersion, !updater.bannerDismissed {
+                            UpdateBanner(version: version, theme: theme,
+                                         onUpdate: updater.checkForUpdates, onLater: updater.dismissBanner)
+                                .transition(.opacity)
                         }
-                        .padding(8)
-                        .transition(.opacity)
+                        if !unreadFiles.isEmpty {
+                            UnreadDataBanner(files: unreadFiles, theme: theme) {
+                                unreadNoticedAt = Date().timeIntervalSince1970
+                                withAnimation(.smooth) { unreadFiles = [] }
+                            }
+                            .transition(.opacity)
+                        }
                     }
+                    .padding(8)
+                    .animation(.smooth, value: updater.pendingVersion == nil || updater.bannerDismissed)
                 }
             if !HomeLayout.sections(for: uiDisplay.settings.home).isEmpty {
                 HomeLedgerView(theme: theme, display: uiDisplay.settings.home)
@@ -60,6 +69,30 @@ struct HomeView: View {
                 withAnimation(.smooth(duration: 0.25)) { vm.notchSize = openNotchSize(for: .home) }
             }
         }
+    }
+}
+
+/// A newer version a scheduled check found: one line over the room, and the Update button opens Sparkle's window.
+private struct UpdateBanner: View {
+    let version: String
+    let theme: RoomTheme
+    let onUpdate: () -> Void
+    let onLater: () -> Void
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "arrow.down.circle.fill").foregroundStyle(theme.accent.swiftUI)
+            Text("TokenCats \(version) is available.")
+                .font(.system(size: 11, weight: .semibold, design: .rounded))
+            Spacer(minLength: 4)
+            Button("Later", action: onLater)
+                .font(.system(size: 10, weight: .semibold, design: .rounded))
+            Button("Update", action: onUpdate)
+                .font(.system(size: 10, weight: .bold, design: .rounded))
+        }
+        .foregroundStyle(theme.ink.swiftUI)
+        .padding(.horizontal, 10).padding(.vertical, 7)
+        .background(RoundedRectangle(cornerRadius: 8).fill(theme.surface.swiftUI))
     }
 }
 

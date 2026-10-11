@@ -2,6 +2,8 @@
   "Some data couldn't be read, so it started fresh: %@": "읽을 수 없는 데이터가 있어 새로 시작했어요: %@",
   "The unreadable files are kept in the data folder.": "읽지 못한 파일은 데이터 폴더에 남겨 뒀어요.",
   "Got it": "확인",
+  "TokenCats %@ is available.": "TokenCats %@ 버전이 나왔어요.",
+  "Update to TokenCats %@…": "TokenCats %@(으)로 업데이트…",
   "Loading": "불러오는 중",
   "5-hour": "5시간",
   "Daily": "일간",

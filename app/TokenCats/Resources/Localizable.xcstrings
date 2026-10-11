@@ -1110,6 +1110,28 @@
         }
       }
     },
+    "Check for Updates…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "업데이트 확인…"
+          }
+        }
+      }
+    },
+    "Check for updates automatically": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "업데이트 자동 확인"
+          }
+        }
+      }
+    },
     "Cheese": {
       "extractionState": "manual",
       "localizations": {
@@ -2496,6 +2518,17 @@
         }
       }
     },
+    "Last checked": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "마지막 확인"
+          }
+        }
+      }
+    },
     "Last updated %@": {
       "extractionState": "manual",
       "localizations": {
@@ -2569,6 +2602,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "불러오는 중"
+          }
+        }
+      }
+    },
+    "Looks for a new version on github.com once a day and asks before installing anything.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "하루 한 번 github.com에서 새 버전을 확인하고, 설치 전에 물어봅니다."
           }
         }
       }
@@ -2690,6 +2734,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "연결 필요"
+          }
+        }
+      }
+    },
+    "Never": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "아직 없음"
           }
         }
       }
@@ -4432,6 +4487,17 @@
         }
       }
     },
+    "TokenCats %@ is available.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TokenCats %@ 버전이 나왔어요."
+          }
+        }
+      }
+    },
     "TokenCats Settings": {
       "extractionState": "manual",
       "localizations": {
@@ -4560,6 +4626,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "지금 갱신"
+          }
+        }
+      }
+    },
+    "Update to TokenCats %@…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TokenCats %@(으)로 업데이트…"
+          }
+        }
+      }
+    },
+    "Updates": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "업데이트"
           }
         }
       }

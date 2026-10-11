@@ -164,7 +164,7 @@ brew install --cask changchangwoo/tap/tokencats
 |---|---|
 | **읽는 것** | `~/.claude`, `~/.codex`의 사용 기록. 토큰 수와 모델만 셉니다. 프롬프트 내용은 저장하거나 보내지 않아요 |
 | **쓰는 것** | 켰을 때만: Claude Code·Codex 설정 파일에 훅 한 줄, Claude Code 상태줄 한 줄. 원래 설정은 백업하고, 끄면 원래대로 돌아가요 |
-| **보내는 것** | GitHub App으로 연결하면 기기 인증에 `github.com`을 사용해요. GitHub 카드를 켜면 `api.github.com`을 통해 카드 SVG를 올리고 프로필 README를 읽고 저장해요. README에서는 표시한 구간만 바꿔요. 에이전트 사용 기록과 프롬프트는 Mac에 남아요 |
+| **보내는 것** | GitHub App으로 연결하면 기기 인증에 `github.com`을 사용해요. GitHub 카드를 켜면 `api.github.com`을 통해 카드 SVG를 올리고 프로필 README를 읽고 저장해요. README에서는 표시한 구간만 바꿔요. 하루 한 번 `raw.githubusercontent.com`에서 새 버전이 있는지 확인하고, 설치 전에 물어봐요(설정 › 정보에서 끌 수 있어요). 에이전트 사용 기록과 프롬프트는 Mac에 남아요 |
 | **사용 통계** | 수집하지 않아요 |
 | **계정** | GitHub 연결은 선택이에요. gh 로그인을 쓰거나, TokenCats GitHub App에 프로필 저장소 접근만 허락하면 돼요 |
 
