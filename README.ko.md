@@ -154,6 +154,7 @@ brew install --cask changchangwoo/tap/tokencats
 - macOS 14 이상에서 동작해요. 노치가 없는 Mac에서는 메뉴 막대 높이로 보여요.
 - 설치 명령은 위처럼 전체 이름으로 입력해 주세요. 짧게 `tokencats`만 쓰면 Homebrew가 설치를 거부해요.
 - 업데이트는 `brew upgrade --cask tokencats`예요.
+- 앱은 ad-hoc 서명되어 있고 Apple 공증을 받지 않았어요. 설치할 때 Homebrew cask가 `TokenCats.app`의 macOS 격리 속성을 제거해 앱을 열 수 있게 해요.
 
 <details>
 <summary><b>개인정보</b> — 읽는 것, 쓰는 것, 보내는 것</summary>
@@ -163,7 +164,7 @@ brew install --cask changchangwoo/tap/tokencats
 |---|---|
 | **읽는 것** | `~/.claude`, `~/.codex`의 사용 기록. 토큰 수와 모델만 셉니다. 프롬프트 내용은 저장하거나 보내지 않아요 |
 | **쓰는 것** | 켰을 때만: Claude Code·Codex 설정 파일에 훅 한 줄, Claude Code 상태줄 한 줄. 원래 설정은 백업하고, 끄면 원래대로 돌아가요 |
-| **보내는 것** | GitHub 카드를 켰을 때만 `api.github.com`으로 카드 SVG와 README 한 구간. 그 밖에는 아무것도 보내지 않아요 |
+| **보내는 것** | GitHub App으로 연결하면 기기 인증에 `github.com`을 사용해요. GitHub 카드를 켜면 `api.github.com`을 통해 카드 SVG를 올리고 프로필 README를 읽고 저장해요. README에서는 표시한 구간만 바꿔요. 에이전트 사용 기록과 프롬프트는 Mac에 남아요 |
 | **사용 통계** | 수집하지 않아요 |
 | **계정** | GitHub 연결은 선택이에요. gh 로그인을 쓰거나, TokenCats GitHub App에 프로필 저장소 접근만 허락하면 돼요 |
 

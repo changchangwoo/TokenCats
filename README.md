@@ -154,6 +154,7 @@ brew install --cask changchangwoo/tap/tokencats
 - Runs on macOS 14 or later. On a Mac without a notch, it sits at menu bar height.
 - Type the full name as shown above. Homebrew refuses to install the short `tokencats` on its own.
 - To update, run `brew upgrade --cask tokencats`.
+- The app is ad-hoc signed and not notarized. During installation, the Homebrew cask removes macOS quarantine from `TokenCats.app` so it can open.
 
 <details>
 <summary><b>Privacy</b> — what it reads, writes, and sends</summary>
@@ -163,7 +164,7 @@ brew install --cask changchangwoo/tap/tokencats
 |---|---|
 | **Reads** | Usage logs under `~/.claude` and `~/.codex`. Only token counts and model names are counted. Prompt contents are never stored or sent |
 | **Writes** | Only when enabled: one hook line in the Claude Code and Codex settings files, and one status line entry for Claude Code. The original settings are backed up, and turning it off restores them |
-| **Sends** | Only when the GitHub card is on: the card SVG and one section of your README, to `api.github.com`. Nothing else is sent anywhere |
+| **Sends** | If you connect with the GitHub App, device authorization uses `github.com`. When you turn on the GitHub card, the app uploads the card SVG through `api.github.com` and reads and saves your profile README there, changing only the marked section. Agent usage logs and prompts stay on your Mac |
 | **Analytics** | None |
 | **Accounts** | Connecting GitHub is optional. Use your gh login, or grant the TokenCats GitHub App access to your profile repository only |
 
