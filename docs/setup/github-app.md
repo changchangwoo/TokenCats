@@ -1,47 +1,53 @@
-# GitHub App 등록 (장치 인증용, 한 번만)
+# GitHub App registration (for device authorization, once)
 
-> 등록 완료 (2026-10-11): 앱 이름 `tokenCatsApp`, slug `tokencatsapp`, 설정 화면 https://github.com/settings/apps/tokencatsapp.
-> `TokenCats`는 같은 이름의 GitHub 계정(@tokencats)이 있어 쓸 수 없었다. Client ID와 slug는 `app/TokenCats/Info.plist`의
-> `NCGitHubAppClientID`, `NCGitHubAppSlug`에 들어 있다.
+> Registered on 2026-10-11: app name `tokenCatsApp`, slug `tokencatsapp`, settings page
+> https://github.com/settings/apps/tokencatsapp. `TokenCats` was unavailable because a GitHub account of that name
+> (@tokencats) exists. The client ID and slug are in `NCGitHubAppClientID` and `NCGitHubAppSlug` in
+> `app/TokenCats/Info.plist`.
 
-`gh` CLI가 없는 사용자도 "GitHub 코드로 연결"을 쓸 수 있게 하려면 GitHub App을 한 번 등록하고 client ID를 앱에 넣는다. 등록 전에는 이 버튼이 보이지 않고 `gh` 로그인 연결만 동작한다.
+For users without the `gh` CLI to use "Connect with a GitHub code", a GitHub App is registered once and its client ID
+is put into the app. Before registration that button is hidden and only the `gh` login connection works.
 
-## 1. 앱 만들기
+## 1. Create the app
 
 github.com → Settings → Developer settings → GitHub Apps → **New GitHub App**
 
-| 항목 | 값 |
+| Field | Value |
 |---|---|
-| GitHub App name | `tokenCatsApp` (전역에서 유일해야 하고, 기존 계정 이름과도 겹치면 안 됨) |
-| Homepage URL | 프로젝트 저장소 주소 |
-| Callback URL | 비워 둠 |
-| **Expire user authorization tokens** | **끔** (갱신에는 client secret이 필요해 데스크톱 앱에서 쓸 수 없다) |
-| Request user authorization (OAuth) during installation | 끔 |
-| **Enable Device Flow** | **켬** |
-| Webhook → Active | 끔 |
+| GitHub App name | `tokenCatsApp` (globally unique, and must not collide with an existing account name) |
+| Homepage URL | The project repository URL |
+| Callback URL | Leave empty |
+| **Expire user authorization tokens** | **Off** (refreshing needs the client secret, which a desktop app cannot hold) |
+| Request user authorization (OAuth) during installation | Off |
+| **Enable Device Flow** | **On** |
+| Webhook → Active | Off |
 | Repository permissions → **Contents** | **Read and write** |
-| Repository permissions → Metadata | Read-only (자동) |
+| Repository permissions → Metadata | Read-only (automatic) |
 | Where can this GitHub App be installed? | Any account |
 
-만든 뒤 화면의 **Client ID**(`Iv23…`)를 복사한다. Client secret은 만들지 않는다.
+After creating it, copy the **Client ID** (`Iv23…`) from the page. Do not create a client secret.
 
-## 2. 앱에 client ID 넣기
+## 2. Put the client ID into the app
 
-둘 중 하나:
+One of the two:
 
-- 배포용: `app/TokenCats/Info.plist`에 `NCGitHubAppClientID`(client ID)와 `NCGitHubAppSlug`(앱 주소의 slug) 키로 넣는다.
-- 시험용: `defaults write <앱 번들 ID> githubAppClientID Iv23...`
+- For distribution: add the `NCGitHubAppClientID` (client ID) and `NCGitHubAppSlug` (the slug in the app's URL) keys to
+  `app/TokenCats/Info.plist`.
+- For testing: `defaults write <app bundle ID> githubAppClientID Iv23...`
 
-## 3. 사용자가 하는 일
+## 3. What the user does
 
-1. 설정 › GitHub 프로필 › GitHub 프로필 자동 갱신 → **GitHub 코드로 연결**
-2. 브라우저에 뜬 github.com/login/device에 앱에 보이는 8자리 코드를 입력하고 승인한다.
-3. 앱이 프로필 레포에 아직 설치되지 않았으면 TokenCats가 설치 화면(`github.com/apps/<slug>/installations/new`)을 연다. 거기서 **Only select repositories → 프로필 레포(`아이디/아이디`)** 를 고른다. 사용자 토큰은 앱이 설치된 레포에서만 동작하므로, 앱은 다른 레포에 쓸 수 없다.
+1. Settings › GitHub profile › Auto-update GitHub profile → **Connect with a GitHub code**
+2. Enter the 8-character code shown in the app at github.com/login/device in the browser and approve.
+3. If the app is not yet installed on the profile repository, TokenCats opens the installation page
+   (`github.com/apps/<slug>/installations/new`). There, choose **Only select repositories → the profile repository
+   (`username/username`)**. The user token only works on repositories where the app is installed, so the app cannot
+   write anywhere else.
 
-## 시험용 대상 레포
+## Test target repository
 
-실제 프로필 레포 대신 다른 레포로 시험하려면:
+To test against a repository other than the real profile repository:
 
 ```
-defaults write <앱 번들 ID> profileRepoOverride owner/repo
+defaults write <app bundle ID> profileRepoOverride owner/repo
 ```

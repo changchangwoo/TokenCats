@@ -1,65 +1,80 @@
-# 고양이 그림 파이프라인
+# Cat art pipeline
 
-**그림을 고치는 방법은 [`art-src/README.md`](../../art-src/README.md)에, 칸의 규격·절차의 정본은
-[`AGENTS.md`의 `sprite.rules`](../../AGENTS.md#spriterules)에 있습니다.** 이 문서는 그 뒤에서 무슨 일이 일어나는지를 적습니다.
+**How to edit the art is in [`art-src/README.md`](../../art-src/README.md); the frame specification and the procedures
+are defined in [`sprite.rules` in `AGENTS.md`](../../AGENTS.md#spriterules).** This document describes what happens
+behind them.
 
-## 흐름
+## Flow
 
 ```
-build/incoming-<코트>/*.png                                   (들어온 큰 원화 시트, 커밋 안 됨)
-        │  swift scripts/import-cat-art.swift <코트> …   — 칸 찾기, 시트당 스케일 하나, 바닥선 y=93, 알파 0/255, idle = groom[0]
+build/incoming-<coat>/*.png                                   (incoming large artwork sheets, not committed)
+        │  swift scripts/import-cat-art.swift <coat> …   — find frames, one scale per sheet, floor line y=93, alpha 0/255, idle = groom[0]
         ▼
-art-src/cats/<코트>/walk-right.png, walk-left.png, idle.png, groom.png      (원본, 96px 칸. 손 수정은 여기서)
-        │  swift scripts/build-cat-art.swift   — 이어 붙이고 크기만 검사. 축소·보정 없음
+art-src/cats/<coat>/walk-right.png, walk-left.png, idle.png, groom.png      (sources, 96px frames; hand edits happen here)
+        │  swift scripts/build-cat-art.swift   — stitch and check sizes only; no scaling or correction
         ▼
-app/TokenCats/Resources/CatArt/cat-<코트>.png          (23칸 시트)
-                               cat-assets.json            (동작 → 시트 칸 번호)
-        │  앱이 실행 중에 읽음
+app/TokenCats/Resources/CatArt/cat-<coat>.png          (23-frame sheet)
+                               cat-assets.json            (action → frame indices in the sheet)
+        │  read by the app at run time
         ▼
-CatSprites (Features/Cats) — 동작 이름과 칸 순서로 시트에서 잘라 그림
+CatSprites (Features/Cats) — crops the sheet by action name and frame order
 ```
 
-## 시트 배치
+## Sheet layout
 
-코트마다 96×96px 프레임 **23칸**을 가로로 붙인 시트 한 장입니다. 순서는 `build-cat-art.swift`의 `clips` 표가 정합니다.
+Each coat is one sheet of **23** 96×96px frames side by side. The order is set by the `clips` table in
+`build-cat-art.swift`.
 
-| 칸 | 동작(`cat-assets.json`의 clip) | 원본 파일 |
+| Frames | Action (`clip` in `cat-assets.json`) | Source file |
 |---|---|---|
 | 0–5 | `walkRight` | `walk-right.png` |
 | 6–11 | `walkLeft` | `walk-left.png` |
 | 12 | `idle` | `idle.png` |
 | 13–22 | `groom` | `groom.png` |
-| 17, 21 | `pet` | 그루밍의 5·9번째 칸을 같이 씀(`petFromGroom`) |
+| 17, 21 | `pet` | Shares the 5th and 9th groom frames (`petFromGroom`) |
 
-앱 코드는 칸 번호를 모릅니다. `CatRoomMotion`은 "동작 + 몇 번째 칸"만 정하고, `CatSprites`가 `cat-assets.json`으로 시트 칸을 찾습니다.
-배치를 바꿀 때는 `clips` 표만 고치면 됩니다.
+App code never knows frame numbers. `CatRoomMotion` decides only "action + which frame", and `CatSprites` finds the
+sheet frame through `cat-assets.json`. To change the layout, edit the `clips` table and nothing else.
 
-## 임포터 (`scripts/import-cat-art.swift`)
+## Importer (`scripts/import-cat-art.swift`)
 
-- 시트에서 불투명(알파 ≥ 160) 덩어리를 찾아 줄·칸 순서로 읽습니다. 칸끼리 닿으면 못 찾습니다. `파일#줄`로 한 줄만 고를 수 있습니다.
-- 그루밍 시트의 0번 칸(앉은 자세) 높이가 `--idle-height`(기본 88)가 되는 스케일 하나로 그루밍 10칸을 만들고, 0번 칸이 `idle.png`가 됩니다.
-- 걷기 시트는 각각 가장 큰 칸이 `--walk-height`(기본 84) 이하, 어떤 칸도 폭 88 이하가 되는 스케일 하나를 씁니다. 꼬리를 높이 든 그림은
-  그만큼 몸이 작아지니 결과는 머리·몸통 크기로 판단합니다.
-- 가장 가까운 픽셀 하나를 고르는 방식으로 줄이고(도트 유지), 알파는 160 기준으로 0/255로 나누고, 색은 프리멀티플라이를 풀어 씁니다.
-- 칸마다 바닥선 y=93에 맞추고 가운데 둔 뒤, 같은 동작의 0번 칸과 실루엣이 가장 많이 겹치는 위치로 ±8px 옮깁니다(몸은 그대로, 발·꼬리만 움직이게).
-- 작은 그림(상점·보관함·닫힌 노치)은 따로 만들지 않습니다. 앱이 idle 칸의 (8, 0)부터 80×80을 잘라 씁니다(`CatSprites.portrait`).
+- Finds opaque blobs (alpha ≥ 160) in the sheet and reads them in row and column order. Touching frames cannot be
+  separated. `file#row` selects a single row.
+- The groom sheet gets one scale that makes frame 0 (the sitting pose) `--idle-height` tall (default 88); that
+  produces the 10 groom frames, and frame 0 becomes `idle.png`.
+- Each walk sheet gets one scale at which its largest frame is at most `--walk-height` (default 84) and no frame is
+  wider than 88. A picture with the tail held high comes out with a smaller body, so judge the result by head and body
+  size.
+- Downscaling is nearest-pixel (keeps the pixel look), alpha is split into 0/255 at a threshold of 160, and colours are
+  un-premultiplied.
+- Each frame is set on the floor line y=93 and centred, then shifted by up to ±8px to the position where its
+  silhouette overlaps frame 0 of the same action the most (so the body stays put and only paws and tail move).
+- No small picture (store, collection, closed notch) is produced. The app crops 80×80 from (8, 0) of the idle frame
+  (`CatSprites.portrait`).
 
-## 검사 (`swift test`, `CatAssetCatalogTests`)
+## Checks (`swift test`, `CatAssetCatalogTests`)
 
-- `shippedArtIsExactlyTheSourceFolder`: 앱의 시트·아이콘이 `art-src/cats/<코트>/`를 그대로 이어 붙인 것과 같은지. 결과물을 손으로 고쳤거나 원본을 고치고 빌드를 안 돌렸으면 실패합니다.
-- `everyCoatHasACompleteAtlas`: 시트가 동작이 쓰는 칸만 정확히 담는지(남는 칸·빈 번호 없음).
-- `groomingStartsFromTheIdlePose`: 그루밍 첫 칸이 쉬는 자세와 픽셀까지 같은지.
-- `idleGroomAndPetHaveMatchingSizeAndFloor`: 그루밍·쓰다듬기 칸이 쉬는 자세와 바닥선이 같고 높이 차 6px 이내인지, 실루엣이 충분히 겹치는지.
-- 그루밍·쓰다듬기에서 앞발이 몇 개 보이는지는 자동으로 판별하지 못하므로 `--gif-preview`로 눈으로 확인합니다.
+- `shippedArtIsExactlyTheSourceFolder`: the app's sheets and icons equal `art-src/cats/<coat>/` stitched together
+  as is. Fails if the output was hand-edited, or the sources changed without a build.
+- `everyCoatHasACompleteAtlas`: the sheet holds exactly the frames the actions use (no spare frames, no missing
+  indices).
+- `groomingStartsFromTheIdlePose`: the first groom frame is pixel-identical to the resting pose.
+- `idleGroomAndPetHaveMatchingSizeAndFloor`: groom and pet frames share the resting pose's floor line, differ in
+  height by at most 6px, and overlap it enough.
+- How many forepaws are visible in groom and pet frames cannot be judged automatically; check with `--gif-preview` by
+  eye.
 
-## 실행 중 규칙
+## Run-time rules
 
-- `idle`, `walkRight`, `walkLeft`, `groom`, `pet`은 이름으로 참조합니다. 시트 내 위치는 JSON에만 있습니다.
-- 시트는 코트별로 필요할 때 읽고 프레임을 캐시합니다.
-- 최대 10마리를 보유하고 방에는 `CatHousehold.roomCapacity`(4)마리가 삽니다. 고양이는 털색(`coat`)으로 그림을 고르고, 같은 털색 여러 마리도 가능합니다.
+- `idle`, `walkRight`, `walkLeft`, `groom` and `pet` are referenced by name. Their sheet positions exist only in the
+  JSON.
+- Sheets are read per coat on demand and their frames are cached.
+- Up to 10 cats are owned, and `CatHousehold.roomCapacity` (4) live in the room. A cat picks its art by coat, and
+  several cats of the same coat are allowed.
 
-## 지난 이력
+## History
 
-예전에는 큰 원화 시트(`docs/design/cat-*-source.png`)를 빌드 스크립트가 잘라 축소하고, 일부 칸을 교정본으로 덮어썼습니다.
-어느 칸이 어느 파일에서 오는지 알기 어려워 지금 구조로 바꿨습니다.
-그 축소 로직은 `scripts/import-cat-art.swift`로 옮겨, 빌드가 아니라 새 코트를 들일 때 한 번만 돌립니다(삼색 `split`이 첫 사례).
+Originally the build script cropped and downscaled the large artwork sheets (`docs/design/cat-*-source.png`) and
+overrode some frames with corrected versions. It was hard to tell which frame came from which file, so the structure
+was changed to the current one. The downscaling logic moved into `scripts/import-cat-art.swift`, which now runs once
+when a new coat is brought in rather than on every build (the calico `split` was the first case).

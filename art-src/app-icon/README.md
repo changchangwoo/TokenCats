@@ -1,16 +1,25 @@
-# 앱 아이콘
+# App icon
 
-게임 속 검정 고양이를 그대로 쓴 얼굴 클로즈업에, 하늘색 그라데이션(`#9DDCFF → #3E8FE0`) 배경. 2026-10-11 확정.
-검정 고양이는 TokenCats가 처음 만든 고양이라서 대표로 세웠다.
-배경은 눈 색(연두)·크림과 비교한 뒤 하늘색으로 정했다. macOS 기본 강조색과 겹쳐 은은하게 어울리고, Mac 앱다운 느낌을 준다.
-앱 안이 포근한 방 색으로 바뀐 뒤 크림·갈색·방 그림 배경도 비교했지만 하늘색을 유지했다(2026-10-11). 앱은 평소 Dock에 없어서 아이콘과 방이 나란히 보일 일이 드물고, 대신 첫 고양이를 검정으로 고정해 아이콘의 고양이가 방으로 걸어 들어오게 했다.
+A close-up of the in-game black cat, used as is, on a sky-blue gradient (`#9DDCFF → #3E8FE0`). Settled on 2026-10-11.
+The black cat is the first cat TokenCats ever made, which is why it stands for the app.
+The background was chosen after comparing the eye colour (yellow-green) and cream; sky blue sits quietly next to the
+default macOS accent colour and feels like a Mac app. After the app's interior switched to the cozy-room palette,
+cream, brown and the room picture were compared as backgrounds too, but sky blue stayed (2026-10-11). The app is
+normally not in the Dock, so the icon and the room are rarely seen side by side; instead the first cat is fixed to
+black so the cat on the icon walks into the room.
 
-- 원본: `black-idle-96.png` — `art-src/cats/black/idle.png`(feat/notch-companion-mvp)의 앉은 프레임을 그대로 가져온 것이다. 고치지 않는다.
-- 만드는 법: `swift scripts/build-app-icon.swift`
-  - 1024 캔버스에 정수 배율인 10배로 그린다. 귀 끝(프레임 6행)을 위에서 196px에 두고, 두 눈 사이(44.5열)를 가운데에 둔다.
-  - 꼬리는 지운다. 58행부터 몸 오른쪽의 첫 빈칸 너머를 지우고, 꼬리가 몸에 붙은 줄은 67열부터 지운다(87행부터는 66열).
-  - macOS 아이콘 격자(본체 832/1024, 모서리 22.5%)를 따르고, 작은 크기는 1024 그림을 줄여 만든다.
-  - 같은 구도의 정사각형(`docs/design/app-icon-square-1024.png`)은 GitHub App 로고용이다.
-  - 저장소 소셜 미리보기(`docs/design/social-preview-1280x640.png`)는 꼬리까지 온전한 앉은 고양이를 6배로 가운데에 둔다.
-- 검정 고양이 그림이 바뀌면 프레임을 다시 떼어 이 원본을 바꾸고 스크립트를 돌린다. 꼬리 위치가 바뀌었다면 스크립트의 `tail` 값도 확인한다.
-- 16px에서는 눈이 흐려진다. Finder 목록 크기에서만 보이므로 지금은 그대로 둔다.
+- Source: `black-idle-96.png` — the sitting frame taken as is from `art-src/cats/black/idle.png`
+  (feat/notch-companion-mvp). Not edited.
+- How it is made: `swift scripts/build-app-icon.swift`
+  - Drawn on a 1024 canvas at an integer scale of 10×. The ear tips (frame row 6) sit 196px from the top, and the
+    midpoint between the eyes (column 44.5) is centred.
+  - The tail is erased: from row 58, everything beyond the first empty pixel to the right of the body is cleared, and
+    on the rows where the tail joins the body the clearing starts at column 67 (column 66 from row 87).
+  - Follows the macOS icon grid (body 832/1024, corner radius 22.5%); the smaller sizes are downscaled from the 1024
+    picture.
+  - The square of the same composition (`docs/design/app-icon-square-1024.png`) is the GitHub App logo.
+  - The repository social preview (`docs/design/social-preview-1280x640.png`) centres the full sitting cat, tail and
+    all, at 6×.
+- When the black cat's art changes, extract the frame again, replace this source and re-run the script. If the tail
+  moved, check the script's `tail` values as well.
+- At 16px the eyes blur. That size only appears in Finder list view, so it is left as is for now.

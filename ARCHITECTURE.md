@@ -1,106 +1,120 @@
-# TokenCats 구조
+# TokenCats architecture
 
-## 세 층
+## Three layers
 
 ```
 app/TokenCats/
-  Core/        규칙과 데이터. SwiftPM 타겟 TokenCatsCore. UI 없음, 테스트 대상.
-  Features/    화면. 한 폴더가 한 화면(Home · Cats · Store · ClosedNotch · Profile · Settings · Shared).
-  NotchShell/  boring.notch에서 가져온 노치 창: 열고 닫기, 제스처, 크기, 애니메이션, 환영 화면.
-  App/         진입점(TokenCatsApp)과 메뉴 막대.
-  Resources/   JSON 카탈로그, 고양이·방 그림(빌드 결과물), 폰트, 훅 스크립트.
-Tests/TokenCatsCoreTests/   Core와 같은 폴더 구조.
-art-src/      그림 원본. 고양이·방 그림은 여기만 고칩니다(art-src/README.md).
+  Core/        Rules and data. SwiftPM target TokenCatsCore. No UI; this is what the tests cover.
+  Features/    Screens. One folder per screen (Home · Cats · Store · ClosedNotch · Profile · Settings · Shared).
+  NotchShell/  The notch window taken from boring.notch: open/close, gestures, sizing, animation, welcome screen.
+  App/         Entry point (TokenCatsApp) and the menu bar.
+  Resources/   JSON catalogs, cat and room art (build output), fonts, hook scripts.
+Tests/TokenCatsCoreTests/   Mirrors the Core folder structure.
+art-src/      Art sources. Cat and room art is edited here only (art-src/README.md).
 ```
 
-의존 방향: **Features → Core**이고, **NotchShell**은 창을 띄우며 Features의 화면을 담습니다. Features는 NotchShell의
-창 상태 두 가지(`NotchCoordinator`: 열린 탭·디스플레이, `BatteryStatusViewModel`: 배터리)만 읽습니다. Core는
-`Foundation`·`Combine`·`Darwin`·`os.log`만 import하고 SwiftUI·AppKit·`Defaults`를 모릅니다. 그래서 `swift test`가
-Xcode 없이 돌고, 카드·장부·방 배치 같은 규칙은 전부 테스트로 고정되어 있습니다.
+Dependencies point **Features → Core**; **NotchShell** opens the window and hosts the Features screens. Features reads
+only two pieces of NotchShell window state (`NotchCoordinator`: open tab and display, `BatteryStatusViewModel`:
+battery). Core imports only `Foundation`, `Combine`, `Darwin` and `os.log`, and knows nothing of SwiftUI, AppKit or
+`Defaults`. That is why `swift test` runs without Xcode, and why every rule — card, ledger, room layout — is pinned by
+a test.
 
-`NotchShell`은 빌린 코드라는 뜻입니다. 파일마다 출처 주석이 있고, 동작하는 범위에서 최소로만 고칩니다.
-노치와 무관한 TokenCats의 규칙이 그 안에 들어가면 안 됩니다. 예외는 `FullscreenDetector`로, boring.notch가 외부
-패키지로 하던 전체 화면 감지를 직접 쓴 것입니다(전체 화면 앱 위에서는 닫힌 노치와 고양이가 숨습니다).
+`NotchShell` means borrowed code. Every file carries a provenance comment and is changed as little as it takes to
+work. TokenCats rules that have nothing to do with the notch must not end up in there. The one exception is
+`FullscreenDetector`, which does in-house what boring.notch did through an external package: detect full-screen apps
+(the closed notch and its cats hide over a full-screen app).
 
-## 데이터 흐름
+## Data flow
 
 ```
-에이전트 로그 (~/.claude, ~/.codex)
+Agent logs (~/.claude, ~/.codex)
    └─ TokenUsageReader · DailyTokenScan  ─┐
-훅 스크립트 → SocketServer → AgentHub      │   (세션 알림만; 츄르와 무관)
+Hook script → SocketServer → AgentHub      │   (session notices only; unrelated to churu)
                                            ▼
-                         ChuruLedger → ChuruModel (잔액 · 오늘 · 연속일)
+                         ChuruLedger → ChuruModel (balance · today · streak)
                                            │
-                     StoreService ─ 구매 ─▶ CatHousehold · StoreInventory (cats.json · inventory.json)
+                     StoreService ─ purchase ─▶ CatHousehold · StoreInventory (cats.json · inventory.json)
                                            │
-                   CatRoomScene · CatRoomMotion ─▶ CatRoomView (노치 안 방) / ClosedNotchView (닫힌 노치)
+                   CatRoomScene · CatRoomMotion ─▶ CatRoomView (room in the notch) / ClosedNotchView (closed notch)
                                            │
                       CatRoomSVG · ContributionYear ─▶ ProfileCard ─▶ ProfileSync ─▶ GitHub README
 ```
 
-- 모든 데이터 파일 이름은 `Core/Support/DataFiles.swift` 한 곳에 있습니다. `Backup`은 그 목록으로 백업·복원·초기화합니다.
-- 사용자 설정의 키와 기본값은 `Features/Settings/AppSettings.swift`(키)와 `Core/Settings/Preferences.swift`(기본값)에만 있습니다.
-  뷰는 `@AppStorage(AppSettings.Key.x) private var x = AppSettings.Default.x` 패턴으로만 읽습니다.
-- 경로는 `AppPaths`. Debug 빌드에서는 `NC_SUPPORT_DIR` 환경 변수로 데이터 폴더를 바꿀 수 있어 스냅숏과 테스트가 고정 사본을
-  씁니다(Release는 무시합니다: 훅 스크립트의 소켓 경로가 고정이라 둘이 갈라지면 안 됩니다).
+- Every data file name lives in one place, `Core/Support/DataFiles.swift`. `Backup` backs up, restores and resets from
+  that list.
+- Preference keys and defaults live only in `Features/Settings/AppSettings.swift` (keys) and
+  `Core/Settings/Preferences.swift` (defaults). Views read them only through the
+  `@AppStorage(AppSettings.Key.x) private var x = AppSettings.Default.x` pattern.
+- Paths come from `AppPaths`. In Debug builds the `NC_SUPPORT_DIR` environment variable redirects the data folder, so
+  snapshots and tests work on a fixed copy (Release ignores it: the hook script's socket path is fixed, and the two
+  must never diverge).
 
-## 앱 수명 상태
+## App-lifetime state
 
-`StoreModel`, `ChuruModel`, `CostUsageModel`, `UsageLimitsModel`, `HomeUsageHistoryModel`, `UIDisplayModel`, `ProfileSync`,
-`CatSprites`, `CatRoomStage`는 `.shared` 싱글턴입니다. 노치 창이 여러 디스플레이에 떠도 데이터는 하나여야 해서 그렇습니다.
+`StoreModel`, `ChuruModel`, `CostUsageModel`, `UsageLimitsModel`, `HomeUsageHistoryModel`, `UIDisplayModel`,
+`ProfileSync`, `CatSprites` and `CatRoomStage` are `.shared` singletons, because the notch window may be open on
+several displays while the data must stay single.
 
-규칙:
-- 뷰는 `@ObservedObject`로만 접근하고, 싱글턴끼리는 서로의 UserDefaults를 직접 읽지 않고 `AppSettings`를 통합니다.
-- 상태 변경은 `StoreService`·`ChuruTracker` 같은 Core 타입이 하고, 싱글턴은 그 결과를 메인 스레드에 올려 줄 뿐입니다.
-- Core의 싱글턴은 `SocketServer`·`AgentHub` 둘뿐이고, 둘 다 프로세스 수명의 서비스입니다.
+Rules:
+- Views reach them only through `@ObservedObject`, and singletons never read each other's UserDefaults directly; they go
+  through `AppSettings`.
+- State changes are made by Core types such as `StoreService` and `ChuruTracker`; a singleton only publishes the result
+  on the main thread.
+- Core has exactly two singletons, `SocketServer` and `AgentHub`, and both are process-lifetime services.
 
-## 확장 지점
+## Extension points
 
-### 고양이를 더하려면
-`art-src/cats/<새 코트>/`에 동작별 그림 4개(걷기 둘, 쉬기, 그루밍. 쓰다듬기는 그루밍에서, 작은 고양이는 쉬기에서 가져옴)를 두고
-`swift scripts/build-cat-art.swift`를 돌리면 코트가 생깁니다. 무엇을 어느 파일에 그리는지는 [art-src/README.md](art-src/README.md)에
-있습니다. `Resources/store-catalog.json`의 입양 상자 등급에 코트를 넣으면 상점에 나옵니다. `CatAssetCatalogTests`가 모든 코트의
-크기·바닥선·이음새와, 앱 리소스가 원본 폴더와 똑같은지를 검사합니다.
+### Adding a cat
+Put the four per-action pictures (two walks, idle, groom; petting comes from groom and the small portrait from idle)
+in `art-src/cats/<new coat>/` and run `swift scripts/build-cat-art.swift`; that creates the coat. What goes in which
+file is in [art-src/README.md](art-src/README.md). Add the coat to an adoption-box tier in
+`Resources/store-catalog.json` and it shows up in the store. `CatAssetCatalogTests` checks every coat's size, floor
+line and seams, and that the app resources are identical to the source folder.
 
-### 방 테마를 더하려면
-`art-src/rooms/<테마>/`에 벽·바닥 원본을 두고 `scripts/import-room-art.swift`로 `Resources/RoomArt/`에 PNG(1x·2x)를 만듭니다.
-`Resources/room-themes.json`에 테마(색·식별자)를, `store-catalog.json`에 가격을 넣습니다. `RoomThemeTests`가 카탈로그와 그림
-파일이 서로 맞는지, 카드 미리보기 대비가 충분한지 검사합니다.
+### Adding a room theme
+Put the wall and floor sources in `art-src/rooms/<theme>/` and run `scripts/import-room-art.swift` to produce the 1x
+and 2x PNGs in `Resources/RoomArt/`. Add the theme (colours, identifier) to `Resources/room-themes.json` and its price
+to `store-catalog.json`. `RoomThemeTests` checks that the catalog and the picture files agree and that the card preview
+has enough contrast.
 
-### 에이전트를 더하려면
-`Core/Agents/AgentIntegration.swift`에 케이스를 추가하고 설정 파일 경로와 훅 이벤트를 답하게 합니다.
-`Resources/tokencats-hook.py`는 첫 인자로 받은 provider 이름을 소켓 메시지에 실어 보내므로, 이벤트 이름이 다르면
-그 스크립트의 분기와 `AgentSession`의 상태 매핑을 함께 고칩니다. 토큰 집계는 `TokenUsageReader`에 로그 형식을 추가합니다.
+### Adding an agent
+Add a case to `Core/Agents/AgentIntegration.swift` that answers the settings-file path and the hook events.
+`Resources/tokencats-hook.py` puts the provider name it receives as its first argument into the socket message, so if
+the event names differ, update that script's branches together with the state mapping in `AgentSession`. For token
+counting, add the log format to `TokenUsageReader`.
 
-### 언어를 더하려면
-`Resources/Localizable.xcstrings`에 그 언어의 열을 더하면 끝입니다. 설정의 언어 목록은 번들에 든 언어(`Bundle.main.localizations`)
-에서 `AppLanguage`가 만들고, 이름은 그 언어의 자기 이름으로 나옵니다. 코드는 고치지 않습니다. 한국어처럼 번역 조각
-(`Resources/l10n/*.json`)으로 관리하려면 `scripts/build-string-catalog.py`의 `TARGETS`에 언어 코드를 넣습니다.
-언어는 루트 뷰 네 곳(노치·설정·온보딩·메뉴바)에 `.localized()`가 거는 `environment(\.locale)` 하나로 흐르므로, 설정에서
-고르는 순간 재실행 없이 바뀝니다. 프로필 카드 SVG는 전 세계에 보이는 것이라 언제나 영어입니다.
+### Adding a language
+Add that language's column to `Resources/Localizable.xcstrings` and you are done. The language list in Settings is
+built by `AppLanguage` from the languages in the bundle (`Bundle.main.localizations`), with each name shown in its own
+language. No code changes. To manage a language through translation fragments (`Resources/l10n/*.json`) the way Korean
+is, add its code to `TARGETS` in `scripts/build-string-catalog.py`. Language flows through a single
+`environment(\.locale)` that `.localized()` applies at the four root views (notch, settings, onboarding, menu bar), so
+picking it in Settings takes effect without a relaunch. The profile card SVG is seen worldwide and is always English.
 
-## 테스트와 검증
+## Tests and verification
 
-- Core는 Swift Testing(`swift test`). 새 규칙은 실패하는 테스트부터 씁니다.
-- UI는 Debug 빌드 + 스냅숏입니다. `scripts/snapshot.sh <dir>`가 카드 5종 SVG와 화면 PNG를 뽑고,
-  `scripts/compare-snapshots.py <base> <new>`가 바이트/픽셀로 비교합니다. 카드는 바이트까지 같아야 합니다.
-  `TOKENCATS_LAUNCH_ARGS="-companionLanguage en"`처럼 앱 인자를 더해 언어별로 뽑을 수 있습니다.
-- 문구는 `python3 scripts/check-strings.py`. 소스의 한글 리터럴과 카탈로그의 번역 누락을 잡습니다.
+- Core uses Swift Testing (`swift test`). A new rule starts with a failing test.
+- UI is a Debug build plus snapshots. `scripts/snapshot.sh <dir>` writes the five card SVGs and the screen PNGs, and
+  `scripts/compare-snapshots.py <base> <new>` compares them byte by byte and pixel by pixel. Cards must be
+  byte-identical. Add app arguments such as `TOKENCATS_LAUNCH_ARGS="-companionLanguage en"` to capture per language.
+- Copy is checked with `python3 scripts/check-strings.py`, which catches Korean literals in source and missing
+  translations in the catalog.
 
-## 이름과 예전 이름
+## Names and former names
 
-디스크에 닿는 식별자는 모두 TokenCats 이름입니다. "Notch Companion" 시절에 설치한 사용자는
-첫 실행 때 `LegacyDataMigration`(App)과 `IdentityMigration`(Core)이 한 번 옮깁니다. 예전 이름은
-`Core/Support/LegacyIdentity.swift`에만 있고, 훅·상태줄·README 블록은 예전 마커도 우리 것으로 알아봅니다.
+Every identifier that touches the disk uses the TokenCats name. For users who installed in the "Notch Companion"
+days, `LegacyDataMigration` (App) and `IdentityMigration` (Core) move things once on first launch. The former names
+exist only in `Core/Support/LegacyIdentity.swift`, and the hook, status line and README block also recognise the old
+markers as ours.
 
-| 식별자 | 지금 값 | 예전 값 (옮겨짐) |
+| Identifier | Current value | Former value (migrated) |
 |---|---|---|
-| `.app` 이름 (`PRODUCT_NAME`) | `TokenCats` | `Notch Companion` |
-| 번들 ID | `io.github.changchangwoo.tokencats` | `com.changwoo.notchcompanion` (설정을 복사, `SU*` 제외) |
-| 데이터 폴더 | `~/Library/Application Support/TokenCats/` | `.../NotchCompanion/` (통째로 이동) |
-| 소켓 | `<데이터 폴더>/companion.sock`, 경로가 길면 `~/.tokencats/` | |
-| 훅·상태줄 스크립트 | `tokencats-hook.py`, `tokencats-statusline.py` | `notch-companion-*.py` (명령을 새 경로로 다시 씀) |
-| 설정 파일 백업 | `*.tokencats.bak`, `*.tokencats-statusline.bak` | 상태줄 첫 백업은 이름을 바꿈 |
-| README 마커 | `<!-- tokencats:start -->` … `<!-- tokencats:end -->` | 그대로 알아보고, README에 다시 넣을 때 새 마커로 바뀜 |
-| 키체인 | 서비스 `TokenCats.github` | 옮기지 않음 (device flow를 켠 적이 없어 저장된 토큰이 없음) |
-| UserDefaults 키 | `companion*`, `profile*`, `roomThemeID` 등 (`AppSettings.Key`) | 키 이름은 그대로 |
+| `.app` name (`PRODUCT_NAME`) | `TokenCats` | `Notch Companion` |
+| Bundle ID | `io.github.changchangwoo.tokencats` | `com.changwoo.notchcompanion` (preferences copied, `SU*` excluded) |
+| Data folder | `~/Library/Application Support/TokenCats/` | `.../NotchCompanion/` (moved whole) |
+| Socket | `<data folder>/companion.sock`, or `~/.tokencats/` when the path is too long | |
+| Hook and status-line scripts | `tokencats-hook.py`, `tokencats-statusline.py` | `notch-companion-*.py` (commands rewritten to the new path) |
+| Settings-file backups | `*.tokencats.bak`, `*.tokencats-statusline.bak` | The first status-line backup is renamed |
+| README markers | `<!-- tokencats:start -->` … `<!-- tokencats:end -->` | Still recognised; replaced by the new markers on the next README write |
+| Keychain | service `TokenCats.github` | Not migrated (device flow was never enabled, so no token was stored) |
+| UserDefaults keys | `companion*`, `profile*`, `roomThemeID` and so on (`AppSettings.Key`) | Key names unchanged |
