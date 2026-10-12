@@ -51,7 +51,11 @@ PY
 fi
 GENERATE_APPCAST="$(find build/DerivedData/SourcePackages/artifacts -type f -name generate_appcast | head -1)"
 [[ -n "$GENERATE_APPCAST" ]] || { echo "error: generate_appcast not found; build once so the Sparkle package is resolved"; exit 1; }
-"$GENERATE_APPCAST" --download-url-prefix "https://github.com/changchangwoo/TokenCats/releases/download/v$VERSION/" \
+# The EdDSA key comes from the login keychain, which can stop to ask on screen; SPARKLE_ED_KEY_FILE points at
+# the exported key instead (kept outside the repository) so a release can run unattended.
+KEY_ARGS=()
+[[ -n "${SPARKLE_ED_KEY_FILE:-}" ]] && KEY_ARGS=(--ed-key-file "$SPARKLE_ED_KEY_FILE")
+"$GENERATE_APPCAST" "${KEY_ARGS[@]}" --download-url-prefix "https://github.com/changchangwoo/TokenCats/releases/download/v$VERSION/" \
   --link "https://github.com/changchangwoo/TokenCats" \
   --full-release-notes-url "https://github.com/changchangwoo/TokenCats/releases/tag/v$VERSION" \
   --embed-release-notes -o appcast.xml "$OUT"

@@ -37,7 +37,8 @@ scripts/package-release.sh release-notes.md
   `SUPublicEDKey` in `Info.plist`. Sparkle releases the downloaded update from quarantine itself.
 - The private key lives in the login keychain of the Mac that releases (`generate_keys` from the Sparkle package
   put it there). An exported copy is kept outside the repository; never commit it. A Mac without the key cannot
-  produce a feed the shipped app accepts.
+  produce a feed the shipped app accepts. The keychain may stop to ask on screen; set `SPARKLE_ED_KEY_FILE` to
+  the exported key's path and `package-release.sh` signs with that file instead.
 - The cask says `auto_updates true`, so `brew upgrade` leaves the app alone once Sparkle has updated it
   (`brew upgrade --greedy` still reinstalls from the cask).
 - Sparkle logs "Code signature of the new version doesn't match the old version" on every update: ad-hoc

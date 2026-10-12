@@ -6,6 +6,11 @@ versions follow [Semantic Versioning](https://semver.org/). Each release's notes
 
 ## [Unreleased]
 
+## [0.1.5] - 2026-10-12
+
+- Fixes a launch failure in 0.1.3 and 0.1.4: installed through Homebrew, the app quit the moment it started, because the release build's hardened runtime refused the ad-hoc signed update framework. The release build no longer uses the hardened runtime (it only matters for notarization), and every build now launches itself once before it ships
+- If you have 0.1.3 or 0.1.4, run `brew upgrade --cask tokencats`: a build that does not start cannot update itself
+
 ## [0.1.4] - 2026-10-12
 
 - Uses less power while the notch is closed: the session check and the full-screen detector no longer wake up every few seconds
@@ -40,7 +45,8 @@ versions follow [Semantic Versioning](https://semver.org/). Each release's notes
 First public release. Cats in your MacBook notch that grow on the tokens you spend in Claude Code and Codex, with a
 GitHub profile card.
 
-[Unreleased]: https://github.com/changchangwoo/TokenCats/compare/v0.1.4...HEAD
+[Unreleased]: https://github.com/changchangwoo/TokenCats/compare/v0.1.5...HEAD
+[0.1.5]: https://github.com/changchangwoo/TokenCats/releases/tag/v0.1.5
 [0.1.4]: https://github.com/changchangwoo/TokenCats/releases/tag/v0.1.4
 [0.1.3]: https://github.com/changchangwoo/TokenCats/releases/tag/v0.1.3
 [0.1.2]: https://github.com/changchangwoo/TokenCats/releases/tag/v0.1.2
