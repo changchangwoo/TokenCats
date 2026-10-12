@@ -11,15 +11,17 @@ final class FakeTransport: HTTPTransport, @unchecked Sendable {
     init(_ script: [String: [(Int, String)]]) { self.script = script }
 
     func send(_ request: URLRequest) async throws -> (Data, HTTPURLResponse) {
-        lock.lock(); defer { lock.unlock() }
-        sent.append(request)
-        let key = "\(request.httpMethod ?? "GET") \(request.url!.path)"
-        guard var answers = script[key], !answers.isEmpty else {
-            return (Data(), HTTPURLResponse(url: request.url!, statusCode: 599, httpVersion: nil, headerFields: nil)!)
+        // Scoped locking: lock()/unlock() across an async function is refused by newer compilers.
+        lock.withLock {
+            sent.append(request)
+            let key = "\(request.httpMethod ?? "GET") \(request.url!.path)"
+            guard var answers = script[key], !answers.isEmpty else {
+                return (Data(), HTTPURLResponse(url: request.url!, statusCode: 599, httpVersion: nil, headerFields: nil)!)
+            }
+            let (status, body) = answers.removeFirst()
+            script[key] = answers
+            return (Data(body.utf8), HTTPURLResponse(url: request.url!, statusCode: status, httpVersion: nil, headerFields: nil)!)
         }
-        let (status, body) = answers.removeFirst()
-        script[key] = answers
-        return (Data(body.utf8), HTTPURLResponse(url: request.url!, statusCode: status, httpVersion: nil, headerFields: nil)!)
     }
 
     var calls: [String] { sent.map { "\($0.httpMethod ?? "GET") \($0.url!.path)" } }

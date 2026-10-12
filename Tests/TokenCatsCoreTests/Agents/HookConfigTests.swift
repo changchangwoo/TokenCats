@@ -120,7 +120,7 @@ struct HookScriptTests {
         let run = try runHookScript(socketPath: "/tmp/nc-does-not-exist.sock", provider: "claude", input: input)
         #expect(run.status == 0)
         #expect(run.stdout.isEmpty)
-        #expect(run.elapsed < 1.0)
+        #expect(run.elapsed < 3.0)  // the script's own timeout is 0.3 s; the rest is Python starting up
     }
 
     @Test func scriptExitsQuietlyWhenSocketIsStale() throws {
@@ -129,7 +129,7 @@ struct HookScriptTests {
         let run = try runHookScript(socketPath: stale.path, provider: "claude", input: input)
         #expect(run.status == 0)
         #expect(run.stdout.isEmpty)
-        #expect(run.elapsed < 1.0)
+        #expect(run.elapsed < 3.0)  // the script's own timeout is 0.3 s; the rest is Python starting up
     }
 
     @Test func scriptIgnoresGarbageInput() throws {
