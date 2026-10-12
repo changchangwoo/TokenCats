@@ -6,15 +6,14 @@ versions follow [Semantic Versioning](https://semver.org/). Each release's notes
 
 ## [Unreleased]
 
-- Three daily missions on Home — check in, pet a cat, use 1M tokens — each paying a small churu bonus when you tap Claim. The usage streak multiplies the rewards, up to 2× from ten days. Unclaimed rewards expire at midnight. The section folds to one line while nothing is waiting to be claimed; Settings › Home display can hide it
-- Every cat has a bond level, 1 to 99. It rises when you pet the cat, give it churu (right-click a cat in the room or
-  the collection, 1M churu), and while the app runs with the cat in the room. Hover a cat to see its level and bar.
-  Settings › GitHub profile › Card contents can put each cat's level on the profile card (off by default)
-- Give a cat its own name: right-click it in the collection and type inside the notch. Up to 16 characters, and a
-  blank name brings back the coat name
-- Two new cats in the adoption box: the Sphynx (Rare) and the Norwegian (Unique). The tier odds are unchanged, so
-  each cat in those tiers is now half as likely
+## [0.1.6] - 2026-10-13
+
+- Three daily missions on Home — check in, pet a cat, use 1M tokens — each paying a small churu bonus when you tap Claim. The usage streak multiplies the rewards, up to 2× from ten days. Unclaimed rewards expire at midnight. Settings › Home display can hide the section
+- Every cat has a bond level, 1 to 99. It rises when you pet the cat, give it churu (right-click a cat in the room or the collection, 1M churu), and while the app runs with the cat in the room. Hover a cat to see its level and bar. Settings › GitHub profile can put each cat's level on the profile card (off by default)
+- Give a cat its own name: right-click it in the collection and type inside the notch. Up to 16 characters, and a blank name brings back the coat name
+- Two new cats in the adoption box: the Sphynx (Rare) and the Norwegian (Unique). The tier odds are unchanged, so each cat in those tiers is now half as likely
 - Fresh art for every cat's walk, and for the sitting and grooming poses of every coat except the black cat
+- The 365-day graph in Statistics fits its panel instead of cutting off the newest weeks
 
 ## [0.1.5] - 2026-10-12
 
@@ -55,7 +54,8 @@ versions follow [Semantic Versioning](https://semver.org/). Each release's notes
 First public release. Cats in your MacBook notch that grow on the tokens you spend in Claude Code and Codex, with a
 GitHub profile card.
 
-[Unreleased]: https://github.com/changchangwoo/TokenCats/compare/v0.1.5...HEAD
+[Unreleased]: https://github.com/changchangwoo/TokenCats/compare/v0.1.6...HEAD
+[0.1.6]: https://github.com/changchangwoo/TokenCats/releases/tag/v0.1.6
 [0.1.5]: https://github.com/changchangwoo/TokenCats/releases/tag/v0.1.5
 [0.1.4]: https://github.com/changchangwoo/TokenCats/releases/tag/v0.1.4
 [0.1.3]: https://github.com/changchangwoo/TokenCats/releases/tag/v0.1.3
