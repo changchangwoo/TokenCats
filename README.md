@@ -5,6 +5,7 @@
 <h1 align="center">TokenCats</h1>
 
 <p align="center">
+  <a href="https://github.com/changchangwoo/TokenCats/actions/workflows/ci.yml"><img src="https://github.com/changchangwoo/TokenCats/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <img src="https://img.shields.io/badge/macOS-14+-2F6FDE?logo=apple&logoColor=white" alt="macOS 14+">
   <img src="https://img.shields.io/badge/Swift-6-F05138?logo=swift&logoColor=white" alt="Swift 6">
   <img src="https://img.shields.io/badge/Apple%20Silicon%20%C2%B7%20Intel-universal-555555" alt="Apple Silicon · Intel">
@@ -155,6 +156,8 @@ brew install --cask changchangwoo/tap/tokencats
 - Type the full name as shown above. Homebrew refuses to install the short `tokencats` on its own.
 - To update, run `brew upgrade --cask tokencats`.
 - The app is ad-hoc signed and not notarized. During installation, the Homebrew cask removes macOS quarantine from `TokenCats.app` so it can open.
+- If you download the zip from [Releases](https://github.com/changchangwoo/TokenCats/releases) instead, macOS will say the app cannot be opened the first time. Open System Settings › Privacy & Security, scroll down and click **Open Anyway**, or run `xattr -dr com.apple.quarantine /Applications/TokenCats.app` in Terminal.
+- After that, the app updates itself: once a day it looks for a new version and asks before installing (Settings › About).
 
 <details>
 <summary><b>Privacy</b> — what it reads, writes, and sends</summary>

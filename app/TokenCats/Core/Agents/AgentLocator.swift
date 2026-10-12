@@ -16,8 +16,9 @@ struct AgentLocator: Sendable {
         return nil
     }
 
+    /// Runs every few seconds for every live session, so it reads only the start time.
     func isAlive(_ agent: AgentIdentity) -> Bool {
-        inspector.detail(of: agent.pid)?.startedAt == agent.startedAt
+        inspector.startedAt(of: agent.pid) == agent.startedAt
     }
 
     /// Matches the agent by kernel name, by argv[0] (native Claude execs a versioned binary such as

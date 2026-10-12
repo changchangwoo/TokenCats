@@ -22,7 +22,8 @@ scripts/package-release.sh release-notes.md
 ## Releasing, in order
 
 1. Bump `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION` in `app/TokenCats.xcodeproj/project.pbxproj`.
-2. `scripts/package-release.sh notes.md`, then commit `appcast.xml` with the bump as `chore(release): x.y.z`.
+2. `scripts/package-release.sh notes.md`, then commit `appcast.xml` and `CHANGELOG.md` (the script opens the
+   version's section from the notes) with the bump as `chore(release): x.y.z`.
 3. Push `main` first (the feed must point at a zip that is about to exist), then
    `gh release create vx.y.z build/release/TokenCats-x.y.z.zip --title "TokenCats x.y.z"`.
 4. Copy `build/release/tokencats.rb` to the tap's `Casks/tokencats.rb` and push.
@@ -39,6 +40,32 @@ scripts/package-release.sh release-notes.md
   produce a feed the shipped app accepts.
 - The cask says `auto_updates true`, so `brew upgrade` leaves the app alone once Sparkle has updated it
   (`brew upgrade --greedy` still reinstalls from the cask).
+- Sparkle logs "Code signature of the new version doesn't match the old version" on every update: ad-hoc
+  signatures differ per build. It goes on because the EdDSA signature is what it trusts, and it releases the
+  installed update from quarantine.
+
+### Testing an update end to end (Debug builds)
+
+A Debug build takes two environment variables so the whole path (feed, download, signature check, install) can run
+against a local server with nobody at the keyboard:
+
+```bash
+# 1. keep the current build as the "old" app, build a higher version into a feed folder
+ditto build/DerivedData/Build/Products/Debug/TokenCats.app /tmp/old/TokenCats.app
+# bump MARKETING_VERSION/CURRENT_PROJECT_VERSION, build Debug, then:
+ditto -c -k --keepParent build/DerivedData/Build/Products/Debug/TokenCats.app /tmp/feed/TokenCats-0.9.9.zip
+GEN="$(find build/DerivedData/SourcePackages/artifacts -type f -name generate_appcast | head -1)"
+"$GEN" --download-url-prefix http://127.0.0.1:8765/ -o /tmp/feed/appcast.xml /tmp/feed
+# 2. serve the feed and run the old app on autopilot
+(cd /tmp/feed && python3 -m http.server 8765 --bind 127.0.0.1 &)
+NC_SUPPORT_DIR=/tmp/e2e-data NC_SPARKLE_FEED=http://127.0.0.1:8765/appcast.xml \
+  NC_SPARKLE_AUTOPILOT=/tmp/sparkle.log /tmp/old/TokenCats.app/Contents/MacOS/TokenCats
+# 3. the log ends with "ready to install"; the app quits and Sparkle installs on the way out
+/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' /tmp/old/TokenCats.app/Contents/Info.plist  # 0.9.9
+```
+
+`NC_SPARKLE_FEED` replaces the feed URL and `NC_SPARKLE_AUTOPILOT` answers every Sparkle prompt with "go on",
+writing each step to the log; both are ignored by Release builds. Restore the version in the project afterwards.
 
 ## Why the cask looks the way it does
 

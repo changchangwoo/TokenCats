@@ -5,6 +5,7 @@
 <h1 align="center">TokenCats</h1>
 
 <p align="center">
+  <a href="https://github.com/changchangwoo/TokenCats/actions/workflows/ci.yml"><img src="https://github.com/changchangwoo/TokenCats/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <img src="https://img.shields.io/badge/macOS-14+-2F6FDE?logo=apple&logoColor=white" alt="macOS 14+">
   <img src="https://img.shields.io/badge/Swift-6-F05138?logo=swift&logoColor=white" alt="Swift 6">
   <img src="https://img.shields.io/badge/Apple%20Silicon%20%C2%B7%20Intel-universal-555555" alt="Apple Silicon · Intel">
@@ -154,6 +155,8 @@ brew install --cask changchangwoo/tap/tokencats
 - macOS 14 이상에서 동작해요. 노치가 없는 Mac에서는 메뉴 막대 높이로 보여요.
 - 설치 명령은 위처럼 전체 이름으로 입력해 주세요. 짧게 `tokencats`만 쓰면 Homebrew가 설치를 거부해요.
 - 업데이트는 `brew upgrade --cask tokencats`예요.
+- [Releases](https://github.com/changchangwoo/TokenCats/releases)에서 zip을 직접 받으면 처음 열 때 macOS가 열 수 없다고 해요. 시스템 설정 › 개인정보 보호 및 보안 맨 아래의 **그래도 열기**를 누르거나, 터미널에서 `xattr -dr com.apple.quarantine /Applications/TokenCats.app`을 실행하면 돼요.
+- 그 뒤로는 앱이 스스로 업데이트해요. 하루 한 번 새 버전을 확인하고 설치 전에 물어봐요(설정 › 정보).
 - 앱은 ad-hoc 서명되어 있고 Apple 공증을 받지 않았어요. 설치할 때 Homebrew cask가 `TokenCats.app`의 macOS 격리 속성을 제거해 앱을 열 수 있게 해요.
 
 <details>

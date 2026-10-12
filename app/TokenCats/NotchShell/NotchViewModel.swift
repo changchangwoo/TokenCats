@@ -20,12 +20,8 @@ class NotchViewModel: NSObject, ObservableObject {
 
     @Published var notchSize: CGSize = getClosedNotchSize()
     @Published var closedNotchSize: CGSize = getClosedNotchSize()
-    
-    
-    deinit {
-        destroy()
-    }
 
+    // No deinit: an AnyCancellable cancels itself when the set is released.
     func destroy() {
         cancellables.forEach { $0.cancel() }
         cancellables.removeAll()

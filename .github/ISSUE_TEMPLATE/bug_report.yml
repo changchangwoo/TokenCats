@@ -1,0 +1,63 @@
+name: Bug report
+description: Something in TokenCats does not work the way it should.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time. The version is in Settings › About; the data folder is `~/Library/Application Support/TokenCats`.
+  - type: input
+    id: version
+    attributes:
+      label: TokenCats version
+      placeholder: "0.1.3"
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: How it was installed
+      options:
+        - Homebrew (brew install --cask changchangwoo/tap/tokencats)
+        - Zip from Releases
+        - Built from source
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version and Mac
+      placeholder: "macOS 15.1, MacBook Pro 14 (M3)"
+    validations:
+      required: true
+  - type: dropdown
+    id: agents
+    attributes:
+      label: Agents in use
+      multiple: true
+      options:
+        - Claude Code
+        - Codex
+        - Neither
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1.
+        2.
+        3.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or screenshots
+      description: |
+        A screenshot helps for anything visual. For the GitHub card, `profile-sync.json` in the data folder (without your token file) helps.
+        Please do not paste prompts or agent conversations.

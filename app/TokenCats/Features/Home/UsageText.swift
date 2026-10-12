@@ -56,8 +56,8 @@ extension UsageDetail {
 }
 
 extension CostEstimate {
-    static let explanation: LocalizedStringKey = """
+    static var explanation: LocalizedStringKey { """
     An estimate at public API prices. It can differ from what a subscription bills, and usage of models without \
     a known price is left out of the amount.
-    """
+    """ }
 }

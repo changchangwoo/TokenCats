@@ -26,7 +26,7 @@ final class HomeUsageHistoryModel: ObservableObject {
             let week = WeekUsage.make(dailyTokens: days, today: today, calendar: .current)
             let year = ContributionYear.make(dailyTokens: days, today: today,
                                              thresholds: ChuruRules.standard.calendarThresholds, calendar: .current)
-            await MainActor.run {
+            await MainActor.run { [weak self] in
                 guard let self else { return }
                 self.week = week
                 self.year = year

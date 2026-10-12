@@ -10,7 +10,7 @@ echo "date=$(date '+%Y-%m-%d %H:%M') pid=$PID minutes=$MINUTES"
 echo "device=$(sysctl -n machdep.cpu.brand_string) ram=$(( $(sysctl -n hw.memsize) / 1073741824 ))GB macOS=$(sw_vers -productVersion)"
 echo "power=$(pmset -g batt | head -1 | sed "s/.*'\(.*\)'.*/\1/")"
 CPU_AVG=$(top -l $((SAMPLES + 1)) -s 10 -pid "$PID" -stats cpu \
-  | awk '/^[0-9.]+$/ { n++; if (n > 1) { s += $1; c++; if ($1 > m) m = $1 } } END { printf "%.2f (samples=%d, max=%.1f)", (c ? s / c : 0), c, m }')
+  | awk '/^[0-9.]+ *$/ { n++; if (n > 1) { s += $1; c++; if ($1 > m) m = $1 } } END { printf "%.2f (samples=%d, max=%.1f)", (c ? s / c : 0), c, m }')
 echo "avg_cpu_percent=$CPU_AVG"
 echo "rss_kb=$(ps -o rss= -p "$PID" | tr -d ' ')"
 footprint -p "$PID" 2>/dev/null | grep -i "footprint" | head -3 || echo "footprint unavailable"

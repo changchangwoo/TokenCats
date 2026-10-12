@@ -1,0 +1,24 @@
+name: Feature request
+description: An idea for TokenCats — a cat, a room, a card option, an agent, anything.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: The idea
+      description: What it would do, and where you would see it (closed notch, the room, the store, the card, settings).
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it matters
+      description: The moment you wanted it. One sentence is enough.
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: If it is one of these, note it
+      options:
+        - label: A new cat or prop (artwork follows the rules in AGENTS.md)
+        - label: A new agent (reads its usage logs; see ARCHITECTURE.md extension points)
+        - label: A new language (translations live in Resources/l10n)

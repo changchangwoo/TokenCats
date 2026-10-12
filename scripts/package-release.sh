@@ -4,8 +4,10 @@
 #   build/release/TokenCats-<version>.zip   (universal, ad-hoc signed; ditto keeps the bundle's signature)
 #   build/release/tokencats.rb              (packaging/homebrew/tokencats.rb.template with version and sha256)
 #   appcast.xml                             (the update feed the app reads; signed with the EdDSA key in the keychain)
+#   CHANGELOG.md                            (a new section for this version from the notes, above the last one)
 # Usage: scripts/package-release.sh [release-notes.md]
-#   The notes file's "- " lines become the update's release notes, shown by the app before installing.
+#   The notes file's "- " lines become the update's release notes, shown by the app before installing, and the
+#   version's CHANGELOG section (the [Unreleased] section is emptied).
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
@@ -32,6 +34,21 @@ fi
 # generate_appcast updates an existing feed in place and keeps entries whose zips are gone, so start fresh: the
 # feed lists only the version in the folder, which is all an older app needs to find.
 rm -f appcast.xml
+if [[ -n "$NOTES" ]]; then
+  python3 - "$VERSION" "$NOTES" <<'PY'
+import pathlib, re, sys, datetime
+version, notes = sys.argv[1], pathlib.Path(sys.argv[2]).read_text()
+log = pathlib.Path("CHANGELOG.md"); text = log.read_text()
+bullets = "\n".join(line for line in notes.splitlines() if line.startswith("- "))
+section = f"## [{version}] - {datetime.date.today().isoformat()}\n\n{bullets}\n\n"
+if f"## [{version}]" in text:
+    sys.exit(0)
+text = re.sub(r"## \[Unreleased\]\n\n(?:.*\n)*?(?=## \[)", "## [Unreleased]\n\n" + section, text, count=1)
+text = re.sub(r"\[Unreleased\]: (\S+?)/compare/v[\d.]+\.\.\.HEAD",
+              lambda m: f"[Unreleased]: {m.group(1)}/compare/v{version}...HEAD\n[{version}]: {m.group(1)}/releases/tag/v{version}", text, count=1)
+log.write_text(text)
+PY
+fi
 GENERATE_APPCAST="$(find build/DerivedData/SourcePackages/artifacts -type f -name generate_appcast | head -1)"
 [[ -n "$GENERATE_APPCAST" ]] || { echo "error: generate_appcast not found; build once so the Sparkle package is resolved"; exit 1; }
 "$GENERATE_APPCAST" --download-url-prefix "https://github.com/changchangwoo/TokenCats/releases/download/v$VERSION/" \
@@ -42,6 +59,7 @@ echo "zip:     $ZIP"
 echo "sha256:  $SHA"
 echo "cask:    $OUT/tokencats.rb"
 echo "appcast: appcast.xml (commit it with the release; the app reads it from main)"
+[[ -n "$NOTES" ]] && echo "changelog: CHANGELOG.md has a $VERSION section (commit it too)"
 echo
 echo "To publish (the TokenCats repo must be public for anonymous downloads):"
 echo "  commit appcast.xml and push main, then"

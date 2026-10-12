@@ -1,7 +1,8 @@
 // NotchShell — adapted from boring.notch (TheBoredTeam, GPL-3.0). See NOTICE.md.
 import AppKit
 
-/// Small Spaces API wrapper.
+/// Small Spaces API wrapper. Main actor: it reads window numbers.
+@MainActor
 public final class CGSSpace {
     private let identifier: CGSSpaceID
 

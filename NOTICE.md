@@ -18,7 +18,9 @@ TokenCats is not affiliated with or endorsed by TheBoredTeam.
   override the bundled cat art for local experiments (`CatSprites.artDirectory`).
 - Swift packages linked into the app, all MIT (license texts in `THIRD_PARTY_LICENSES`): Defaults 9.0.6,
   KeyboardShortcuts 2.4.0 and LaunchAtLogin-Modern 1.1.0 by Sindre Sorhus, https://github.com/sindresorhus;
-  SkyLightWindow 1.0.0 by Lakr Aream, https://github.com/Lakr233/SkyLightWindow.
+  SkyLightWindow 1.0.0 by Lakr Aream, https://github.com/Lakr233/SkyLightWindow;
+  Sparkle 2.10.0 by the Sparkle Project, https://sparkle-project.org (in-app updates; it also bundles
+  ed25519 by Orson Peters, zlib license, and bsdiff by Colin Percival, BSD-2-Clause).
 - Profile card font: Baloo 2 by The Baloo 2 Project Authors, https://github.com/EkType/Baloo2, SIL Open Font
   License 1.1 (`app/TokenCats/Resources/Fonts/Baloo2-OFL.txt`). Subset and embedded by `scripts/build-card-font.sh`
   into `Core/Card/CardFont.swift`.

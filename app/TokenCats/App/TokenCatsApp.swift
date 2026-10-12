@@ -55,6 +55,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var previousScreens: [NSScreen]?
     private var onboardingWindowController: NSWindowController?
     private var onboardingModel: OnboardingModel?
+    /// The first-run window opens once, whichever comes first: the notch scene finishing or the fallback timer.
+    private var firstRunOnboardingShown = false
     private var screenLockedObserver: Any?
     private var screenUnlockedObserver: Any?
     private var isScreenLocked: Bool = false
@@ -78,7 +80,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @MainActor
-    func onScreenLocked(_ notification: Notification) {
+    func onScreenLocked() {
         isScreenLocked = true
         if !Defaults[.showOnLockScreen] {
             cleanupWindows()
@@ -88,7 +90,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @MainActor
-    func onScreenUnlocked(_ notification: Notification) {
+    func onScreenUnlocked() {
         isScreenLocked = false
         if !Defaults[.showOnLockScreen] {
             adjustWindowPosition(changeAlpha: true)
@@ -232,8 +234,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NotificationCenter.default.addObserver(
             forName: Notification.Name.automaticallySwitchDisplayChanged, object: nil, queue: nil
         ) { [weak self] _ in
-            guard let self = self, let window = self.window else { return }
             Task { @MainActor in
+                guard let self, let window = self.window else { return }
                 window.alphaValue = self.coordinator.selectedScreenUUID == self.coordinator.preferredScreenUUID ? 1 : 0
             }
         }
@@ -251,18 +253,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Use closure-based observers for DistributedNotificationCenter and keep tokens for removal
         screenLockedObserver = DistributedNotificationCenter.default().addObserver(
             forName: NSNotification.Name(rawValue: "com.apple.screenIsLocked"),
-            object: nil, queue: .main) { [weak self] notification in
-                Task { @MainActor in
-                    self?.onScreenLocked(notification)
-                }
+            object: nil, queue: .main) { [weak self] _ in
+                Task { @MainActor in self?.onScreenLocked() }
         }
 
         screenUnlockedObserver = DistributedNotificationCenter.default().addObserver(
             forName: NSNotification.Name(rawValue: "com.apple.screenIsUnlocked"),
-            object: nil, queue: .main) { [weak self] notification in
-                Task { @MainActor in
-                    self?.onScreenUnlocked(notification)
-                }
+            object: nil, queue: .main) { [weak self] _ in
+                Task { @MainActor in self?.onScreenUnlocked() }
         }
 
         KeyboardShortcuts.onKeyDown(for: .toggleNotchOpen) { [weak self] in
@@ -326,11 +324,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         if coordinator.firstLaunch {
             // After the first-run scene in the notch; the timer covers a launch where no notch played it.
-            var shown = false
-            let show = { [weak self] in
-                guard !shown else { return }
-                shown = true
-                self?.showOnboardingWindow()
+            let show: @MainActor @Sendable () -> Void = { [weak self] in
+                guard let self, !self.firstRunOnboardingShown else { return }
+                self.firstRunOnboardingShown = true
+                self.showOnboardingWindow()
             }
             NotificationCenter.default.addObserver(forName: .firstRunSceneFinished, object: nil, queue: .main) { _ in
                 MainActor.assumeIsolated { show() }

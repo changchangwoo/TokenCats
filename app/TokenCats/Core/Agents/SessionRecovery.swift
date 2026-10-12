@@ -22,7 +22,7 @@ struct SessionRecovery {
     let inspector: any ProcessInspector
     let claudeSessionsDirectory: URL
     /// Modification time of a file, seconds since 1970; injectable for tests.
-    var modifiedAt: @Sendable (String) -> Double? = SessionRecovery.fileModifiedAt
+    var modifiedAt: @Sendable (String) -> Double? = { @Sendable path in SessionRecovery.fileModifiedAt(path) }
 
     static var live: SessionRecovery {
         SessionRecovery(

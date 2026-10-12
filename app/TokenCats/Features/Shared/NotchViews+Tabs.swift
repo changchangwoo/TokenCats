@@ -1,10 +1,17 @@
 import Foundation
 
+/// One header tab: which view it opens, its label key and its SF Symbol.
+struct NotchTab: Sendable {
+    let view: NotchViews
+    let label: String
+    let icon: String
+}
+
 extension NotchViews {
     /// Tabs in the header, in order. The store and cats open from their own buttons.
-    static let tabs: [(view: NotchViews, label: String, icon: String)] = [
-        (.home, "Home", "house.fill"),
-        (.statistics, "Stats", "chart.bar.fill"),
+    static let tabs: [NotchTab] = [
+        NotchTab(view: .home, label: "Home", icon: "house.fill"),
+        NotchTab(view: .statistics, label: "Stats", icon: "chart.bar.fill"),
     ]
 
     private var storageName: String {

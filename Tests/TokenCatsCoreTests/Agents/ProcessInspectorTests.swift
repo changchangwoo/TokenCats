@@ -42,6 +42,14 @@ struct SystemProcessInspectorTests {
 
     @Test func missingProcessIsNil() {
         #expect(SystemProcessInspector().detail(of: 999_999) == nil)
+        #expect(SystemProcessInspector().startedAt(of: 999_999) == nil)
+    }
+
+    /// The cheap liveness read agrees with the full detail, so a session is never pruned by a mismatch.
+    @Test func startedAtMatchesTheFullDetail() throws {
+        let inspector = SystemProcessInspector()
+        let me = ProcessInfo.processInfo.processIdentifier
+        #expect(try #require(inspector.startedAt(of: me)) == #require(inspector.detail(of: me)).startedAt)
     }
 }
 

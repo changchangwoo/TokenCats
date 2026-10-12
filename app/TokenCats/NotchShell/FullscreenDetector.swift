@@ -2,8 +2,9 @@ import AppKit
 import Combine
 
 /// Tells, per display, whether a full-screen app owns it, so the closed notch and its cats get out of the way of
-/// a video, a talk or a game. Reads the window list on app switches and every two seconds; each read is a few
-/// hundred microseconds. Written for TokenCats: boring.notch used MacroVisionKit for this.
+/// a video, a talk or a game. Reads the window list when an app comes to the front, when the active Space changes
+/// (entering or leaving full screen is a Space change) and when displays change; a slow poll covers the rest, such
+/// as a game taking a display without a Space. Written for TokenCats: boring.notch used MacroVisionKit for this.
 @MainActor
 final class FullscreenDetector: ObservableObject {
     static let shared = FullscreenDetector()
@@ -12,19 +13,25 @@ final class FullscreenDetector: ObservableObject {
     @Published private(set) var fullscreenStatus: [String: Bool] = [:]
 
     private var timer: Timer?
-    private var activationObserver: Any?
+    private var observers: [Any] = []
 
     private init() {
         refresh()
-        activationObserver = NSWorkspace.shared.notificationCenter.addObserver(
-            forName: NSWorkspace.didActivateApplicationNotification, object: nil, queue: .main
+        let workspace = NSWorkspace.shared.notificationCenter
+        for name in [NSWorkspace.didActivateApplicationNotification, NSWorkspace.activeSpaceDidChangeNotification] {
+            observers.append(workspace.addObserver(forName: name, object: nil, queue: .main) { _ in
+                Task { @MainActor in FullscreenDetector.shared.refresh() }
+            })
+        }
+        observers.append(NotificationCenter.default.addObserver(
+            forName: NSApplication.didChangeScreenParametersNotification, object: nil, queue: .main
         ) { _ in
             Task { @MainActor in FullscreenDetector.shared.refresh() }
-        }
-        let timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { _ in
+        })
+        let timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { _ in
             Task { @MainActor in FullscreenDetector.shared.refresh() }
         }
-        timer.tolerance = 1
+        timer.tolerance = 10
         self.timer = timer
     }
 

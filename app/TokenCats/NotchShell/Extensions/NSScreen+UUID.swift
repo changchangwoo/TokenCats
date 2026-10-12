@@ -51,20 +51,16 @@ final class NSScreenUUIDCache {
         rebuildCache()
         setupObserver()
     }
-    
-    deinit {
-        if let observer = observer {
-            NotificationCenter.default.removeObserver(observer)
-        }
-    }
-    
+
+    // A singleton: never deallocated, so the observer is never removed.
+
     private func setupObserver() {
         observer = NotificationCenter.default.addObserver(
             forName: NSApplication.didChangeScreenParametersNotification,
             object: nil,
             queue: .main
         ) { [weak self] _ in
-            self?.rebuildCache()
+            MainActor.assumeIsolated { self?.rebuildCache() }
         }
     }
     

@@ -265,14 +265,19 @@ struct OnboardingAgentsStep: View {
                 note(theme, "It shows up here by itself once installed.")
             case .needsPython:
                 note(theme, "Connecting needs the Xcode Command Line Tools. Run this in Terminal, then check again.")
-                HStack {
+                // The command is never cut off: it gets its own row with Copy; the check sits on the next row.
+                HStack(spacing: 8) {
                     Text(verbatim: Self.toolsCommand)
                         .font(.system(size: 12, weight: .semibold, design: .monospaced))
+                        .fixedSize()
                         .padding(.horizontal, 8).padding(.vertical, 4)
                         .background(RoundedRectangle(cornerRadius: 6).fill(theme.panel.swiftUI))
                     Button("Copy") { copyToClipboard(Self.toolsCommand) }
                         .buttonStyle(OnboardingSecondaryButtonStyle(theme: theme, onCard: true))
-                    Spacer()
+                    Spacer(minLength: 0)
+                }
+                HStack {
+                    Spacer(minLength: 0)
                     Button("Check again", action: onCheckAgain)
                         .buttonStyle(OnboardingSecondaryButtonStyle(theme: theme, onCard: true))
                 }

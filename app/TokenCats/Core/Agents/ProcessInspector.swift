@@ -17,12 +17,16 @@ struct ProcessDetail: Equatable, Sendable {
 protocol ProcessInspector: Sendable {
     /// nil when the process no longer exists or cannot be inspected.
     func detail(of pid: Int32) -> ProcessDetail?
+    /// Only the start time, for liveness checks that run every few seconds: a fraction of `detail(of:)`, which
+    /// also copies the process's arguments and environment out of the kernel.
+    func startedAt(of pid: Int32) -> String?
     func allPids() -> [Int32]
     func environment(of pid: Int32) -> [String: String]
     func openFilePaths(of pid: Int32) -> [String]
 }
 
 extension ProcessInspector {
+    func startedAt(of pid: Int32) -> String? { detail(of: pid)?.startedAt }
     func allPids() -> [Int32] { [] }
     func environment(of pid: Int32) -> [String: String] { [:] }
     func openFilePaths(of pid: Int32) -> [String] { [] }
@@ -41,6 +45,13 @@ struct SystemProcessInspector: ProcessInspector {
         return ProcessDetail(
             tty: Self.ttyName(info.e_tdev), startedAt: startedAt, command: Self.arguments(of: pid), cwd: Self.cwd(of: pid),
             parentPid: Int32(bitPattern: info.pbi_ppid), name: name)
+    }
+
+    func startedAt(of pid: Int32) -> String? {
+        var info = proc_bsdinfo()
+        let size = Int32(MemoryLayout<proc_bsdinfo>.size)
+        guard proc_pidinfo(pid, PROC_PIDTBSDINFO, 0, &info, size) == size else { return nil }
+        return String(format: "%llu.%06llu", info.pbi_start_tvsec, info.pbi_start_tvusec)
     }
 
     func allPids() -> [Int32] {
