@@ -2,6 +2,7 @@ name: CI
 
 on:
   push:
+    branches: ['**']   # every branch; a tag push would only repeat the branch's run
   pull_request:
 
 concurrency:

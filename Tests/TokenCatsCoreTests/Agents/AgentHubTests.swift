@@ -65,7 +65,7 @@ struct SocketIntegrationTests {
         let run = try runHookScript(socketPath: path, provider: "claude", input: input, env: ["ORCA_TERMINAL_HANDLE": "term_1"])
         #expect(run.status == 0)
         #expect(run.stdout.isEmpty)
-        #expect(run.elapsed < 1)
+        #expect(run.elapsed < 3.0)  // fire-and-forget: the script's own timeout is 0.3 s; the rest is Python starting up
         #expect(received.value?.toolSummary == "rm -rf build")
         #expect(received.value?.orcaTerminal == "term_1")
     }
