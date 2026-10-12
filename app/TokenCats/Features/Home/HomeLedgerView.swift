@@ -5,6 +5,7 @@ import SwiftUI
 struct HomeLedgerView: View {
     let theme: RoomTheme
     let display: HomeDisplaySettings
+    @AppStorage(AppSettings.Key.missionsExpanded) private var missionsExpanded = AppSettings.Default.missionsExpanded
 
     var body: some View {
         let sections = HomeLayout.sections(for: display)
@@ -19,11 +20,13 @@ struct HomeLedgerView: View {
                 Group {
                     switch section {
                     case .balance: HomeBalanceSection(theme: theme, display: display)
+                    case .missions: HomeMissionsSection(theme: theme)
                     case .limits: UsageDashboardView(theme: theme, display: display)
                     case .history: HomeHistorySection(theme: theme, display: display)
                     }
                 }
-                .frame(height: HomeLayout.height(of: section), alignment: .top)
+                .frame(height: HomeLayout.height(of: section, expanded: missionsExpanded), alignment: .top)
+                .animation(.smooth(duration: 0.25), value: missionsExpanded)
             }
         }
         .foregroundStyle(theme.ink.swiftUI)

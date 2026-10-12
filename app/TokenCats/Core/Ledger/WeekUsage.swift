@@ -27,7 +27,7 @@ struct WeekUsage: Equatable, Sendable {
 /// Home remains a glanceable size; charts and grass live in Statistics.
 /// The ledger under Home's room: churu on hand, the agents' limits, then the usage record, divided by thin lines.
 enum HomeSection: Equatable, Sendable {
-    case balance, limits, history
+    case balance, limits, history, missions
 }
 
 /// Home's open height follows the sections the user keeps on; detailed charts live in Statistics and never add height.
@@ -37,6 +37,10 @@ enum HomeLayout {
     /// The ledger's top and bottom padding.
     static let ledgerPadding = 24.0
     static let balanceHeight = 44.0
+    /// A title row (about 15pt), three 20pt mission rows and 4pt gaps.
+    static let missionsHeight = 88.0
+    /// The missions section folded to its title line by the user (the chevron on its title row).
+    static let missionsFoldedHeight = 20.0
     static let limitsHeight = 84.0
     static let historyHeight = 66.0
     /// A divider line with the space above and below it.
@@ -50,21 +54,24 @@ enum HomeLayout {
         if display.showWeeklyTokens || display.showTodayTokens || display.showEstimatedCost || display.showStreak {
             sections.append(.history)
         }
+        // Last: a working day glances at the balance and the limits; missions are the once-a-day visit.
+        if display.showMissions { sections.append(.missions) }
         return sections
     }
 
-    static func height(of section: HomeSection) -> Double {
+    static func height(of section: HomeSection, expanded: Bool = true) -> Double {
         switch section {
         case .balance: return balanceHeight
+        case .missions: return expanded ? missionsHeight : missionsFoldedHeight
         case .limits: return limitsHeight
         case .history: return historyHeight
         }
     }
 
-    static func height(for display: HomeDisplaySettings) -> Double {
+    static func height(for display: HomeDisplaySettings, missionsExpanded: Bool = true) -> Double {
         let sections = sections(for: display)
         guard !sections.isEmpty else { return roomOnlyHeight }
-        return roomOnlyHeight + ledgerPadding + sections.map(height(of:)).reduce(0, +)
+        return roomOnlyHeight + ledgerPadding + sections.map { height(of: $0, expanded: missionsExpanded) }.reduce(0, +)
             + dividerHeight * Double(sections.count - 1)
     }
 }

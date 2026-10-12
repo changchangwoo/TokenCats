@@ -16,22 +16,49 @@ struct WeekUsageTests {
         #expect(week.total == 600)
     }
 
-    @Test func homeLedgerIsBalanceThenLimitsThenHistory() {
-        #expect(HomeLayout.sections(for: .default) == [.balance, .limits, .history])
+    /// Missions sit last: the balance and the agent limits are what a working day glances at.
+    @Test func homeLedgerIsBalanceThenLimitsThenHistoryThenMissions() {
+        #expect(HomeLayout.sections(for: .default) == [.balance, .limits, .history, .missions])
         var display = HomeDisplaySettings.default
         display.showAgentLimits = false
+        #expect(HomeLayout.sections(for: display) == [.balance, .history, .missions])
+        display.showMissions = false
         #expect(HomeLayout.sections(for: display) == [.balance, .history])
         display.showBalance = false
         display.showAdoptionProgress = false
         #expect(HomeLayout.sections(for: display) == [.history])
     }
 
+    @Test func missionsSectionAddsItsHeightAndADivider() {
+        typealias Layout = HomeLayout
+        var display = HomeDisplaySettings.default
+        let full = Layout.height(for: display)
+        #expect(full == Layout.roomOnlyHeight + Layout.ledgerPadding + Layout.balanceHeight + Layout.missionsHeight
+                + Layout.limitsHeight + Layout.historyHeight + Layout.dividerHeight * 3)
+        #expect(Layout.maximumHeight == full)
+        display.showMissions = false
+        #expect(Layout.height(for: display) == full - Layout.missionsHeight - Layout.dividerHeight)
+    }
+
+    /// The user folds the missions section to one line with the chevron on its title row.
+    @Test func missionsSectionFoldsToOneLine() {
+        typealias Layout = HomeLayout
+        let full = Layout.height(for: .default)
+        #expect(Layout.height(for: .default, missionsExpanded: true) == full)
+        #expect(Layout.height(for: .default, missionsExpanded: false)
+                == full - Layout.missionsHeight + Layout.missionsFoldedHeight)
+        #expect(Layout.height(of: .missions, expanded: false) == Layout.missionsFoldedHeight)
+        var hidden = HomeDisplaySettings.default
+        hidden.showMissions = false
+        #expect(Layout.height(for: hidden, missionsExpanded: false) == Layout.height(for: hidden))
+    }
+
     @Test func detailedChartsDoNotEnlargeHome() {
         typealias Layout = HomeLayout
         var display = HomeDisplaySettings.default
         let full = Layout.height(for: display)
-        #expect(full == Layout.roomOnlyHeight + Layout.ledgerPadding + Layout.balanceHeight + Layout.limitsHeight
-                + Layout.historyHeight + Layout.dividerHeight * 2)
+        #expect(full == Layout.roomOnlyHeight + Layout.ledgerPadding + Layout.balanceHeight + Layout.missionsHeight
+                + Layout.limitsHeight + Layout.historyHeight + Layout.dividerHeight * 3)
         #expect(Layout.maximumHeight == full)
         display.showContributionGraph = false
         display.showWeeklyChart = false
@@ -42,6 +69,7 @@ struct WeekUsageTests {
         display.showTodayTokens = false
         display.showEstimatedCost = false
         display.showStreak = false
+        display.showMissions = false
         #expect(Layout.height(for: display) == Layout.roomOnlyHeight + Layout.ledgerPadding + Layout.balanceHeight)
         display.showBalance = false
         display.showAdoptionProgress = false

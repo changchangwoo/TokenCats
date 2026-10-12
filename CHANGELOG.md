@@ -6,6 +6,8 @@ versions follow [Semantic Versioning](https://semver.org/). Each release's notes
 
 ## [Unreleased]
 
+- Three daily missions on Home — check in, pet a cat, use 1M tokens — each paying a small churu bonus when you tap Claim. The usage streak multiplies the rewards, up to 2× from ten days. Unclaimed rewards expire at midnight. The section folds to one line while nothing is waiting to be claimed; Settings › Home display can hide it
+
 ## [0.1.5] - 2026-10-12
 
 - Fixes a launch failure in 0.1.3 and 0.1.4: installed through Homebrew, the app quit the moment it started, because the release build's hardened runtime refused the ad-hoc signed update framework. The release build no longer uses the hardened runtime (it only matters for notarization), and every build now launches itself once before it ships

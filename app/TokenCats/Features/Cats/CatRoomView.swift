@@ -37,7 +37,10 @@ struct CatRoomView: View {
                             CGRect(x: $0.x - 52, y: baseline - 94,
                                    width: 104, height: 92)
                         },
-                        onPetStart: { point in stage.pet(at: Date(), point: point, baseline: baseline) },
+                        onPetStart: { point in
+                            stage.pet(at: Date(), point: point, baseline: baseline)
+                            Task { await ChuruModel.shared.record(.pet) }
+                        },
                         onPetMove: { point in stage.pet(at: Date(), point: point, baseline: baseline) },
                         onPetEnd: { stage.endPet(at: Date()) })
                         .frame(maxWidth: .infinity, maxHeight: .infinity)

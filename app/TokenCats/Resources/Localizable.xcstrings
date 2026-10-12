@@ -1132,6 +1132,17 @@
         }
       }
     },
+    "Check in": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "출석하기"
+          }
+        }
+      }
+    },
     "Cheese": {
       "extractionState": "manual",
       "localizations": {
@@ -1205,6 +1216,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "츄르 장부"
+          }
+        }
+      }
+    },
+    "Claim": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "받기"
+          }
+        }
+      }
+    },
+    "Claimed": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "받았어요"
           }
         }
       }
@@ -2056,6 +2089,17 @@
         }
       }
     },
+    "Fold missions": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "미션 접기"
+          }
+        }
+      }
+    },
     "Follow system": {
       "extractionState": "manual",
       "localizations": {
@@ -2694,6 +2738,17 @@
         }
       }
     },
+    "Missions": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "미션"
+          }
+        }
+      }
+    },
     "Mon": {
       "extractionState": "manual",
       "localizations": {
@@ -3152,6 +3207,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "최적화"
+          }
+        }
+      }
+    },
+    "Pet a cat": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "고양이 쓰다듬기"
           }
         }
       }
@@ -4069,6 +4135,17 @@
         }
       }
     },
+    "Streak bonus on today's mission rewards": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연속 사용일 수만큼 오늘 미션 보상이 커져요"
+          }
+        }
+      }
+    },
     "Sun": {
       "extractionState": "manual",
       "localizations": {
@@ -4476,6 +4553,17 @@
         }
       }
     },
+    "Today's missions": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘의 미션"
+          }
+        }
+      }
+    },
     "Today's tokens": {
       "extractionState": "manual",
       "localizations": {
@@ -4619,6 +4707,17 @@
         }
       }
     },
+    "Unfold missions": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "미션 펼치기"
+          }
+        }
+      }
+    },
     "Update": {
       "extractionState": "manual",
       "localizations": {
@@ -4747,6 +4846,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "연속 사용"
+          }
+        }
+      }
+    },
+    "Use 1M tokens": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "토큰 1M 쓰기"
           }
         }
       }

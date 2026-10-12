@@ -63,6 +63,8 @@ enum PreferenceDefaults {
     static let language = "system"
     static let animationQuality = AnimationQuality.default.rawValue
     static let batterySaver = false
+    /// The missions section on Home starts open; the chevron folds it and the choice sticks.
+    static let missionsExpanded = true
     static let closedNotchCats = true
     static let profileShowsNumbers = ProfileCardOptions.default.showsNumbers
     static let profileShowsYear = ProfileCardOptions.default.showsYear

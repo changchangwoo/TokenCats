@@ -51,7 +51,7 @@
 <td>
 
 1. 🪙 **Code.** TokenCats counts the tokens you spend in Claude Code and Codex.
-2. 🐟 **Churu piles up.** One token is one churu.
+2. 🐟 **Churu piles up.** One token is one churu, and three small daily missions add a bonus.
 3. 📦 **Adopt.** An adoption box costs 10 million churu.
 4. 🏠 **Decorate.** Buy backgrounds and props for the room.
 5. 🖼️ **Show off.** Your room becomes your GitHub profile card.

@@ -15,7 +15,7 @@ let windowSize: CGSize = .init(width: openNotchSize.width,
 
 func companionHomeNotchHeight() -> CGFloat {
     let display = UIDisplaySettings.load(from: DataFiles.live.uiDisplay).home
-    return CGFloat(HomeLayout.height(for: display))
+    return CGFloat(HomeLayout.height(for: display, missionsExpanded: AppSettings.missionsExpanded))
 }
 
 /// Open notch size per tab: the agent home gets extra height, other tabs keep boring.notch's size.

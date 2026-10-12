@@ -9,6 +9,7 @@ struct HomeView: View {
     @ObservedObject private var uiDisplay = UIDisplayModel.shared
     @AppStorage(AppSettings.Key.unreadDataNoticedAt) private var unreadNoticedAt = 0.0
     @ObservedObject private var updater = AppUpdater.shared
+    @AppStorage(AppSettings.Key.missionsExpanded) private var missionsExpanded = AppSettings.Default.missionsExpanded
     /// Data files that could not be read and started fresh since the user last dismissed the notice.
     @State private var unreadFiles: [String] = []
     private var theme: RoomTheme { store.theme(id: backgroundID) }
@@ -64,10 +65,16 @@ struct HomeView: View {
                 try? await Task.sleep(for: .seconds(60))
             }
         }
-        .onChange(of: uiDisplay.settings.home) { _, _ in
-            if vm.notchState == .open {
-                withAnimation(.smooth(duration: 0.25)) { vm.notchSize = openNotchSize(for: .home) }
-            }
+        .onChange(of: uiDisplay.settings.home) { _, _ in resizeNotch() }
+        // The chevron on the missions section folds it to one line; the notch follows.
+        .onChange(of: missionsExpanded) { _, _ in resizeNotch() }
+    }
+}
+
+extension HomeView {
+    private func resizeNotch() {
+        if vm.notchState == .open {
+            withAnimation(.smooth(duration: 0.25)) { vm.notchSize = openNotchSize(for: .home) }
         }
     }
 }

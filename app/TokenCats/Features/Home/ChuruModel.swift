@@ -7,6 +7,8 @@ final class ChuruModel: ObservableObject {
     static let shared = ChuruModel()
 
     @Published private(set) var snapshot: ChuruSnapshot?
+    /// The mission whose Claim is in flight; its button is disabled so a double tap cannot pay twice.
+    @Published private(set) var claiming: MissionID?
 
     /// The wall calendar: this month's churu, or this month with every day blank until the first count finishes,
 
@@ -28,6 +30,21 @@ final class ChuruModel: ObservableObject {
         defer { refreshing = false }
         let tracker = tracker
         snapshot = await perform { tracker.refresh() }
+    }
+
+    /// An in-app action toward today's missions. Nothing happens before the first refresh.
+    func record(_ id: MissionID) async {
+        let tracker = tracker
+        if let next = await perform({ tracker.record(id) }) { snapshot = next }
+    }
+
+    /// Pays a claimable mission. Re-reads the logs first, like a purchase, so the token mission is judged fresh.
+    func claim(_ id: MissionID) async {
+        guard claiming == nil else { return }
+        claiming = id
+        defer { claiming = nil }
+        let tracker = tracker
+        snapshot = await perform { tracker.claim(id) }
     }
 
     func perform<T: Sendable>(_ work: @escaping @Sendable () -> T) async -> T {

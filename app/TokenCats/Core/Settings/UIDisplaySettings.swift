@@ -20,6 +20,7 @@ struct HomeDisplaySettings: Codable, Equatable, Sendable {
     var showEstimatedCost: Bool
     var showStreak: Bool
     var showAdoptionProgress: Bool
+    var showMissions: Bool
     var showWeeklyTokens: Bool
     var showWeeklyChart: Bool
     var showContributionGraph: Bool
@@ -32,14 +33,14 @@ struct HomeDisplaySettings: Codable, Equatable, Sendable {
 
     static let `default` = HomeDisplaySettings(
         showBalance: true, showTodayTokens: true, showEstimatedCost: true,
-        showStreak: true, showAdoptionProgress: true,
+        showStreak: true, showAdoptionProgress: true, showMissions: true,
         showWeeklyTokens: true, showWeeklyChart: true, showContributionGraph: true,
         showAgentLimits: true,
         showUsageValues: true, showUsageBars: true, showResetTime: true,
         hiddenProviderIDs: [], providerOrder: ["claude", "codex"])
 
     var showsChuruSummary: Bool {
-        showBalance || showTodayTokens || showEstimatedCost || showStreak || showAdoptionProgress
+        showBalance || showTodayTokens || showEstimatedCost || showStreak || showAdoptionProgress || showMissions
     }
     var showsHistory: Bool { showWeeklyTokens || showWeeklyChart || showContributionGraph }
     var showsHomeLedger: Bool { showsChuruSummary || showAgentLimits || showWeeklyTokens }
@@ -47,7 +48,7 @@ struct HomeDisplaySettings: Codable, Equatable, Sendable {
 
 extension HomeDisplaySettings {
     private enum CodingKeys: String, CodingKey {
-        case showBalance, showTodayTokens, showEstimatedCost, showStreak, showAdoptionProgress
+        case showBalance, showTodayTokens, showEstimatedCost, showStreak, showAdoptionProgress, showMissions
         case showWeeklyTokens, showWeeklyChart, showContributionGraph, showAgentLimits
         case showUsageValues, showUsageBars, showResetTime, hiddenProviderIDs, providerOrder
     }
@@ -63,6 +64,7 @@ extension HomeDisplaySettings {
         showStreak = try values.decodeIfPresent(Bool.self, forKey: .showStreak) ?? fallback.showStreak
         showAdoptionProgress = try values.decodeIfPresent(Bool.self, forKey: .showAdoptionProgress)
             ?? fallback.showAdoptionProgress
+        showMissions = try values.decodeIfPresent(Bool.self, forKey: .showMissions) ?? fallback.showMissions
         showWeeklyTokens = try values.decodeIfPresent(Bool.self, forKey: .showWeeklyTokens)
             ?? fallback.showWeeklyTokens
         showWeeklyChart = try values.decodeIfPresent(Bool.self, forKey: .showWeeklyChart)

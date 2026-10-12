@@ -31,7 +31,7 @@ Agent logs (~/.claude, ~/.codex)
    └─ TokenUsageReader · DailyTokenScan  ─┐
 Hook script → SocketServer → AgentHub      │   (session notices only; unrelated to churu)
                                            ▼
-                         ChuruLedger → ChuruModel (balance · today · streak)
+                         ChuruLedger → ChuruModel (balance · today · streak · missions)
                                            │
                      StoreService ─ purchase ─▶ CatHousehold · StoreInventory (cats.json · inventory.json)
                                            │

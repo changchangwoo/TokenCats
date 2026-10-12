@@ -165,4 +165,240 @@ struct ChuruLedgerTests {
             #expect(ChuruLedger.dayKey(day, seoulCalendar(identifier)) == "2026-10-10", "\(identifier)")
         }
     }
+
+    // MARK: Missions
+
+    @Test func aFreshDayStartsWithCheckInClaimableAndNoBonus() {
+        var ledger = ChuruLedger(installedAt: at(12, 0))
+        let snapshot = ledger.apply([usage(at(12, 9), 10_000)], now: at(12, 10), rules: rules, calendar: seoul)
+        #expect(ledger.missionDay == MissionDay(day: "2026-10-12"))
+        #expect(snapshot.missions.map(\.state) == [.claimable, .inProgress, .inProgress])
+        #expect(snapshot.todayBonus == 0)
+        #expect(snapshot.missionMultiplier == 1.1)  // today has usage: streak 1
+        #expect(snapshot.balance == 10_000)
+    }
+
+    @Test func claimingAddsTheRewardToTheBalanceAndFreezesIt() {
+        var ledger = ChuruLedger(installedAt: at(12, 0))
+        let before = ledger.apply([usage(at(12, 9), 10_000)], now: at(12, 10), rules: rules, calendar: seoul)
+        let paid = ledger.claim(.checkIn, snapshot: before)
+        #expect(paid == 55_000)
+        let after = ledger.snapshot(todayTokensByProvider: before.todayTokensByProvider, now: at(12, 10),
+                                    rules: rules, calendar: seoul)
+        #expect(after.balance == 65_000)
+        #expect(after.todayBonus == 55_000)
+        #expect(after.missions[0].state == .claimed(reward: 55_000))
+        #expect(after.lifetimeTokens == 10_000)  // tokens only
+        #expect(ledger.missionDay?.claimed == ["checkIn": 55_000])
+    }
+
+    @Test func claimingTwiceOnTheSameDayPaysOnce() {
+        var ledger = ChuruLedger(installedAt: at(12, 0))
+        let first = ledger.apply([], now: at(12, 10), rules: rules, calendar: seoul)
+        let result1 = ledger.claim(.checkIn, snapshot: first)
+        #expect(result1 == 50_000)
+        // A second tap that still holds the old snapshot, and one with a fresh snapshot: both refused.
+        let result2 = ledger.claim(.checkIn, snapshot: first)
+        #expect(result2 == nil)
+        let fresh = ledger.snapshot(todayTokensByProvider: [:], now: at(12, 10), rules: rules, calendar: seoul)
+        let result3 = ledger.claim(.checkIn, snapshot: fresh)
+        #expect(result3 == nil)
+        #expect(fresh.balance == 50_000)
+    }
+
+    @Test func claimingAnUnfinishedMissionIsRefused() {
+        var ledger = ChuruLedger(installedAt: at(12, 0))
+        let snapshot = ledger.apply([usage(at(12, 9), 999_999)], now: at(12, 10), rules: rules, calendar: seoul)
+        let result4 = ledger.claim(.pet, snapshot: snapshot)
+        #expect(result4 == nil)
+        let result5 = ledger.claim(.tokens1M, snapshot: snapshot)
+        #expect(result5 == nil)
+        #expect(ledger.missionDay?.claimed.isEmpty == true)
+    }
+
+    @Test func aSnapshotFromAnotherDayCannotClaim() {
+        var ledger = ChuruLedger(installedAt: at(11, 0))
+        let yesterday = ledger.apply([], now: at(11, 10), rules: rules, calendar: seoul)
+        _ = ledger.apply([], now: at(12, 10), rules: rules, calendar: seoul)
+        let result6 = ledger.claim(.checkIn, snapshot: yesterday)
+        #expect(result6 == nil)
+    }
+
+    @Test func recordingAPetCountsOnceUpToTheTarget() {
+        var ledger = ChuruLedger(installedAt: at(12, 0))
+        _ = ledger.apply([], now: at(12, 10), rules: rules, calendar: seoul)
+        let result7 = ledger.record(.pet, today: "2026-10-12", rules: rules.missions)
+        #expect(result7)
+        let result21 = ledger.record(.pet, today: "2026-10-12", rules: rules.missions)
+        #expect(!result21)  // target met: nothing to save
+        #expect(ledger.missionDay?.counts == ["pet": 1])
+        let snapshot = ledger.snapshot(todayTokensByProvider: [:], now: at(12, 10), rules: rules, calendar: seoul)
+        #expect(snapshot.missions[1].state == .claimable)
+    }
+
+    @Test func recordingOnAStaleOrMissingDayIsIgnored() {
+        var ledger = ChuruLedger(installedAt: at(11, 0))
+        let result22 = ledger.record(.pet, today: "2026-10-11", rules: rules.missions)
+        #expect(!result22)  // no day yet
+        _ = ledger.apply([], now: at(11, 10), rules: rules, calendar: seoul)
+        let result23 = ledger.record(.pet, today: "2026-10-12", rules: rules.missions)
+        #expect(!result23)  // day rolled, not yet applied
+        #expect(ledger.missionDay?.counts.isEmpty == true)
+    }
+
+    /// Midnight: claimed rewards move into the day's frozen bonus; unclaimed ones are gone.
+    @Test func dayChangeFreezesClaimedBonusesAndDropsUnclaimed() {
+        var ledger = ChuruLedger(installedAt: at(11, 0))
+        let day1 = ledger.apply([usage(at(11, 9), 2_000_000)], now: at(11, 10), rules: rules, calendar: seoul)
+        let result8 = ledger.claim(.checkIn, snapshot: day1)
+        #expect(result8 == 55_000)
+        // tokens1M was claimable but never claimed.
+        let day2 = ledger.apply([usage(at(11, 9), 2_000_000), usage(at(12, 9), 1)], now: at(12, 10),
+                                rules: rules, calendar: seoul)
+        #expect(ledger.frozenDays["2026-10-11"] == ChuruDay(tokens: 2_000_000, bonus: 55_000))
+        #expect(ledger.missionDay == MissionDay(day: "2026-10-12"))
+        #expect(day2.todayBonus == 0)
+        #expect(day2.missions.map(\.state) == [.claimable, .inProgress, .inProgress])
+        #expect(day2.balance == 2_000_001 + 55_000)
+    }
+
+    /// The app was off on the 11th: the 12th's refresh freezes the 11th's tokens and rolls its bonus in one go.
+    @Test func tokensAndBonusOfThePreviousDayFreezeTogether() {
+        var ledger = ChuruLedger(installedAt: at(11, 0))
+        let day1 = ledger.apply([], now: at(11, 8), rules: rules, calendar: seoul)
+        let result9 = ledger.claim(.checkIn, snapshot: day1)
+        #expect(result9 == 50_000)
+        let day2 = ledger.apply([usage(at(11, 15), 300_000)], now: at(12, 10), rules: rules, calendar: seoul)
+        #expect(ledger.frozenDays["2026-10-11"] == ChuruDay(tokens: 300_000, bonus: 50_000))
+        #expect(day2.balance == 350_000)
+    }
+
+    @Test func aFrozenBonusIgnoresLaterRuleChanges() {
+        var ledger = ChuruLedger(installedAt: at(11, 0))
+        let day1 = ledger.apply([], now: at(11, 8), rules: rules, calendar: seoul)
+        let result10 = ledger.claim(.checkIn, snapshot: day1)
+        #expect(result10 == 50_000)
+        var generous = ChuruRules()
+        generous.missions.missions = [MissionRule(id: .checkIn, target: 1, baseReward: 5_000_000)]
+        let day2 = ledger.apply([], now: at(12, 10), rules: generous, calendar: seoul)
+        #expect(day2.balance == 50_000)
+        #expect(day2.missions[0].reward == 5_000_000)
+    }
+
+    @Test func spendSucceedsAgainstBonusOnlyBalance() {
+        var ledger = ChuruLedger(installedAt: at(12, 0))
+        let before = ledger.apply([], now: at(12, 10), rules: rules, calendar: seoul)
+        let result11 = ledger.claim(.checkIn, snapshot: before)
+        #expect(result11 == 50_000)
+        let funded = ledger.snapshot(todayTokensByProvider: [:], now: at(12, 10), rules: rules, calendar: seoul)
+        let result12 = ledger.spend(50_000, balance: funded.balance)
+        #expect(result12)
+        let after = ledger.snapshot(todayTokensByProvider: [:], now: at(12, 10), rules: rules, calendar: seoul)
+        #expect(after.balance == 0)
+    }
+
+    @Test func clockSetBackPastTheMissionDayStartsOver() {
+        var ledger = ChuruLedger(installedAt: at(10, 0))
+        let ahead = ledger.apply([], now: at(14, 10), rules: rules, calendar: seoul)
+        let result13 = ledger.claim(.checkIn, snapshot: ahead)
+        #expect(result13 == 50_000)
+        let corrected = ledger.apply([], now: at(12, 10), rules: rules, calendar: seoul)
+        #expect(ledger.missionDay == MissionDay(day: "2026-10-12"))
+        #expect(ledger.frozenDays["2026-10-14"] == nil)  // a future day's claim is not kept
+        #expect(corrected.balance == 0)
+    }
+
+    @Test func decodesALedgerWrittenBeforeMissions() throws {
+        let json = """
+        {"installedAt":781000000,"openFrom":781000000,"spent":1000,
+         "frozenDays":{"2026-10-10":{"tokens":200000}}}
+        """
+        let ledger = try JSONDecoder().decode(ChuruLedger.self, from: Data(json.utf8))
+        #expect(ledger.frozenDays["2026-10-10"] == ChuruDay(tokens: 200_000, bonus: 0))
+        #expect(ledger.missionDay == nil)
+        #expect(ledger.spent == 1000)
+    }
+
+    @Test func missionDayRoundTripsThroughJSON() throws {
+        var ledger = ChuruLedger(installedAt: at(12, 0))
+        let snapshot = ledger.apply([], now: at(12, 10), rules: rules, calendar: seoul)
+        _ = ledger.claim(.checkIn, snapshot: snapshot)
+        _ = ledger.record(.pet, today: "2026-10-12", rules: rules.missions)
+        let data = try JSONEncoder().encode(ledger)
+        #expect(try JSONDecoder().decode(ChuruLedger.self, from: data) == ledger)
+        let text = String(decoding: data, as: UTF8.self)
+        #expect(text.contains("\"claimed\":{\"checkIn\":50000}"))  // an object, not an array of pairs
+    }
+
+    @Test func spendingKeepsTheMissionFields() {
+        var ledger = ChuruLedger(installedAt: at(12, 0))
+        let snapshot = ledger.apply([usage(at(12, 9), 10_000)], now: at(12, 10), rules: rules, calendar: seoul)
+        let spent = snapshot.spending(1_000)
+        #expect(spent.missions == snapshot.missions)
+        #expect(spent.todayBonus == snapshot.todayBonus)
+        #expect(spent.missionMultiplier == snapshot.missionMultiplier)
+    }
+
+    // MARK: Tracker missions
+
+    private func missionTracker(in dir: URL) -> (ChuruTracker, JSONFile<ChuruLedger>) {
+        let file = JSONFile<ChuruLedger>(url: dir.appendingPathComponent("churu.json"))
+        let tracker = ChuruTracker(reader: TokenUsageReader(roots: .init(claude: [], codex: [])),
+                                   file: file, rules: rules, calendar: seoul)
+        return (tracker, file)
+    }
+
+    @Test func recordBeforeAnyRefreshIsIgnored() throws {
+        let (tracker, file) = missionTracker(in: try makeTempDirectory())
+        #expect(tracker.record(.pet, now: at(12, 10)) == nil)
+        #expect(file.load() == nil)
+    }
+
+    @Test func recordSavesOnceAndPublishesTheClaimableMission() throws {
+        let (tracker, file) = missionTracker(in: try makeTempDirectory())
+        _ = tracker.refresh(now: at(12, 10))
+        let first = tracker.record(.pet, now: at(12, 11))
+        #expect(first?.missions[1].state == .claimable)
+        #expect(file.load()?.missionDay?.counts == ["pet": 1])
+        // Stamp the file; a second pet past the target must not write it again.
+        try FileManager.default.setAttributes([.modificationDate: at(1, 0)], ofItemAtPath: file.url.path)
+        let second = tracker.record(.pet, now: at(12, 12))
+        #expect(second?.missions[1].progress == 1)
+        let modified = try #require(try FileManager.default.attributesOfItem(atPath: file.url.path)[.modificationDate] as? Date)
+        #expect(modified == at(1, 0))
+    }
+
+    @Test func claimRefreshesPaysAndPersists() throws {
+        let (tracker, file) = missionTracker(in: try makeTempDirectory())
+        _ = tracker.refresh(now: at(12, 10))
+        let paid = tracker.claim(.checkIn, now: at(12, 11))
+        #expect(paid.balance == 50_000)
+        #expect(paid.missions[0].state == .claimed(reward: 50_000))
+        #expect(file.load()?.missionDay?.claimed == ["checkIn": 50_000])
+        let again = tracker.claim(.checkIn, now: at(12, 12))
+        #expect(again.balance == 50_000)
+    }
+
+    /// A pet after midnight, before the first refresh of the new day, publishes nothing: the cached tokens are
+    /// yesterday's and the day has not rolled, so a snapshot now would show a wrong balance.
+    @Test func recordAfterMidnightWaitsForTheNextRefresh() throws {
+        let (tracker, file) = missionTracker(in: try makeTempDirectory())
+        _ = tracker.refresh(now: at(12, 23, 59))
+        _ = tracker.claim(.checkIn, now: at(12, 23, 59))
+        #expect(tracker.record(.pet, now: at(13, 0, 1)) == nil)
+        #expect(file.load()?.missionDay?.day == "2026-10-12")
+        let rolled = tracker.refresh(now: at(13, 0, 2))
+        #expect(rolled.balance == 50_000)
+        #expect(tracker.record(.pet, now: at(13, 0, 3))?.missions[1].state == .claimable)
+    }
+
+    /// A claim after midnight lands on the new day: the old day's unclaimed check-in is gone.
+    @Test func claimAfterMidnightRollsTheDayFirst() throws {
+        let (tracker, _) = missionTracker(in: try makeTempDirectory())
+        _ = tracker.refresh(now: at(12, 23, 59))
+        let paid = tracker.claim(.checkIn, now: at(13, 0, 1))
+        #expect(paid.day == "2026-10-13")
+        #expect(paid.balance == 50_000)
+        #expect(tracker.ledger?.missionDay?.day == "2026-10-13")
+    }
 }

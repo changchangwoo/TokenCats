@@ -13,6 +13,7 @@ struct HomeDisplaySettingsView: View {
                 Toggle("Show cost", isOn: choice(\.showEstimatedCost))
                 Toggle("Streak", isOn: choice(\.showStreak))
                 Toggle("Progress to the next adoption", isOn: choice(\.showAdoptionProgress))
+                Toggle("Missions", isOn: choice(\.showMissions))
             }
             Section("Agent limits") {
                 Toggle("Show the limits section", isOn: choice(\.showAgentLimits))

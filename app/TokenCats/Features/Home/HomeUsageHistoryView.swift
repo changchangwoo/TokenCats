@@ -180,18 +180,22 @@ private struct ContributionGrassView: View {
                 .font(.system(size: 11, weight: .semibold, design: .rounded))
                 .foregroundStyle(theme.ink.swiftUI)
             Canvas { graphics, size in
-                let left = max(0, (size.width - Double(ContributionYear.weeks) * horizontalPitch) / 2).rounded()
+                // 53 columns at the full pitch need 583pt; a narrower panel shrinks the pitch rather than
+                // losing the newest weeks off the right edge.
+                let pitch = min(horizontalPitch, (size.width / Double(ContributionYear.weeks)).rounded(.down))
+                let tile = min(self.tile, pitch - 1)
+                let left = max(0, (size.width - Double(ContributionYear.weeks) * pitch) / 2).rounded()
                 for label in year.monthLabels {
                     let text = Text(label.name)
                         .font(.system(size: 9, weight: .medium, design: .rounded))
                         .foregroundColor(theme.ink.swiftUI.opacity(0.75))
                     graphics.draw(graphics.resolve(text),
-                                  at: CGPoint(x: left + Double(label.column) * horizontalPitch, y: 0), anchor: .topLeading)
+                                  at: CGPoint(x: left + Double(label.column) * pitch, y: 0), anchor: .topLeading)
                 }
                 for (column, days) in year.columns.enumerated() {
                     for (row, cell) in days.enumerated() {
                         guard let level = cell.level else { continue }
-                        let x = left + Double(column) * horizontalPitch
+                        let x = left + Double(column) * pitch
                         let y = 17.0 + Double(row) * verticalPitch
                         let rect = CGRect(x: x, y: y, width: tile, height: tile)
                         graphics.fill(Path(roundedRect: rect, cornerRadius: 1.3),
