@@ -5,8 +5,8 @@
     "tiers": [
       { "id": "common", "name": { "en": "Common", "ko": "흔함" }, "weight": 50, "coats": ["black", "cheese", "split", "tabby"] },
       { "id": "uncommon", "name": { "en": "Uncommon", "ko": "드묾" }, "weight": 30, "coats": ["white", "tuxedo", "cream"] },
-      { "id": "rare", "name": { "en": "Rare", "ko": "희귀" }, "weight": 15, "coats": ["siamese"] },
-      { "id": "unique", "name": { "en": "Unique", "ko": "유니크" }, "weight": 5, "coats": ["foxfire"] }
+      { "id": "rare", "name": { "en": "Rare", "ko": "희귀" }, "weight": 15, "coats": ["siamese", "sphynx"] },
+      { "id": "unique", "name": { "en": "Unique", "ko": "유니크" }, "weight": 5, "coats": ["foxfire", "norwegian"] }
     ],
     "showcase": ["black", "siamese", "cream", "tabby", "foxfire", "cheese", "tuxedo", "split"]
   },

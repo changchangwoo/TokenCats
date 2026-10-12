@@ -27,7 +27,7 @@ private struct Fixture {
         if let cats { catsFile.save(cats) }
         inventoryFile = JSONFile(url: dir.appendingPathComponent("inventory.json"))
         let themes = try RoomThemeCatalog(data: Data(contentsOf: resources.appendingPathComponent("room-themes.json")))
-        let coats: Set<String> = ["black", "white", "cheese", "tuxedo", "tabby", "split", "siamese", "cream", "foxfire"]
+        let coats: Set<String> = ["black", "white", "cheese", "tuxedo", "tabby", "split", "siamese", "cream", "foxfire", "norwegian", "sphynx"]
         let catalog = try StoreCatalog(data: Data(contentsOf: resources.appendingPathComponent("store-catalog.json")),
                                        coats: coats, backgroundIDs: Set(themes.backgrounds.map(\.id)),
                                        defaultBackgroundID: themes.defaultID)

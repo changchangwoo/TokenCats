@@ -36,7 +36,7 @@ struct StoreCatalogTests {
         #expect(store.catBox.tiers.map { $0.name.resolve(for: Locale(identifier: "ko")) } == ["흔함", "드묾", "희귀", "유니크"])
         #expect(store.catBox.tiers.map { $0.name.resolve(for: Locale(identifier: "en")) } == ["Common", "Uncommon", "Rare", "Unique"])
         #expect(store.catBox.tiers.map(\.weight) == [50, 30, 15, 5])
-        #expect(store.catBox.tiers.map(\.coats) == [["black", "cheese", "split", "tabby"], ["white", "tuxedo", "cream"], ["siamese"], ["foxfire"]])
+        #expect(store.catBox.tiers.map(\.coats) == [["black", "cheese", "split", "tabby"], ["white", "tuxedo", "cream"], ["siamese", "sphynx"], ["foxfire", "norwegian"]])
         #expect(store.price(ofBackground: "cozy") == 0)
         #expect(store.price(ofBackground: "night") == 10_000_000)
         #expect(Set(store.backgrounds.map(\.id)) == Set(try themes().backgrounds.map(\.id)))
@@ -186,6 +186,6 @@ struct StoreCatalogTests {
 
     @Test func eachCoatSharesItsTiersChanceEvenly() throws {
         let odds = try catalog().boxOdds(available: { _ in true })
-        #expect(odds.map(\.percentPerCoat) == [12.5, 10, 15, 5])
+        #expect(odds.map(\.percentPerCoat) == [12.5, 10, 7.5, 2.5])
     }
 }

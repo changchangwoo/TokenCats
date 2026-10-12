@@ -14,6 +14,8 @@ extension CatDisplayName {
         case "siamese": return "Siamese"
         case "cream": return "Cream"
         case "foxfire": return "Foxfire"
+        case "norwegian": return "Norwegian"
+        case "sphynx": return "Sphynx"
         default: return LocalizedStringResource(String.LocalizationValue(coat))
         }
     }

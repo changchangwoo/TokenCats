@@ -6,7 +6,7 @@ for cats the `shippedArtIsExactlyTheSourceFolder` test fails.
 
 ## Cats: `cats/<coat>/`
 
-One coat is one folder (`black`, `cheese`, `cream`, `foxfire`, `siamese`, `split`, `tabby`, `tuxedo`, `white`). The
+One coat is one folder (`black`, `cheese`, `cream`, `foxfire`, `norwegian`, `siamese`, `sphynx`, `split`, `tabby`, `tuxedo`, `white`). The
 pictures in these files go into the app **pixel for pixel**. There is no scaling, correction or overriding, so what you
 see here is exactly what the app shows.
 

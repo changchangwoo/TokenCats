@@ -2815,6 +2815,17 @@
         }
       }
     },
+    "Norwegian": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "노르웨이"
+          }
+        }
+      }
+    },
     "Not connected: the Xcode command line tools are missing. Run xcode-select --install in Terminal, then connect again": {
       "extractionState": "manual",
       "localizations": {
@@ -3977,6 +3988,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ 츄르를 써요"
+          }
+        }
+      }
+    },
+    "Sphynx": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "스핑크스"
           }
         }
       }

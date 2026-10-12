@@ -121,7 +121,7 @@ struct CatRoomTests {
             return 0
         }
 
-        for coat in ["black", "white", "tabby", "cheese", "tuxedo", "split", "siamese", "cream", "foxfire"] {
+        for coat in ["black", "white", "tabby", "cheese", "tuxedo", "split", "siamese", "cream", "foxfire", "norwegian", "sphynx"] {
             let step = firstStep(for: coat)
             #expect(step == 7.5)
         }
@@ -394,7 +394,7 @@ struct CatCoatCatalogTests {
     @Test func everyCoatProvidesTheSharedClips() throws {
         let url = resourcesURL.appendingPathComponent("CatArt/cat-assets.json")
         let catalog = try JSONDecoder().decode(CatAssetCatalog.self, from: Data(contentsOf: url))
-        for coat in ["black", "white", "cheese", "tuxedo", "tabby", "split", "siamese", "cream", "foxfire"] { #expect(catalog.cats[coat] != nil) }
+        for coat in ["black", "white", "cheese", "tuxedo", "tabby", "split", "siamese", "cream", "foxfire", "norwegian", "sphynx"] { #expect(catalog.cats[coat] != nil) }
         let required: Set<String> = ["idle", "walkRight", "walkLeft", "groom", "pet"]
         for (coat, asset) in catalog.cats {
             #expect(required.isSubset(of: Set(asset.clips.keys)), "coat \(coat)")
