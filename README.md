@@ -42,6 +42,7 @@
 - With the notch closed, the cats sit on either side of it.
 - Hover the notch and the room opens. Inside, the cats walk around, groom themselves, and float a heart when you pet them.
 - Pet a cat, or right-click it to give churu, and its bond level climbs toward 99. Hover a cat to see the level, and switch on "Cat bond levels" in Settings › GitHub profile to show it on your card.
+- Give a cat its own name by right-clicking it in the collection. Up to 16 characters, and a blank name brings back the coat name.
 - Below the room you can see your churu, today's tokens, and your Claude and Codex usage limits.
 
 ### How it works
@@ -144,8 +145,8 @@ Who will you meet? Isn't that exciting?
 |---|---|---|
 | Common | 50% | <img src="docs/readme/cat-black.png" width="64" alt="Black"> <img src="docs/readme/cat-cheese.png" width="64" alt="Cheese"> <img src="docs/readme/cat-split.png" width="64" alt="Calico"> <img src="docs/readme/cat-tabby.png" width="64" alt="Tabby"> |
 | Uncommon | 30% | <img src="docs/readme/cat-white.png" width="64" alt="White"> <img src="docs/readme/cat-tuxedo.png" width="64" alt="Tuxedo"> <img src="docs/readme/cat-cream.png" width="64" alt="Cream"> |
-| Rare | 15% | <img src="docs/readme/cat-siamese.png" width="64" alt="Siamese"> |
-| Unique | 5% | <img src="docs/readme/cat-foxfire.png" width="64" alt="Foxfire"> Worth bragging about if it's on your profile. |
+| Rare | 15% | <img src="docs/readme/cat-siamese.png" width="64" alt="Siamese"> <img src="docs/readme/cat-sphynx.png" width="64" alt="Sphynx"> |
+| Unique | 5% | <img src="docs/readme/cat-foxfire.png" width="64" alt="Foxfire"> <img src="docs/readme/cat-norwegian.png" width="64" alt="Norwegian"> |
 
 ### Install
 

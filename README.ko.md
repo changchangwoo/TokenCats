@@ -42,6 +42,7 @@
 - 노치를 닫아 두면 고양이들이 노치 양옆에 앉아 있어요.
 - 노치에 마우스를 올리면 방이 열려요. 방 안의 고양이는 걷고, 그루밍하고, 쓰다듬으면 하트를 띄워요.
 - 쓰다듬거나 우클릭으로 츄르를 주면 친밀도 레벨이 99까지 올라요. 고양이에 마우스를 올리면 레벨이 보이고, 설정 › GitHub 프로필에서 "고양이 친밀도 레벨"을 켜면 카드에도 나와요.
+- 보관함에서 고양이를 우클릭하면 이름을 지어 줄 수 있어요. 최대 16자이고, 비워 두면 다시 코트 이름으로 불러요.
 - 방 아래에는 보유 츄르, 오늘 쓴 토큰, Claude·Codex 사용 한도가 함께 보여요.
 
 ### 어떻게 키우나요
@@ -144,8 +145,8 @@ GitHub에서 내 아이디와 같은 이름의 공개 저장소(예: `changchang
 |---|---|---|
 | 흔함 | 50% | <img src="docs/readme/cat-black.png" width="64" alt="검정"> <img src="docs/readme/cat-cheese.png" width="64" alt="치즈"> <img src="docs/readme/cat-split.png" width="64" alt="삼색"> <img src="docs/readme/cat-tabby.png" width="64" alt="고등어"> |
 | 드묾 | 30% | <img src="docs/readme/cat-white.png" width="64" alt="하양"> <img src="docs/readme/cat-tuxedo.png" width="64" alt="턱시도"> <img src="docs/readme/cat-cream.png" width="64" alt="크림"> |
-| 희귀 | 15% | <img src="docs/readme/cat-siamese.png" width="64" alt="샴"> |
-| 유니크 | 5% | <img src="docs/readme/cat-foxfire.png" width="64" alt="여우불"> 프로필에 있으면 자랑해도 돼요. |
+| 희귀 | 15% | <img src="docs/readme/cat-siamese.png" width="64" alt="샴"> <img src="docs/readme/cat-sphynx.png" width="64" alt="스핑크스"> |
+| 유니크 | 5% | <img src="docs/readme/cat-foxfire.png" width="64" alt="여우불"> <img src="docs/readme/cat-norwegian.png" width="64" alt="노르웨이"> |
 
 ### 설치
 

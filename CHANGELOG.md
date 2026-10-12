@@ -10,6 +10,11 @@ versions follow [Semantic Versioning](https://semver.org/). Each release's notes
 - Every cat has a bond level, 1 to 99. It rises when you pet the cat, give it churu (right-click a cat in the room or
   the collection, 1M churu), and while the app runs with the cat in the room. Hover a cat to see its level and bar.
   Settings › GitHub profile › Card contents can put each cat's level on the profile card (off by default)
+- Give a cat its own name: right-click it in the collection and type inside the notch. Up to 16 characters, and a
+  blank name brings back the coat name
+- Two new cats in the adoption box: the Sphynx (Rare) and the Norwegian (Unique). The tier odds are unchanged, so
+  each cat in those tiers is now half as likely
+- Fresh art for every cat's walk, and for the sitting and grooming poses of every coat except the black cat
 
 ## [0.1.5] - 2026-10-12
 
