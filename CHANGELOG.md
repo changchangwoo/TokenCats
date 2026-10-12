@@ -6,12 +6,12 @@ versions follow [Semantic Versioning](https://semver.org/). Each release's notes
 
 ## [Unreleased]
 
-- Idle power: the session liveness check reads only each process's start time, and the full-screen detector
-  listens for app, Space and display changes instead of polling every two seconds
-- Agents page: the `xcode-select --install` command keeps its own row and is never cut off
+## [0.1.4] - 2026-10-12
+
+- Uses less power while the notch is closed: the session check and the full-screen detector no longer wake up every few seconds
+- The first-run agents page keeps the `xcode-select --install` command on its own row, so it is never cut off
 - README: what to do when a zip downloaded by hand is refused by Gatekeeper
-- Repository: CI workflow, issue and pull request templates, security policy, code of conduct, this changelog
-- Debug builds: an end-to-end test of the update path against a local feed (`docs/setup/release.md`)
+- Under the hood: every strict-concurrency warning fixed, CI on every push, issue and pull request templates, a security policy and a changelog
 
 ## [0.1.3] - 2026-10-11
 
@@ -40,7 +40,8 @@ versions follow [Semantic Versioning](https://semver.org/). Each release's notes
 First public release. Cats in your MacBook notch that grow on the tokens you spend in Claude Code and Codex, with a
 GitHub profile card.
 
-[Unreleased]: https://github.com/changchangwoo/TokenCats/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/changchangwoo/TokenCats/compare/v0.1.4...HEAD
+[0.1.4]: https://github.com/changchangwoo/TokenCats/releases/tag/v0.1.4
 [0.1.3]: https://github.com/changchangwoo/TokenCats/releases/tag/v0.1.3
 [0.1.2]: https://github.com/changchangwoo/TokenCats/releases/tag/v0.1.2
 [0.1.1]: https://github.com/changchangwoo/TokenCats/releases/tag/v0.1.1

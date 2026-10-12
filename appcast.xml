@@ -3,19 +3,21 @@
     <channel>
         <title>TokenCats</title>
         <item>
-            <title>0.1.3</title>
-            <pubDate>Sun, 11 Oct 2026 22:49:53 +0900</pubDate>
+            <title>0.1.4</title>
+            <pubDate>Mon, 12 Oct 2026 11:55:37 +0900</pubDate>
             <link>https://github.com/changchangwoo/TokenCats</link>
-            <sparkle:fullReleaseNotesLink>https://github.com/changchangwoo/TokenCats/releases/tag/v0.1.3</sparkle:fullReleaseNotesLink>
-            <sparkle:version>4</sparkle:version>
-            <sparkle:shortVersionString>0.1.3</sparkle:shortVersionString>
+            <sparkle:fullReleaseNotesLink>https://github.com/changchangwoo/TokenCats/releases/tag/v0.1.4</sparkle:fullReleaseNotesLink>
+            <sparkle:version>5</sparkle:version>
+            <sparkle:shortVersionString>0.1.4</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <description><![CDATA[<ul>
-<li>TokenCats now updates itself: once a day it looks for a new version and asks before installing. Settings › About has the switch; "Check for Updates…" is in the menu bar menu</li>
-<li>This is the last version you install by hand: `brew upgrade --cask tokencats`</li>
+<li>Uses less power while the notch is closed: the session check and the full-screen detector no longer wake up every few seconds</li>
+<li>The first-run agents page keeps the `xcode-select --install` command on its own row, so it is never cut off</li>
+<li>README: what to do when a zip downloaded by hand is refused by Gatekeeper</li>
+<li>Under the hood: every strict-concurrency warning fixed, CI on every push, issue and pull request templates, a security policy and a changelog</li>
 </ul>
 ]]></description>
-            <enclosure url="https://github.com/changchangwoo/TokenCats/releases/download/v0.1.3/TokenCats-0.1.3.zip" length="11939188" type="application/octet-stream" sparkle:edSignature="MMvrxw+ZibddS/xrQqLzD1Ttl/nyoi2gncGENP6WiT72YaJmE9XX3hU8D6UnHJnRWAfBEr/5iE0CVkRzEBeSDw=="/>
+            <enclosure url="https://github.com/changchangwoo/TokenCats/releases/download/v0.1.4/TokenCats-0.1.4.zip" length="11945016" type="application/octet-stream" sparkle:edSignature="1LwH59kD29/RzVu++qJVkZf15dolQgMnzisLS5/M/wdbymAb2PJmk3YApwIN2AvE6r2QhVFsjpXvVJ6QyL2NAg=="/>
         </item>
     </channel>
 </rss>
