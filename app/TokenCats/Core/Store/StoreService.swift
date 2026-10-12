@@ -5,7 +5,10 @@ enum PurchaseResult: Equatable, Sendable {
     case adopted(CatResidentRecord, tier: StoreCatalog.Tier)
     case backgroundOwned(String)
     case propOwned(RoomProp)
+    /// Churu given to a cat; `level` is its bond level afterwards.
+    case treated(catID: String, level: Int)
     case insufficient(short: Int)
+    /// Nothing left to buy: a background or prop already owned, or a treat for a cat already at the last level.
     case alreadyOwned
     case failed
 }
@@ -16,32 +19,39 @@ struct StoreOutcome: Sendable {
     let snapshot: ChuruSnapshot
     let household: CatHousehold
     let inventory: StoreInventory
+    let bonds: CatBondBook
 }
 
 /// Buys from the store and moves cats between the room and storage; the only writer of `cats.json` and
-/// `inventory.json`. Not thread-safe: run it on the churu tracker's queue, so a purchase always checks the
-/// balance the tracker has just computed rather than a number on screen.
+/// `inventory.json`. Treats credit the cat's bond through `CatBondService` on the same queue. Not thread-safe: run
+/// it on the churu tracker's queue, so a purchase always checks the balance the tracker has just computed rather
+/// than a number on screen.
 final class StoreService: @unchecked Sendable {
     enum Product: Equatable, Sendable {
         case catBox
         case background(String)
         case prop(RoomProp)
+        /// Churu for one cat, by id; the cat may be in the room or in storage.
+        case treat(catID: String)
     }
 
     let catalog: StoreCatalog?
     private(set) var household: CatHousehold
     private(set) var inventory: StoreInventory
+    var bondBook: CatBondBook { bonds.book }
     private let tracker: ChuruTracker
+    private let bonds: CatBondService
     private let catsFile: JSONFile<CatHousehold>
     private let inventoryFile: JSONFile<StoreInventory>
     private let drawableCoats: Set<String>
     private var generator: SeededGenerator
 
-    init(catalog: StoreCatalog?, tracker: ChuruTracker, catsFile: JSONFile<CatHousehold>,
+    init(catalog: StoreCatalog?, tracker: ChuruTracker, bonds: CatBondService, catsFile: JSONFile<CatHousehold>,
          inventoryFile: JSONFile<StoreInventory>, defaultBackground: String, drawableCoats: Set<String>,
          seed: UInt64 = UInt64.random(in: .min ... .max)) {
         self.catalog = catalog
         self.tracker = tracker
+        self.bonds = bonds
         self.catsFile = catsFile
         self.inventoryFile = inventoryFile
         self.drawableCoats = drawableCoats
@@ -59,7 +69,8 @@ final class StoreService: @unchecked Sendable {
     func purchase(_ product: Product, now: Date = Date()) -> StoreOutcome {
         let snapshot = tracker.refresh(now: now)
         func outcome(_ result: PurchaseResult, _ snapshot: ChuruSnapshot) -> StoreOutcome {
-            StoreOutcome(result: result, snapshot: snapshot, household: household, inventory: inventory)
+            StoreOutcome(result: result, snapshot: snapshot, household: household, inventory: inventory,
+                         bonds: bonds.book)
         }
         guard let catalog else { return outcome(.failed, snapshot) }
 
@@ -75,12 +86,18 @@ final class StoreService: @unchecked Sendable {
             guard let offer = catalog.price(ofProp: prop) else { return outcome(.failed, snapshot) }
             guard !inventory.owns(prop: prop) else { return outcome(.alreadyOwned, snapshot) }
             price = offer
+        case .treat(let catID):
+            guard let offer = catalog.treatPrice else { return outcome(.failed, snapshot) }
+            guard household.residents.contains(where: { $0.id == catID }) else { return outcome(.failed, snapshot) }
+            // A cat at Lv.99 gains nothing, so no churu is taken for it.
+            guard bonds.book.level(of: catID) < CatBondRules.maxLevel else { return outcome(.alreadyOwned, snapshot) }
+            price = offer
         }
         guard snapshot.balance >= price else { return outcome(.insufficient(short: price - snapshot.balance), snapshot) }
 
         var nextHousehold = household
         var nextInventory = inventory
-        let result: PurchaseResult
+        var result: PurchaseResult
         switch product {
         case .catBox:
             guard let draw = catalog.drawCat(available: drawableCoats.contains, using: &generator) else {
@@ -98,13 +115,20 @@ final class StoreService: @unchecked Sendable {
             nextInventory.own(prop: prop)
             nextInventory.record(StorePurchase(at: now, product: "prop", price: price, result: prop.rawValue))
             result = .propOwned(prop)
+        case .treat(let catID):
+            nextInventory.record(StorePurchase(at: now, product: "treat", price: price, result: catID))
+            result = .treated(catID: catID, level: bonds.book.level(of: catID))
         }
         household = nextHousehold
         guard inventoryFile.save(nextInventory) else {
-            // A cat already saved stays adopted; a background or prop is not owned until its record is written.
+            // A cat already saved stays adopted; a background, prop or treat is not owned until its record is written.
             return outcome(product == .catBox ? result : .failed, snapshot)
         }
         inventory = nextInventory
+        if case .treat(let catID) = product {
+            // Credited only once the purchase is on record, so a crash leaves a recorded treat, never a free one.
+            result = .treated(catID: catID, level: bonds.treat(catID).level(of: catID))
+        }
         guard tracker.spend(price, balance: snapshot.balance) else { return outcome(result, snapshot) }
         return outcome(result, snapshot.spending(price))
     }
@@ -124,9 +148,16 @@ final class StoreService: @unchecked Sendable {
         return true
     }
 
-    /// Releases a cat for good; the churu spent on it stays spent.
+    /// Names a cat (a blank name takes the coat name back).
+    func rename(id: String, to name: String) -> Result<CatHousehold, CatHousehold.MoveError> {
+        change { try $0.rename(id: id, to: name) }
+    }
+
+    /// Releases a cat for good; the churu spent on it stays spent and its bond is forgotten.
     func release(id: String) -> Result<CatHousehold, CatHousehold.MoveError> {
-        change { try $0.release(id: id) }
+        let result = change { try $0.release(id: id) }
+        if case .success = result { bonds.forget(id) }
+        return result
     }
 
     func swap(roomID: String, storedID: String) -> Result<CatHousehold, CatHousehold.MoveError> {

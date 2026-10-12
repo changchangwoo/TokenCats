@@ -14,6 +14,9 @@ class NotchCoordinator: ObservableObject {
         didSet { NotchViews.lastSelected = currentView }
     }
     @Published var helloAnimationRunning: Bool = false
+    /// A screen inside the notch is taking typed input (naming a cat): the notch stays open when the pointer
+    /// leaves, and the notch window under the pointer takes the keyboard for as long as this is true.
+    @Published var takesTyping: Bool = false
 
     @AppStorage("firstLaunch") var firstLaunch: Bool = true
 

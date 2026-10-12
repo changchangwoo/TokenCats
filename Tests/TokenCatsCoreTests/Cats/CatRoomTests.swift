@@ -9,6 +9,46 @@ private func household(_ count: Int) -> CatHousehold {
 }
 
 struct CatHouseholdTests {
+    @Test func roomDisplayOrderFollowsEachEntry() throws {
+        var home = CatHousehold(residents: [])
+        home.adopt(coat: "black")
+        home.adopt(coat: "white")
+        home.adopt(coat: "cheese")
+        #expect(home.roomResidentsByEntry.map(\.id) == ["black-1", "white-1", "cheese-1"])
+
+        try home.move(id: "white-1", toRoom: false)
+        #expect(home.roomResidentsByEntry.map(\.id) == ["black-1", "cheese-1"])
+        try home.move(id: "white-1", toRoom: true)
+        #expect(home.roomResidentsByEntry.map(\.id) == ["black-1", "cheese-1", "white-1"])
+        #expect(home.residents.map(\.id) == ["black-1", "white-1", "cheese-1"])
+        #expect(home.storedResidents.isEmpty)
+    }
+
+    @Test func swapAppendsTheIncomingCatAndReleaseRemovesIt() throws {
+        var home = household(4)
+        home.adopt(coat: "tabby")
+        try home.swap(roomID: "white-1", storedID: "tabby-1")
+        #expect(home.roomResidentsByEntry.map(\.id) == ["black-1", "black-2", "white-2", "tabby-1"])
+        try home.swap(roomID: "black-1", storedID: "white-1")
+        #expect(home.roomResidentsByEntry.map(\.id) == ["black-2", "white-2", "tabby-1", "white-1"])
+        try home.release(id: "tabby-1")
+        #expect(home.roomResidentsByEntry.map(\.id) == ["black-2", "white-2", "white-1"])
+        #expect(home.storedResidents.map(\.id) == ["black-1"])
+    }
+
+    @Test func roomDisplayOrderSurvivesSaveAndLegacyFiles() throws {
+        let file = JSONFile<CatHousehold>(url: try makeTempDirectory().appendingPathComponent("cats.json"))
+        let old = #"{"residents":[{"id":"black-1","coat":"black"},{"id":"white-1","coat":"white"},{"id":"cheese-1","coat":"cheese"}]}"#
+        try Data(old.utf8).write(to: file.url)
+        var home = CatHousehold.load(from: file, firstCoat: { "tabby" })
+        #expect(home.roomResidentsByEntry.map(\.id) == ["black-1", "white-1", "cheese-1"])
+        try home.move(id: "white-1", toRoom: false)
+        try home.move(id: "white-1", toRoom: true)
+        #expect(file.save(home))
+        let restored = CatHousehold.load(from: file, firstCoat: { "tabby" })
+        #expect(restored.roomResidentsByEntry.map(\.id) == ["black-1", "cheese-1", "white-1"])
+    }
+
     @Test func roomHoldsFourAndLaterAdoptionsWaitInStorage() {
         #expect(CatHousehold.roomCapacity == 4)
         var home = household(4)
@@ -161,6 +201,44 @@ struct CatRoomTests {
         #expect(after[1].petFrame != nil)
         #expect(after[1].heartProgress != nil)
         #expect(room.pet(at: 2, point: RoomPoint(x: 300, y: 10), baseline: 170) == nil)
+    }
+
+    @Test func pettingReportsTheCatOncePerHeart() {
+        var room = CatRoom(household: household(1))
+        let cat = room.step(dt: 0.1, now: 0, width: 600)[0]
+        let point = RoomPoint(x: cat.x, y: 120)
+        let first = room.pet(at: 1, point: point, baseline: 170)
+        #expect(first == cat.id)
+        // Dragging on: the pose continues, the heart cooldown holds, so no new credit.
+        let dragging = room.pet(at: 1.5, point: point, baseline: 170)
+        #expect(dragging == nil)
+        #expect(room.step(dt: 0.1, now: 1.6, width: 600)[0].petFrame != nil)
+        let nextHeart = room.pet(at: 2.5, point: point, baseline: 170)
+        #expect(nextHeart == cat.id)
+    }
+
+    @Test func celebrateFloatsHeartsWithoutATouch() {
+        var room = CatRoom(household: household(2))
+        let cats = room.step(dt: 0.1, now: 0, width: 600)
+        room.celebrate(id: cats[1].id, at: 1)
+        let after = room.step(dt: 0.1, now: 1.1, width: 600)
+        #expect(after[0].heartProgress == nil)
+        #expect(after[1].heartProgress != nil)
+        #expect(after[1].petFrame == nil)
+        room.celebrate(id: "ghost-9", at: 2)   // unknown id: nothing happens
+    }
+
+    @Test func catIDReportsTheFrontMostCat() {
+        var room = CatRoom(household: household(2))
+        let cats = room.step(dt: 0.1, now: 0, width: 600)
+        #expect(room.catID(at: RoomPoint(x: cats[0].x, y: 120), baseline: 170) == cats[0].id)
+        #expect(room.catID(at: RoomPoint(x: cats[1].x, y: 120), baseline: 170) == cats[1].id)
+        #expect(room.catID(at: RoomPoint(x: 300, y: 10), baseline: 170) == nil)
+        // Later residents are drawn on top: a point both cats cover goes to the later one.
+        let between = RoomPoint(x: (cats[0].x + cats[1].x) / 2, y: 120)
+        if let hit = room.catID(at: between, baseline: 170) {
+            #expect(hit == room.catIndex(at: between, baseline: 170).map { cats[$0].id })
+        }
     }
 
     @Test func narrowRoomHidesExtraCatsAndOnlyVisibleCatsCanBeClicked() {

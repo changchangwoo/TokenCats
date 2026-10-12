@@ -4,6 +4,14 @@ import Foundation
 struct CatRoomSVGCat: Equatable, Sendable {
     let id: String
     let coat: String
+    /// Bond level, drawn as a pixel tag under the cat.
+    let level: Int
+
+    init(id: String, coat: String, level: Int = 1) {
+        self.id = id
+        self.coat = coat
+        self.level = level
+    }
 }
 
 /// PNG bytes for one coat: the sitting pose and the grooming and walking clips in playback order.
@@ -27,6 +35,7 @@ struct CatSample: Equatable, Sendable {
 struct CatTrack: Equatable, Sendable {
     let id: String
     let coat: String
+    let level: Int
     var samples: [CatSample]
 }
 
@@ -45,6 +54,9 @@ enum CatRoomSVG {
     static let roomHeight = 200.0
     static let cardHeight = 504.0
     static let catSize = 96
+    /// Top of the level tag's letters in the cat's own coordinates: 96 pixels of cat, then the floor gap (18) minus
+    /// the letters' 10 pixels, 2 of plaque and a 4-pixel breath above the room's bottom edge.
+    static let levelTagTop = catSize + Int(CatRoomScene.catFloorGap) - 16
     /// Five coats with sitting and grooming frames come to about 0.9MB; the cap leaves room for more coats.
     static let maxBytes = 2_000_000
     /// The profile room holds at most five cats.
@@ -68,10 +80,11 @@ enum CatRoomSVG {
                               year: ContributionYear? = nil, showsNumbers: Bool = false, owner: String? = nil,
                               updated: Date? = nil, theme: RoomTheme = .current,
                               art: RoomArtPNGs? = nil, showsCalendar: Bool = true,
-                              props: [RoomProp] = [], propArt: [String: Data] = [:]) throws -> String {
+                              props: [RoomProp] = [], propArt: [String: Data] = [:],
+                              showsLevels: Bool = false) throws -> String {
         let svg = render(calendar: calendar, cats: cats, frames: frames, year: year, showsNumbers: showsNumbers,
                          owner: owner, updated: updated, theme: theme, art: art, showsCalendar: showsCalendar,
-                         props: props, propArt: propArt)
+                         props: props, propArt: propArt, showsLevels: showsLevels)
         let bytes = svg.utf8.count
         if bytes > maxBytes { throw TooLarge(bytes: bytes) }
         return svg
@@ -85,7 +98,7 @@ enum CatRoomSVG {
                        year: ContributionYear? = nil, showsNumbers: Bool = false, owner: String? = nil,
                        updated: Date? = nil, theme: RoomTheme = .current, art: RoomArtPNGs? = nil,
                        showsCalendar: Bool = true, props: [RoomProp] = [], propArt: [String: Data] = [:],
-                       calendarSystem: Calendar = .current) -> String {
+                       showsLevels: Bool = false, calendarSystem: Calendar = .current) -> String {
         let scene = CatRoomScene.profile(calendar: calendar, theme: theme, showsCalendar: showsCalendar, props: props)
         let drawn = Array(cats.filter { frames[$0.coat].map { !$0.idle.isEmpty } ?? false }.prefix(maxCats))
         var coats: [String] = []
@@ -137,7 +150,9 @@ enum CatRoomSVG {
                 + #"height="\#(number(rect.height))" href="data:image/png;base64,\#(png.base64EncodedString())"/>"#
         }
         for track in simulate(drawn) {
-            if let coatFrames = frames[track.coat] { out += catElement(track, frames: coatFrames) }
+            if let coatFrames = frames[track.coat] {
+                out += catElement(track, frames: coatFrames, theme: theme, showsLevel: showsLevels)
+            }
         }
         if let year {
             out += graph(year, showsNumbers: showsNumbers, theme: theme,
@@ -265,7 +280,7 @@ enum CatRoomSVG {
     /// Runs the notch room with these residents and records every cat each tick.
     static func simulate(_ cats: [CatRoomSVGCat]) -> [CatTrack] {
         var room = CatRoom(household: CatHousehold(residents: cats.map { CatResidentRecord(id: $0.id, coat: $0.coat) }))
-        var tracks = cats.map { CatTrack(id: $0.id, coat: $0.coat, samples: []) }
+        var tracks = cats.map { CatTrack(id: $0.id, coat: $0.coat, level: $0.level, samples: []) }
         for step in 0..<Int((simulationSeconds / tick).rounded()) {
             let scene = room.step(dt: step == 0 ? 0 : tick, now: Double(step) * tick, width: simulationWidth)
             for cat in scene {
@@ -287,7 +302,8 @@ enum CatRoomSVG {
 
     /// One cat sitting at its starting place, with a `<use>` per frame it shows: sitting, and grooming
     /// whenever the notch room grooms. Walking moments show sitting.
-    private static func catElement(_ track: CatTrack, frames: CatCoatFrames) -> String {
+    private static func catElement(_ track: CatTrack, frames: CatCoatFrames, theme: RoomTheme,
+                                   showsLevel: Bool) -> String {
         let id = safeId(track.coat)
         let timing = #"dur="\#(Int(simulationSeconds))s" repeatCount="indefinite""#
         let top = roomHeight - CatRoomScene.catFloorGap - Double(catSize)
@@ -303,7 +319,29 @@ enum CatRoomSVG {
             out += ##"<use href="#\##(id)-\##(key)" opacity="\##(shown[0] == key ? 1 : 0)">"##
                 + (always ? "" : opacity(during: during, timing: timing)) + "</use>"
         }
+        if showsLevel { out += levelTag(track.level, theme: theme) }
         return out + "</g></svg>"
+    }
+
+    /// Art pixels of plaque around the letters, sideways and up/down.
+    private static let levelTagPadding = (x: 2, y: 1)
+
+    /// `LV n` in the calendar's pixel letters on a small plaque, centred under the cat, inside its svg so it scales
+    /// with the cat. Letters in `ink` on `panel`: the pair the card's stats use, so it reads on any floor.
+    private static func levelTag(_ level: Int, theme: RoomTheme) -> String {
+        let text = "LV \(level)"
+        let pixel = Int(CalendarProp.pixel)
+        let width = PixelGlyphs.width(of: text) * pixel
+        let left = (catSize - width) / 2
+        let padX = levelTagPadding.x * pixel, padY = levelTagPadding.y * pixel
+        var out = #"<rect class="level" x="\#(left - padX)" y="\#(levelTagTop - padY)" "#
+            + #"width="\#(width + 2 * padX)" height="\#(PixelGlyphs.glyphHeight * pixel + 2 * padY)" rx="\#(pixel)" "#
+            + #"\#(fill(theme.panel))/>"#
+        for rect in PixelGlyphs.rects(text, left: 0, top: 0, color: theme.ink) {
+            out += #"<rect x="\#(left + rect.x * pixel)" y="\#(levelTagTop + rect.y * pixel)" "#
+                + #"width="\#(rect.width * pixel)" height="\#(rect.height * pixel)" \#(fill(rect.color))/>"#
+        }
+        return out
     }
 
     /// Time ranges (seconds) of consecutive samples that match.

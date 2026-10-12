@@ -22,10 +22,11 @@ private func catalog(_ json: String? = nil) throws -> StoreCatalog {
 
 private func manifest(tiers: String = #"[{"id":"common","name":"흔함","weight":70,"coats":["black"]}]"#,
                       backgrounds: String = #"[{"id":"cozy","price":0},{"id":"night","price":10}]"#,
-                      price: Int = 20, props: String? = nil, showcase: String? = nil) -> String {
+                      price: Int = 20, props: String? = nil, showcase: String? = nil, treat: String? = nil) -> String {
     let propList = props.map { #","props":\#($0)"# } ?? ""
     let showcaseList = showcase.map { #","showcase":\#($0)"# } ?? ""
-    return #"{"schemaVersion":1,"catBox":{"price":\#(price),"tiers":\#(tiers)\#(showcaseList)},"backgrounds":\#(backgrounds)\#(propList)}"#
+    let treatOffer = treat.map { #","treat":\#($0)"# } ?? ""
+    return #"{"schemaVersion":1,"catBox":{"price":\#(price),"tiers":\#(tiers)\#(showcaseList)},"backgrounds":\#(backgrounds)\#(propList)\#(treatOffer)}"#
 }
 
 struct StoreCatalogTests {
@@ -45,6 +46,16 @@ struct StoreCatalogTests {
         #expect(store.price(ofProp: .yarnBall) == 1_000_000)
         #expect(store.propsForSale == [.yarnBall, .hideCrate, .catTower])
         #expect(store.price(ofProp: .calendar) == nil)
+        #expect(store.treatPrice == 1_000_000)
+    }
+
+    @Test func treatIsOptionalAndMustCostSomething() throws {
+        #expect(try catalog(manifest()).treatPrice == nil)
+        #expect(try catalog(manifest(treat: #"{"price":5}"#)).treatPrice == 5)
+        #expect(throws: StoreCatalog.Invalid.treatPrice) { try catalog(manifest(treat: #"{"price":0}"#)) }
+        #expect(throws: StoreCatalog.Invalid.treatPrice) { try catalog(manifest(treat: #"{"price":-1}"#)) }
+        #expect(try catalog(manifest(treat: #"{"price":5}"#)).freeForTesting().treatPrice == 0)
+        #expect(try catalog(manifest()).freeForTesting().treatPrice == nil)
     }
 
     @Test func propsAreOptionalAndChecked() throws {

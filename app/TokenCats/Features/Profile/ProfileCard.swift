@@ -34,6 +34,6 @@ enum ProfileCard {
                                          thresholds: ChuruRules.standard.calendarThresholds, calendar: .current)
         return try ProfileExport.svg(calendar: snapshot.calendar, year: options.showsYear ? year : nil,
                                      showsNumbers: options.showsNumbers, owner: owner, updated: Date(),
-                                     theme: theme)
+                                     theme: theme, showsLevels: options.showsLevels)
     }
 }

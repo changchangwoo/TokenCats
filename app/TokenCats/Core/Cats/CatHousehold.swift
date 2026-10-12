@@ -1,24 +1,29 @@
 import Foundation
 
 /// One cat the user owns. `coat` names its art in `cat-assets.json`; `id` is unique per cat,
-/// so two cats may share a coat. `inRoom` is false while the cat waits in storage.
+/// so two cats may share a coat. `inRoom` is false while the cat waits in storage. `name` is the name the user
+/// gave it, or nil for the coat's name (`CatNames`).
 struct CatResidentRecord: Codable, Equatable, Sendable {
     let id: String
     let coat: String
     var inRoom: Bool
+    var name: String?
 
-    init(id: String, coat: String, inRoom: Bool = true) {
+    init(id: String, coat: String, inRoom: Bool = true, name: String? = nil) {
         self.id = id
         self.coat = coat
         self.inRoom = inRoom
+        self.name = name
     }
 
-    /// Files written before storage existed have no `inRoom`: every cat lived in the room.
+    /// Files written before storage existed have no `inRoom`: every cat lived in the room. Files from before
+    /// naming have no `name`.
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(String.self, forKey: .id)
         coat = try container.decode(String.self, forKey: .coat)
         inRoom = try container.decodeIfPresent(Bool.self, forKey: .inRoom) ?? true
+        name = try container.decodeIfPresent(String.self, forKey: .name)
     }
 }
 
@@ -31,9 +36,17 @@ struct CatHousehold: Codable, Equatable, Sendable {
     }
 
     private(set) var residents: [CatResidentRecord]
+    /// IDs in the order cats most recently entered the room. Adoption order stays in `residents`.
+    private var roomEntryIDs: [String]
+
+    private enum CodingKeys: String, CodingKey { case residents, roomEntryIDs }
 
     /// Drops duplicate ids and sends room cats past the room's capacity to storage; no cat is ever dropped.
     init(residents: [CatResidentRecord]) {
+        self.init(residents: residents, roomEntryIDs: [])
+    }
+
+    private init(residents: [CatResidentRecord], roomEntryIDs: [String]) {
         var seen = Set<String>()
         var roomCount = 0
         self.residents = residents.filter { seen.insert($0.id).inserted }
@@ -44,9 +57,30 @@ struct CatHousehold: Codable, Equatable, Sendable {
                 }
                 return record
             }
+        let roomIDs = Set(self.residents.filter(\.inRoom).map(\.id))
+        var ordered = Set<String>()
+        self.roomEntryIDs = roomEntryIDs.filter { roomIDs.contains($0) && ordered.insert($0).inserted }
+        self.roomEntryIDs += self.residents.filter { $0.inRoom && ordered.insert($0.id).inserted }.map(\.id)
+    }
+
+    /// Files saved before room entry order existed start in the existing resident order.
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(residents: try container.decode([CatResidentRecord].self, forKey: .residents),
+                  roomEntryIDs: try container.decodeIfPresent([String].self, forKey: .roomEntryIDs) ?? [])
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(residents, forKey: .residents)
+        try container.encode(roomEntryIDs, forKey: .roomEntryIDs)
     }
 
     var roomResidents: [CatResidentRecord] { residents.filter(\.inRoom) }
+    var roomResidentsByEntry: [CatResidentRecord] {
+        let byID = Dictionary(uniqueKeysWithValues: roomResidents.map { ($0.id, $0) })
+        return roomEntryIDs.compactMap { byID[$0] }
+    }
     var storedResidents: [CatResidentRecord] { residents.filter { !$0.inRoom } }
     var isRoomFull: Bool { roomResidents.count >= Self.roomCapacity }
     /// Adds a cat with a new unique id: into the room while there is space, otherwise into storage.
@@ -56,6 +90,7 @@ struct CatHousehold: Codable, Equatable, Sendable {
         while residents.contains(where: { $0.id == "\(coat)-\(number)" }) { number += 1 }
         let record = CatResidentRecord(id: "\(coat)-\(number)", coat: coat, inRoom: !isRoomFull)
         residents.append(record)
+        if record.inRoom { roomEntryIDs.append(record.id) }
         return record
     }
 
@@ -69,6 +104,16 @@ struct CatHousehold: Codable, Equatable, Sendable {
             guard roomResidents.count > 1 else { throw MoveError.lastCatInRoom }
         }
         residents[index].inRoom = toRoom
+        if toRoom { roomEntryIDs.append(id) }
+        else { roomEntryIDs.removeAll { $0 == id } }
+    }
+
+    /// Gives a cat a name, or takes it back with a blank one. Whitespace is trimmed and the name is cut at
+    /// `CatNames.maxNameLength`.
+    mutating func rename(id: String, to name: String) throws {
+        guard let index = residents.firstIndex(where: { $0.id == id }) else { throw MoveError.unknownCat }
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        residents[index].name = trimmed.isEmpty ? nil : String(trimmed.prefix(CatNames.maxNameLength))
     }
 
     /// Lets a cat go for good: it leaves the household and is not coming back. The room never goes under one,
@@ -77,6 +122,7 @@ struct CatHousehold: Codable, Equatable, Sendable {
         guard let index = residents.firstIndex(where: { $0.id == id }) else { throw MoveError.unknownCat }
         if residents[index].inRoom { guard roomResidents.count > 1 else { throw MoveError.lastCatInRoom } }
         residents.remove(at: index)
+        roomEntryIDs.removeAll { $0 == id }
     }
 
     /// A full room's way to bring a stored cat in: it takes the place of `roomID`, which goes to storage.
@@ -86,11 +132,13 @@ struct CatHousehold: Codable, Equatable, Sendable {
         guard residents[room].inRoom, !residents[stored].inRoom else { throw MoveError.notASwap }
         residents[room].inRoom = false
         residents[stored].inRoom = true
+        roomEntryIDs.removeAll { $0 == roomID }
+        roomEntryIDs.append(storedID)
     }
 
     /// A first launch starts with one cat whose coat the caller picks.
     static func load(from file: JSONFile<CatHousehold>, firstCoat: () -> String) -> CatHousehold {
-        if let saved = file.load() { return CatHousehold(residents: saved.residents) }
+        if let saved = file.load() { return saved }
         var first = CatHousehold(residents: [])
         first.adopt(coat: firstCoat())
         file.save(first)
@@ -202,20 +250,32 @@ struct CatRoom: Sendable {
             .max()
     }
 
-    /// Pets the front-most cat under the point; returns its id.
+    /// Pets the front-most cat under the point. Returns its id only when a heart was accepted (once per
+    /// `CatHeartInteraction.cooldown`), so a drag credits the bond once per heart, not once per frame.
     @discardableResult
     mutating func pet(at now: Double, point: RoomPoint, baseline: Double) -> String? {
         guard let index = catIndex(at: point, baseline: baseline),
               residents[index].petting.touch(at: now, point: point, cat: residents[index].motion,
                                              baseline: baseline)
         else { return nil }
-        _ = residents[index].hearts.tap(at: now, point: point, cat: residents[index].motion,
-                                        baseline: baseline)
-        return residents[index].id
+        let accepted = residents[index].hearts.tap(at: now, point: point, cat: residents[index].motion,
+                                                   baseline: baseline)
+        return accepted ? residents[index].id : nil
     }
 
     mutating func endPet(at now: Double) {
         for index in residents.indices { residents[index].petting.end(at: now) }
+    }
+
+    /// Hearts for a cat that was just given a treat; no pose change.
+    mutating func celebrate(id: String, at now: Double) {
+        guard let index = residents.firstIndex(where: { $0.id == id }) else { return }
+        residents[index].hearts.force(at: now)
+    }
+
+    /// The front-most visible cat under the point, by id.
+    func catID(at point: RoomPoint, baseline: Double) -> String? {
+        catIndex(at: point, baseline: baseline).map { residents[$0].id }
     }
 
     /// Takes in the room's cats after an adoption or a move. Cats already here keep their spot and what they

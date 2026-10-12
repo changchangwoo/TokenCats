@@ -100,6 +100,17 @@
         }
       }
     },
+    "%@ enjoyed the churu · Lv.%lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, 츄르 맛있게 먹었어요 · Lv.%lld"
+          }
+        }
+      }
+    },
     "%@ hook removed": {
       "extractionState": "manual",
       "localizations": {
@@ -703,6 +714,17 @@
         }
       }
     },
+    "Already at Lv.%lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이미 Lv.%lld이에요"
+          }
+        }
+      }
+    },
     "Already owned": {
       "extractionState": "manual",
       "localizations": {
@@ -912,6 +934,17 @@
         }
       }
     },
+    "Bond level %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "친밀도 %lld레벨"
+          }
+        }
+      }
+    },
     "Bought the %@ background": {
       "extractionState": "manual",
       "localizations": {
@@ -1029,6 +1062,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "카드를 올렸습니다"
+          }
+        }
+      }
+    },
+    "Cat bond levels": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "고양이 친밀도 레벨"
           }
         }
       }
@@ -1671,6 +1715,17 @@
         }
       }
     },
+    "Could not give churu. Please try again": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "츄르를 주지 못했어요. 다시 시도해 주세요"
+          }
+        }
+      }
+    },
     "Could not read the JSON in the Claude settings file.": {
       "extractionState": "manual",
       "localizations": {
@@ -2243,6 +2298,17 @@
         }
       }
     },
+    "Give churu · %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "츄르 주기 · %@"
+          }
+        }
+      }
+    },
     "Got it": {
       "extractionState": "manual",
       "localizations": {
@@ -2617,6 +2683,17 @@
         }
       }
     },
+    "Leave it blank to use the coat name again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "비워 두면 다시 코트 이름으로 불러요. 최대 16자."
+          }
+        }
+      }
+    },
     "Left floor": {
       "extractionState": "manual",
       "localizations": {
@@ -2668,6 +2745,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "낮음"
+          }
+        }
+      }
+    },
+    "Lv.%lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lv.%lld"
           }
         }
       }
@@ -2767,6 +2855,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "방에 들어왔어요"
+          }
+        }
+      }
+    },
+    "Name": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이름"
+          }
+        }
+      }
+    },
+    "Name this cat": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "고양이 이름 짓기"
           }
         }
       }
@@ -2892,6 +3002,17 @@
         }
       }
     },
+    "Not enough churu · %@ short": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "츄르가 부족해요 · %@ 모자람"
+          }
+        }
+      }
+    },
     "Not installed": {
       "extractionState": "manual",
       "localizations": {
@@ -2932,6 +3053,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "노치"
+          }
+        }
+      }
+    },
+    "Now called %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이제 %@ 라고 불러요"
           }
         }
       }
@@ -3552,6 +3684,17 @@
         }
       }
     },
+    "Rename…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이름 바꾸기…"
+          }
+        }
+      }
+    },
     "Requests": {
       "extractionState": "manual",
       "localizations": {
@@ -3801,6 +3944,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "토"
+          }
+        }
+      }
+    },
+    "Save": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저장"
           }
         }
       }

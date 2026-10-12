@@ -24,13 +24,15 @@ struct PreferencesTests {
 
     /// The card shows everything by default: the numbers are the point of sharing it.
     @Test func cardOptionsDefaultToEverythingOn() {
-        #expect(ProfileCardOptions.default == ProfileCardOptions(showsNumbers: true, showsYear: true))
+        #expect(ProfileCardOptions.default == ProfileCardOptions(showsNumbers: true, showsYear: true, showsLevels: false))
     }
 
     /// New users get the room cats on the closed notch, full-speed animation, and a full card.
     @Test func defaultsFavourTheCatsWithoutSurpriseSlowdown() {
         #expect(PreferenceDefaults.closedNotchCats && !PreferenceDefaults.batterySaver)
         #expect(PreferenceDefaults.profileShowsNumbers && PreferenceDefaults.profileShowsYear)
+        // Levels are the user's to show: off until they switch them on.
+        #expect(!PreferenceDefaults.profileShowsLevels)
         #expect(PreferenceDefaults.language == "system")
         #expect(PreferenceDefaults.animationQuality == AnimationQuality.default.rawValue)
         #expect(PreferenceDefaults.profileSyncMode == ProfileSyncMode.default.rawValue)
@@ -127,5 +129,7 @@ struct ProfileCardDisclosureTests {
         #expect(ProfileCardOptions.default.publicItems == [.numbers, .year])
         #expect(ProfileCardOptions(showsNumbers: false, showsYear: true).publicItems == [.year])
         #expect(ProfileCardOptions(showsNumbers: false, showsYear: false).publicItems.isEmpty)
+        #expect(ProfileCardOptions(showsNumbers: false, showsYear: false, showsLevels: true).publicItems == [.levels])
+        #expect(ProfileCardOptions(showsNumbers: true, showsYear: true, showsLevels: true).publicItems == [.numbers, .year, .levels])
     }
 }

@@ -15,7 +15,7 @@ enum ProfileExport {
     /// Throws `CatRoomSVG.TooLarge` instead of making a card over the 2MB budget.
     static func svg(calendar: ChuruMonthCalendar, year: ContributionYear?, showsNumbers: Bool,
                     owner: String?, updated: Date,
-                    theme override: RoomTheme? = nil) throws -> String {
+                    theme override: RoomTheme? = nil, showsLevels: Bool = false) throws -> String {
         let sprites = CatSprites.shared
         let store = StoreModel.shared
         let residents = store.household.roomResidents.filter { sprites.hasArt(coat: $0.coat) }
@@ -29,12 +29,16 @@ enum ProfileExport {
         let theme = override ?? RoomThemeSelection.selected(owned: store.inventory.ownedBackgrounds)
         let props = store.inventory.decor.shownProps
         return try CatRoomSVG.checkedRender(calendar: calendar,
-                                            cats: residents.map { CatRoomSVGCat(id: $0.id, coat: $0.coat) },
+                                            cats: residents.map {
+                                                CatRoomSVGCat(id: $0.id, coat: $0.coat,
+                                                              level: CatBondModel.shared.book.level(of: $0.id))
+                                            },
                                             frames: frames, year: year, showsNumbers: showsNumbers,
                                             owner: owner, updated: updated,
                                             theme: theme, art: RoomArtImages.pngs(for: theme.art),
                                             showsCalendar: store.inventory.decor.shows(.calendar),
-                                            props: props, propArt: RoomArtImages.pngs(for: props))
+                                            props: props, propArt: RoomArtImages.pngs(for: props),
+                                            showsLevels: showsLevels)
     }
 
     static func write(_ svg: String) throws -> URL {

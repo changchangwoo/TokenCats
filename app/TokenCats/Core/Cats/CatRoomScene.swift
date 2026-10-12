@@ -75,19 +75,8 @@ struct CalendarProp: Equatable, Sendable {
 
     /// English, fixed width, independent of the Mac's language so the profile looks the same everywhere.
     static let monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]
-    /// 3 × 5 pixel letters for the month names.
-    static let glyphs: [Character: [String]] = [
-        "A": [".X.", "X.X", "XXX", "X.X", "X.X"], "B": ["XX.", "X.X", "XX.", "X.X", "XX."],
-        "C": [".XX", "X..", "X..", "X..", ".XX"], "D": ["XX.", "X.X", "X.X", "X.X", "XX."],
-        "E": ["XXX", "X..", "XX.", "X..", "XXX"], "F": ["XXX", "X..", "XX.", "X..", "X.."],
-        "G": [".XX", "X..", "X.X", "X.X", ".XX"], "J": ["..X", "..X", "..X", "X.X", ".X."],
-        "L": ["X..", "X..", "X..", "X..", "XXX"], "M": ["X.X", "XXX", "XXX", "X.X", "X.X"],
-        "N": ["XX.", "X.X", "X.X", "X.X", "X.X"], "O": [".X.", "X.X", "X.X", "X.X", ".X."],
-        "P": ["XX.", "X.X", "XX.", "X..", "X.."], "R": ["XX.", "X.X", "XX.", "X.X", "X.X"],
-        "S": [".XX", "X..", ".X.", "..X", "XX."], "T": ["XXX", ".X.", ".X.", ".X.", ".X."],
-        "U": ["X.X", "X.X", "X.X", "X.X", "XXX"], "V": ["X.X", "X.X", "X.X", "X.X", ".X."],
-        "Y": ["X.X", "X.X", ".X.", ".X.", ".X."],
-    ]
+    /// 3 × 5 pixel letters for the month names; the shared set in `PixelGlyphs`.
+    static let glyphs = PixelGlyphs.glyphs
 
     /// `nil` before the first churu count: binding and blank paper only.
     init(top: Double, calendar: ChuruMonthCalendar?) {
@@ -128,24 +117,8 @@ struct CalendarProp: Equatable, Sendable {
 
     /// One rect per horizontal run of lit pixels, letters 1 pixel apart, centred on the sheet.
     private static func label(_ text: String) -> [ScenePixelRect] {
-        let letters = text.compactMap { glyphs[$0] }
-        let width = letters.count * 4 - 1
-        let left = (artWidth - width) / 2
-        var rects: [ScenePixelRect] = []
-        for (letterIndex, rows) in letters.enumerated() {
-            for (row, line) in rows.enumerated() {
-                var column = 0
-                let marks = Array(line)
-                while column < marks.count {
-                    guard marks[column] == "X" else { column += 1; continue }
-                    let start = column
-                    while column < marks.count, marks[column] == "X" { column += 1 }
-                    rects.append(ScenePixelRect(x: left + letterIndex * 4 + start, y: labelTop + row,
-                                                width: column - start, height: 1, color: binding))
-                }
-            }
-        }
-        return rects
+        let left = (artWidth - PixelGlyphs.width(of: text)) / 2
+        return PixelGlyphs.rects(text, left: left, top: labelTop, color: binding)
     }
 }
 

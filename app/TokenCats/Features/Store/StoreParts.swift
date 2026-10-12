@@ -10,6 +10,7 @@ struct PendingPurchase: Identifiable {
         case .catBox: return "catBox"
         case .background(let id): return "background-\(id)"
         case .prop(let prop): return "prop-\(prop.rawValue)"
+        case .treat(let catID): return "treat-\(catID)"
         }
     }
 }

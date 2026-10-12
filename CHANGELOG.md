@@ -7,6 +7,9 @@ versions follow [Semantic Versioning](https://semver.org/). Each release's notes
 ## [Unreleased]
 
 - Three daily missions on Home — check in, pet a cat, use 1M tokens — each paying a small churu bonus when you tap Claim. The usage streak multiplies the rewards, up to 2× from ten days. Unclaimed rewards expire at midnight. The section folds to one line while nothing is waiting to be claimed; Settings › Home display can hide it
+- Every cat has a bond level, 1 to 99. It rises when you pet the cat, give it churu (right-click a cat in the room or
+  the collection, 1M churu), and while the app runs with the cat in the room. Hover a cat to see its level and bar.
+  Settings › GitHub profile › Card contents can put each cat's level on the profile card (off by default)
 
 ## [0.1.5] - 2026-10-12
 

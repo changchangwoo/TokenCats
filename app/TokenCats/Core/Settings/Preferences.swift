@@ -29,19 +29,27 @@ enum PowerPolicy {
     }
 }
 
-/// What the GitHub profile card shows besides the room. Everything is on by default: the numbers are the point
-/// of sharing it, and each one can be switched off in Settings › GitHub 프로필.
+/// What the GitHub profile card shows besides the room. The numbers and the year are on by default: they are the
+/// point of sharing it. The cats' bond levels are off until the user switches them on. Each one can be changed in
+/// Settings › GitHub 프로필.
 struct ProfileCardOptions: Equatable, Sendable {
     var showsNumbers: Bool
     var showsYear: Bool
+    var showsLevels: Bool
 
-    static let `default` = ProfileCardOptions(showsNumbers: true, showsYear: true)
+    init(showsNumbers: Bool, showsYear: Bool, showsLevels: Bool = false) {
+        self.showsNumbers = showsNumbers
+        self.showsYear = showsYear
+        self.showsLevels = showsLevels
+    }
+
+    static let `default` = ProfileCardOptions(showsNumbers: true, showsYear: true, showsLevels: false)
 
     /// What anyone visiting the profile sees besides the room; shown before the first upload.
-    enum PublicItem: Equatable, Sendable { case numbers, year }
+    enum PublicItem: Equatable, Sendable { case numbers, year, levels }
 
     var publicItems: [PublicItem] {
-        [(showsNumbers, PublicItem.numbers), (showsYear, .year)].filter(\.0).map(\.1)
+        [(showsNumbers, PublicItem.numbers), (showsYear, .year), (showsLevels, .levels)].filter(\.0).map(\.1)
     }
 }
 
@@ -68,6 +76,7 @@ enum PreferenceDefaults {
     static let closedNotchCats = true
     static let profileShowsNumbers = ProfileCardOptions.default.showsNumbers
     static let profileShowsYear = ProfileCardOptions.default.showsYear
+    static let profileShowsLevels = ProfileCardOptions.default.showsLevels
     static let profileSyncMode = ProfileSyncMode.default.rawValue
     static let roomTheme = RoomThemeCatalog.bundled.defaultID
 }

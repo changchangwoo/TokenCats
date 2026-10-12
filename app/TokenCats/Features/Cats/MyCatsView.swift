@@ -6,6 +6,7 @@ import SwiftUI
 struct MyCatsView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @ObservedObject private var store = StoreModel.shared
+    @ObservedObject private var bonds = CatBondModel.shared
     @AppStorage(AppSettings.Key.roomTheme) private var backgroundID = AppSettings.Default.roomTheme
     @StateObject private var notice = Notice()
     @Environment(\.locale) private var locale
@@ -14,6 +15,11 @@ struct MyCatsView: View {
     @State private var swapping: CatResidentRecord?
     /// A cat waiting for "release for good?" to be answered.
     @State private var releasing: CatResidentRecord?
+    /// A cat whose name is being typed, and the text so far.
+    @State private var renaming: CatResidentRecord?
+    @State private var nameDraft = ""
+    @FocusState private var nameFieldFocused: Bool
+    @ObservedObject private var coordinator = NotchCoordinator.shared
 
     private var theme: RoomTheme { store.theme(id: backgroundID) }
 
@@ -28,7 +34,7 @@ struct MyCatsView: View {
                         backgrounds
                         section(title: "Room \(household.roomResidents.count)/\(CatHousehold.roomCapacity)",
                                 hint: swapping == nil ? "" : "Tap the cat to swap out",
-                                cats: household.roomResidents, inRoom: true)
+                                cats: household.roomResidentsByEntry, inRoom: true)
                         if let swapping {
                             swapBanner(for: swapping)
                         }
@@ -50,6 +56,8 @@ struct MyCatsView: View {
         .overlay {
             if let releasing {
                 releaseConfirmation(for: releasing).transition(.opacity)
+            } else if let renaming {
+                renameDialog(for: renaming).transition(.opacity)
             }
         }
         .animation(reduceMotion ? nil : .smooth(duration: 0.36), value: household)
@@ -183,6 +191,14 @@ struct MyCatsView: View {
                 Text(CatNames.display(cat, in: store.household).text)
                     .font(.system(size: 10, weight: .bold, design: .rounded))
                     .lineLimit(1)
+                HStack(spacing: 4) {
+                    Text("Lv.\(bonds.level(of: cat.id))")
+                        .font(.system(size: 9, weight: .bold, design: .rounded))
+                        .monospacedDigit()
+                        .opacity(0.8)
+                    BondBar(progress: bonds.progress(of: cat.id), theme: theme)
+                }
+                .padding(.horizontal, 2)
             }
             .padding(5)
             .background(RoundedRectangle(cornerRadius: 8).fill(theme.surface.swiftUI))
@@ -191,12 +207,73 @@ struct MyCatsView: View {
         }
         .buttonStyle(.plain)
         .contextMenu {
+            if let price = store.catalog?.treatPrice, bonds.level(of: cat.id) < CatBondRules.maxLevel {
+                let priceText = AppLanguage.shared.string(StoreFormat.churu(price))
+                Button("Give churu · \(priceText)") { Task { await giveTreat(cat) } }
+            }
+            Button("Rename…") {
+                nameDraft = cat.name ?? ""
+                withAnimation(StoreDialogMotion.animation) { swapping = nil; renaming = cat }
+            }
             Button("Release…", role: .destructive) {
                 withAnimation(StoreDialogMotion.animation) { swapping = nil; releasing = cat }
             }
         }
         .matchedGeometryEffect(id: cat.id, in: catMovement)
         .accessibilityLabel(Text("\(CatNames.display(cat, in: store.household).text), \((inRoom ? "In the room" : "Outside") as LocalizedStringResource)" as LocalizedStringResource))
+    }
+
+    /// Typing happens inside the notch: while this dialog is up the notch stays open and its window takes the
+    /// keyboard (`NotchCoordinator.takesTyping`). Return saves, Escape cancels.
+    private func renameDialog(for cat: CatResidentRecord) -> some View {
+        let display = CatNames.display(cat, in: store.household)
+        let coatName = CatDisplayName(coat: cat.coat, ordinal: display.ordinal).text
+        return StoreDialog(theme: theme) {
+            CatFace(coat: cat.coat).frame(width: 44, height: 44)
+            Text("Name this cat")
+                .font(.system(size: 14, weight: .bold, design: .rounded))
+            TextField(text: $nameDraft, prompt: Text(coatName)) { Text("Name") }
+                .labelsHidden()
+                .textFieldStyle(.roundedBorder)
+                .font(.system(size: 13, design: .rounded))
+                .frame(width: 220)
+                .focused($nameFieldFocused)
+                .onSubmit { saveName(for: cat) }
+                .onChange(of: nameDraft) { _, text in
+                    if text.count > CatNames.maxNameLength { nameDraft = String(text.prefix(CatNames.maxNameLength)) }
+                }
+            Text("Leave it blank to use the coat name again.")
+                .font(.system(size: 11, design: .rounded)).opacity(0.75)
+            HStack {
+                Button("Cancel") { endRenaming() }.keyboardShortcut(.cancelAction)
+                Button("Save") { saveName(for: cat) }.keyboardShortcut(.defaultAction)
+            }
+        }
+        .onAppear {
+            coordinator.takesTyping = true
+            Task {
+                try? await Task.sleep(for: .milliseconds(80))
+                nameFieldFocused = true
+            }
+        }
+        .onDisappear { coordinator.takesTyping = false }
+    }
+
+    private func saveName(for cat: CatResidentRecord) {
+        let name = nameDraft
+        endRenaming()
+        Task {
+            let error = await store.rename(id: cat.id, to: name)
+            report(error)
+            if error == nil, let renamed = store.household.residents.first(where: { $0.id == cat.id }) {
+                notice.show("Now called \(CatNames.display(renamed, in: store.household).text)" as LocalizedStringResource)
+            }
+        }
+    }
+
+    private func endRenaming() {
+        nameFieldFocused = false
+        withAnimation(StoreDialogMotion.animation) { renaming = nil }
     }
 
     private func releaseConfirmation(for cat: CatResidentRecord) -> some View {
@@ -249,6 +326,20 @@ struct MyCatsView: View {
             withAnimation(.smooth) { swapping = swapping?.id == cat.id ? nil : cat }
         } else {
             report(await store.move(id: cat.id, toRoom: true))
+        }
+    }
+
+    private func giveTreat(_ cat: CatResidentRecord) async {
+        let name = CatNames.display(cat, in: store.household).text
+        switch await store.purchase(.treat(catID: cat.id)) {
+        case .treated(_, let level):
+            notice.show("\(name) enjoyed the churu · Lv.\(level)")
+        case .insufficient(let short):
+            notice.show("Not enough churu · \(TokenCount.compact(short)) short")
+        case .alreadyOwned:
+            notice.show("Already at Lv.\(CatBondRules.maxLevel)")
+        default:
+            notice.show("Could not give churu. Please try again")
         }
     }
 

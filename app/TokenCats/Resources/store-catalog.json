@@ -21,5 +21,6 @@
     { "id": "yarnBall", "price": 1000000 },
     { "id": "hideCrate", "price": 4000000 },
     { "id": "catTower", "price": 8000000 }
-  ]
+  ],
+  "treat": { "price": 1000000 }
 }

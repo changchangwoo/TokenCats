@@ -206,6 +206,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             hookScript: Bundle.main.url(forResource: "tokencats-hook", withExtension: "py"),
             statusLineScript: Bundle.main.url(forResource: "tokencats-statusline", withExtension: "py"))
         ProfileSync.shared.start()
+        CatBondModel.shared.start()
         AppUpdater.shared.start()
 
         NotificationCenter.default.addObserver(

@@ -7,11 +7,12 @@ struct DataFiles {
 
     static var live: DataFiles { DataFiles(directory: AppPaths.supportDirectory) }
 
-    /// Files a backup carries: the user's cats, churu, purchases, display choices and profile state.
+    /// Files a backup carries: the user's cats and their bonds, churu, purchases, display choices and profile state.
     /// Session and result caches are rebuilt from the agents, so they stay out.
     static var userDataNames: [String] {
         let files = DataFiles(directory: URL(fileURLWithPath: "/"))
-        return [files.cats.url, files.churu.url, files.inventory.url, files.uiDisplay.url, files.profileSync.url]
+        return [files.cats.url, files.churu.url, files.inventory.url, files.uiDisplay.url, files.profileSync.url,
+                files.bonds.url]
             .map(\.lastPathComponent)
     }
 
@@ -25,6 +26,8 @@ struct DataFiles {
     var uiDisplay: JSONFile<UIDisplaySettings> { file("ui-display.json") }
     /// GitHub connection and the last card upload.
     var profileSync: JSONFile<ProfileSyncState> { file("profile-sync.json") }
+    /// Every cat's bond level progress.
+    var bonds: JSONFile<CatBondBook> { file("bonds.json") }
     /// The GitHub App token from the device flow. Never part of a backup.
     var githubToken: SecretFile<UserToken> { SecretFile(url: directory.appendingPathComponent("github-token.json")) }
     /// Day totals from the agents' logs, so the year graph does not rescan every time.

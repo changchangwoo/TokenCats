@@ -20,6 +20,14 @@ struct CatHeartInteraction: Sendable {
         return true
     }
 
+    /// Starts a burst now whatever the cooldown; a treat is worth a heart even right after a pet.
+    mutating func force(at time: Double) {
+        guard time.isFinite else { return }
+        lastAcceptedAt = time
+        startedAt = time
+        side = Bool.random() ? .left : .right
+    }
+
     func progress(at time: Double) -> Double? {
         guard let startedAt else { return nil }
         let elapsed = time - startedAt

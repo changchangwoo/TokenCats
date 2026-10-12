@@ -1,12 +1,22 @@
 import AppKit
 import SwiftUI
 
+/// One entry of the room's right-click menu.
+struct RoomMenuItem {
+    let title: String
+    let action: () -> Void
+}
+
 /// Native hit regions, one per cat, so macOS owns the pointing-hand cursor and mouse dragging.
 struct CatInteractionSurface: NSViewRepresentable {
     let catHitRects: [CGRect]
     let onPetStart: (RoomPoint) -> Void
     let onPetMove: (RoomPoint) -> Void
     let onPetEnd: () -> Void
+    /// The pointer's room position while it is over the surface; nil once it leaves.
+    let onHover: (RoomPoint?) -> Void
+    /// Menu for a right-click (or control-click) at the point; empty for none.
+    let contextMenu: (RoomPoint) -> [RoomMenuItem]
 
     func makeNSView(context: Context) -> CatInteractionNSView { CatInteractionNSView() }
 
@@ -14,6 +24,8 @@ struct CatInteractionSurface: NSViewRepresentable {
         view.onPetStart = onPetStart
         view.onPetMove = onPetMove
         view.onPetEnd = onPetEnd
+        view.onHover = onHover
+        view.contextMenu = contextMenu
         if view.catHitRects != catHitRects {
             view.catHitRects = catHitRects
             view.window?.invalidateCursorRects(for: view)
@@ -33,6 +45,8 @@ final class CatInteractionNSView: NSView {
     var onPetStart: ((RoomPoint) -> Void)?
     var onPetMove: ((RoomPoint) -> Void)?
     var onPetEnd: (() -> Void)?
+    var onHover: ((RoomPoint?) -> Void)?
+    var contextMenu: ((RoomPoint) -> [RoomMenuItem])?
 
     private var hoverArea: NSTrackingArea?
     private var petting = false
@@ -69,12 +83,36 @@ final class CatInteractionNSView: NSView {
     override func mouseMoved(with event: NSEvent) { updatePointer(event) }
     override func mouseExited(with event: NSEvent) {
         NSCursor.arrow.set()
+        onHover?(nil)
     }
 
     override func mouseDown(with event: NSEvent) {
+        if event.modifierFlags.contains(.control), popMenu(for: event) { return }
         let point = localPoint(event)
         petting = hitsCat(point)
         if petting { onPetStart?(point) }
+    }
+
+    /// A cat's menu, or, off the cats, whatever the notch offers on a right-click (its Settings menu).
+    override func rightMouseDown(with event: NSEvent) {
+        if !popMenu(for: event) { super.rightMouseDown(with: event) }
+    }
+
+    /// Shows the menu for the point; false when there is none to show.
+    @discardableResult
+    private func popMenu(for event: NSEvent) -> Bool {
+        let items = contextMenu?(localPoint(event)) ?? []
+        guard !items.isEmpty else { return false }
+        let menu = NSMenu()
+        for item in items {
+            let target = MenuAction(item.action)
+            let entry = NSMenuItem(title: item.title, action: #selector(MenuAction.fire), keyEquivalent: "")
+            entry.target = target
+            entry.representedObject = target   // keeps the target alive while the menu is up
+            menu.addItem(entry)
+        }
+        NSMenu.popUpContextMenu(menu, with: event, for: self)
+        return true
     }
 
     override func mouseDragged(with event: NSEvent) {
@@ -93,6 +131,7 @@ final class CatInteractionNSView: NSView {
 
     private func updatePointer(_ event: NSEvent) {
         let point = localPoint(event)
+        onHover?(point)
         if hitsCat(point) {
             NSCursor.pointingHand.set()
         } else {
@@ -108,4 +147,11 @@ final class CatInteractionNSView: NSView {
         let point = convert(event.locationInWindow, from: nil)
         return RoomPoint(x: point.x, y: point.y)
     }
+}
+
+/// An Objective-C target for one closure, so an `NSMenuItem` can call it.
+private final class MenuAction: NSObject {
+    private let action: () -> Void
+    init(_ action: @escaping () -> Void) { self.action = action }
+    @objc func fire() { action() }
 }

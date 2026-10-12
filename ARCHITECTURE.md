@@ -34,6 +34,8 @@ Hook script → SocketServer → AgentHub      │   (session notices only; unre
                          ChuruLedger → ChuruModel (balance · today · streak · missions)
                                            │
                      StoreService ─ purchase ─▶ CatHousehold · StoreInventory (cats.json · inventory.json)
+                                  ─ treat ───▶ CatBondService ─▶ CatBondBook (bonds.json)
+CatRoom.pet (accepted heart) · CatBondModel 60 s presence tick ─▶ CatBondService
                                            │
                    CatRoomScene · CatRoomMotion ─▶ CatRoomView (room in the notch) / ClosedNotchView (closed notch)
                                            │
@@ -51,8 +53,8 @@ Hook script → SocketServer → AgentHub      │   (session notices only; unre
 
 ## App-lifetime state
 
-`StoreModel`, `ChuruModel`, `CostUsageModel`, `UsageLimitsModel`, `HomeUsageHistoryModel`, `UIDisplayModel`,
-`ProfileSync`, `CatSprites` and `CatRoomStage` are `.shared` singletons, because the notch window may be open on
+`StoreModel`, `ChuruModel`, `CatBondModel`, `CostUsageModel`, `UsageLimitsModel`, `HomeUsageHistoryModel`,
+`UIDisplayModel`, `ProfileSync`, `CatSprites` and `CatRoomStage` are `.shared` singletons, because the notch window may be open on
 several displays while the data must stay single.
 
 Rules:

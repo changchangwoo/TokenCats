@@ -9,6 +9,9 @@ final class CatRoomStage {
     private var lastTick: Date?
     private var householdChanges: AnyCancellable?
     var hiddenCount: Int { room.hiddenCount }
+    /// Where the pointer is over the room, or nil. Plain storage, not published: the room view reads it once per
+    /// timeline frame, so pointer motion never redraws the room on its own.
+    var hoverPoint: RoomPoint?
 
     private init() {
         let store = StoreModel.shared
@@ -29,11 +32,22 @@ final class CatRoomStage {
         return room.step(dt: delta, now: date.timeIntervalSinceReferenceDate, width: width)
     }
 
+    /// Pets the cat under the point; an accepted heart credits its bond.
     func pet(at date: Date, point: RoomPoint, baseline: Double) {
-        room.pet(at: date.timeIntervalSinceReferenceDate, point: point, baseline: baseline)
+        if let id = room.pet(at: date.timeIntervalSinceReferenceDate, point: point, baseline: baseline) {
+            CatBondModel.shared.pet(id)
+        }
     }
 
     func endPet(at date: Date) { room.endPet(at: date.timeIntervalSinceReferenceDate) }
+
+    /// Hearts for a cat that was just given a treat.
+    func celebrate(id: String, at date: Date) {
+        room.celebrate(id: id, at: date.timeIntervalSinceReferenceDate)
+    }
+
+    /// The front-most cat under the point, for the hover badge and the right-click menu.
+    func catID(at point: RoomPoint, baseline: Double) -> String? { room.catID(at: point, baseline: baseline) }
 
     private var cachedScene: (height: Double, calendar: ChuruMonthCalendar?, theme: RoomTheme, decor: RoomDecor,
                               scene: CatRoomScene)?

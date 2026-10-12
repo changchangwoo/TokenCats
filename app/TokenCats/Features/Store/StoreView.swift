@@ -370,7 +370,7 @@ struct StoreView: View {
         let result = await store.purchase(pending.product)
         let message: LocalizedStringResource?
         switch result {
-        case .adopted, .backgroundOwned, .propOwned:
+        case .adopted, .backgroundOwned, .propOwned, .treated:
             message = nil
         case .insufficient(let short):
             message = "\(TokenCount.compact(short)) churu short"

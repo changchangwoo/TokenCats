@@ -27,4 +27,20 @@ struct CatHeartInteractionTests {
         #expect(!third)
         #expect(fourth)
     }
+
+    @Test func forceStartsHeartsDuringTheCooldown() {
+        let cat = CatRoomMotion()
+        var hearts = CatHeartInteraction()
+        let point = RoomPoint(x: 80, y: 110)
+        let first = hearts.tap(at: 10, point: point, cat: cat, baseline: 172)
+        #expect(first)
+        hearts.force(at: 10.5)
+        #expect(hearts.progress(at: 10.6) != nil)
+        #expect(abs((hearts.progress(at: 10.6) ?? 0) - 0.1 / CatHeartInteraction.duration) < 0.0001)
+        // The forced burst also restarts the cooldown.
+        let tooSoon = hearts.tap(at: 11.9, point: point, cat: cat, baseline: 172)
+        let afterCooldown = hearts.tap(at: 12.0, point: point, cat: cat, baseline: 172)
+        #expect(!tooSoon)
+        #expect(afterCooldown)
+    }
 }

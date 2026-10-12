@@ -11,6 +11,7 @@ private struct Fixture {
     let churuFile: JSONFile<ChuruLedger>
     let catsFile: JSONFile<CatHousehold>
     let inventoryFile: JSONFile<StoreInventory>
+    let bondsFile: JSONFile<CatBondBook>
 
     init(tokens: Int, cats: CatHousehold? = nil, catsFileOverride: URL? = nil, free: Bool = false) throws {
         dir = try makeTempDirectory()
@@ -26,6 +27,7 @@ private struct Fixture {
         catsFile = JSONFile(url: catsFileOverride ?? dir.appendingPathComponent("cats.json"))
         if let cats { catsFile.save(cats) }
         inventoryFile = JSONFile(url: dir.appendingPathComponent("inventory.json"))
+        bondsFile = JSONFile(url: dir.appendingPathComponent("bonds.json"))
         let themes = try RoomThemeCatalog(data: Data(contentsOf: resources.appendingPathComponent("room-themes.json")))
         let coats: Set<String> = ["black", "white", "cheese", "tuxedo", "tabby", "split", "siamese", "cream", "foxfire", "norwegian", "sphynx"]
         let catalog = try StoreCatalog(data: Data(contentsOf: resources.appendingPathComponent("store-catalog.json")),
@@ -33,7 +35,8 @@ private struct Fixture {
                                        defaultBackgroundID: themes.defaultID)
         let tracker = ChuruTracker(reader: TokenUsageReader(roots: .init(claude: [dir.appendingPathComponent("claude")], codex: [])),
                                    file: churuFile)
-        service = StoreService(catalog: free ? catalog.freeForTesting() : catalog, tracker: tracker, catsFile: catsFile, inventoryFile: inventoryFile,
+        service = StoreService(catalog: free ? catalog.freeForTesting() : catalog, tracker: tracker,
+                               bonds: CatBondService(file: bondsFile), catsFile: catsFile, inventoryFile: inventoryFile,
                                defaultBackground: themes.defaultID, drawableCoats: coats, seed: 9)
     }
 }
@@ -126,6 +129,90 @@ struct StoreServiceTests {
         #expect(fixture.service.household.residents.count == 61)
     }
 
+    @Test func treatSpendsChuruAndCreditsTheBond() throws {
+        var one = CatHousehold(residents: [])
+        one.adopt(coat: "black")
+        let fixture = try Fixture(tokens: 3_000_000, cats: one)
+        let outcome = fixture.service.purchase(.treat(catID: "black-1"))
+        #expect(outcome.result == .treated(catID: "black-1", level: 4))
+        #expect(outcome.snapshot.balance == 2_000_000)
+        #expect(outcome.bonds.record(of: "black-1").points == 1_000)
+        #expect(fixture.churuFile.load()?.spent == 1_000_000)
+        #expect(fixture.inventoryFile.load()?.purchases.last?.product == "treat")
+        #expect(fixture.inventoryFile.load()?.purchases.last?.result == "black-1")
+        #expect(fixture.bondsFile.load()?.level(of: "black-1") == 4)
+        #expect(fixture.service.bondBook == outcome.bonds)
+    }
+
+    @Test func treatShortOfChuruChangesNothing() throws {
+        var one = CatHousehold(residents: [])
+        one.adopt(coat: "black")
+        let fixture = try Fixture(tokens: 400_000, cats: one)
+        #expect(fixture.service.purchase(.treat(catID: "black-1")).result == .insufficient(short: 600_000))
+        #expect(fixture.bondsFile.load() == nil)
+        #expect(fixture.churuFile.load()?.spent == 0)
+    }
+
+    @Test func treatForAnUnknownCatFails() throws {
+        let fixture = try Fixture(tokens: 3_000_000)
+        #expect(fixture.service.purchase(.treat(catID: "ghost-1")).result == .failed)
+        #expect(fixture.churuFile.load()?.spent == 0)
+        #expect(fixture.bondsFile.load() == nil)
+    }
+
+    @Test func freeCatalogTreatsForNothing() throws {
+        var one = CatHousehold(residents: [])
+        one.adopt(coat: "black")
+        let fixture = try Fixture(tokens: 0, cats: one, free: true)
+        #expect(fixture.service.purchase(.treat(catID: "black-1")).result == .treated(catID: "black-1", level: 4))
+        #expect(fixture.churuFile.load()?.spent == 0)
+        #expect(fixture.bondsFile.load()?.record(of: "black-1").points == 1_000)
+        #expect(fixture.inventoryFile.load()?.purchases.last?.price == 0)
+    }
+
+    @Test func storedCatsCanBeTreated() throws {
+        var full = CatHousehold(residents: [])
+        for _ in 0..<5 { full.adopt(coat: "black") }   // the fifth waits in storage
+        let fixture = try Fixture(tokens: 3_000_000, cats: full)
+        #expect(fixture.service.household.storedResidents.map(\.id) == ["black-5"])
+        #expect(fixture.service.purchase(.treat(catID: "black-5")).result == .treated(catID: "black-5", level: 4))
+    }
+
+    @Test func treatAtTheLastLevelIsRefusedAndNotCharged() throws {
+        var one = CatHousehold(residents: [])
+        one.adopt(coat: "black")
+        let fixture = try Fixture(tokens: 40_000_000, cats: one)
+        for _ in 0..<30 { _ = fixture.service.purchase(.treat(catID: "black-1")) }
+        #expect(fixture.service.bondBook.level(of: "black-1") == 99)
+        #expect(fixture.churuFile.load()?.spent == 30_000_000)
+        let purchases = fixture.inventoryFile.load()?.purchases.count
+        #expect(fixture.service.purchase(.treat(catID: "black-1")).result == .alreadyOwned)
+        #expect(fixture.churuFile.load()?.spent == 30_000_000)
+        #expect(fixture.inventoryFile.load()?.purchases.count == purchases)
+    }
+
+    @Test func renamesGoThroughTheServiceAndAreSaved() throws {
+        var one = CatHousehold(residents: [])
+        one.adopt(coat: "black")
+        let fixture = try Fixture(tokens: 0, cats: one)
+        #expect(fixture.service.rename(id: "black-1", to: "Mochi") == .success(fixture.service.household))
+        #expect(fixture.service.household.residents[0].name == "Mochi")
+        #expect(fixture.catsFile.load()?.residents[0].name == "Mochi")
+        #expect(fixture.service.rename(id: "ghost-1", to: "x") == .failure(.unknownCat))
+    }
+
+    @Test func releaseForgetsTheBond() throws {
+        var two = CatHousehold(residents: [])
+        two.adopt(coat: "black")
+        two.adopt(coat: "white")
+        let fixture = try Fixture(tokens: 3_000_000, cats: two)
+        _ = fixture.service.purchase(.treat(catID: "white-1"))
+        #expect(fixture.bondsFile.load()?.bonds.keys.contains("white-1") == true)
+        #expect(fixture.service.release(id: "white-1") == .success(fixture.service.household))
+        #expect(fixture.bondsFile.load()?.bonds.keys.contains("white-1") == false)
+        #expect(fixture.service.bondBook.level(of: "white-1") == 1)
+    }
+
     @Test func failedSaveKeepsTheChuru() throws {
         // cats.json's parent is a regular file, so saving it fails.
         let blocker = try makeTempDirectory().appendingPathComponent("blocker")
@@ -197,6 +284,7 @@ struct StoreServiceTests {
         let fixture = try Fixture(tokens: 30_000_000)
         let closed = StoreService(catalog: nil, tracker: ChuruTracker(
             reader: TokenUsageReader(roots: .init(claude: [], codex: [])), file: fixture.churuFile),
+            bonds: CatBondService(file: fixture.bondsFile),
             catsFile: fixture.catsFile, inventoryFile: fixture.inventoryFile, defaultBackground: "cozy",
             drawableCoats: ["black"], seed: 1)
         #expect(closed.purchase(.catBox).result == .failed)

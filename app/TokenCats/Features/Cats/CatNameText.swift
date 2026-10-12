@@ -22,8 +22,9 @@ extension CatDisplayName {
 
     var coatName: LocalizedStringResource { Self.coatTitle(coat) }
 
-    /// "Cheese" or "Cheese 2".
+    /// The given name, or "Cheese" or "Cheese 2".
     var text: LocalizedStringResource {
-        ordinal.map { "\(coatName) \($0)" } ?? coatName
+        if let custom { return "\(custom)" }
+        return ordinal.map { "\(coatName) \($0)" } ?? coatName
     }
 }

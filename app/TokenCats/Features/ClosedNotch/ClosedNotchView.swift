@@ -17,7 +17,7 @@ struct ClosedNotchView: View {
 
     /// The room's cats that have art, in room order.
     @MainActor static func cats(in household: CatHousehold) -> [CatResidentRecord] {
-        household.roomResidents.filter { CatSprites.shared.hasArt(coat: $0.coat) }
+        household.roomResidentsByEntry.filter { CatSprites.shared.hasArt(coat: $0.coat) }
     }
 
     var body: some View {

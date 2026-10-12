@@ -128,6 +128,12 @@ struct ContentView: View {
                             }
                         }
                     }
+                    // TokenCats: once typing inside the notch ends, close if the pointer already left meanwhile.
+                    .onChange(of: coordinator.takesTyping) { _, typing in
+                        if !typing && !isHovering && vm.notchState == .open {
+                            vm.close()
+                        }
+                    }
                     .sensoryFeedback(.alignment, trigger: haptics)
                     .contextMenu {
                         Button("Settings") {
@@ -265,7 +271,8 @@ struct ContentView: View {
                         self.isHovering = false
                     }
                     
-                    if self.vm.notchState == .open {
+                    // TokenCats: a screen taking typed input keeps the notch open until it is done.
+                    if self.vm.notchState == .open && !self.coordinator.takesTyping {
                         self.vm.close()
                     }
                 }

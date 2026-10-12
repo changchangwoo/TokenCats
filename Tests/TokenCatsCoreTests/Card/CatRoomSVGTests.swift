@@ -138,6 +138,40 @@ struct CatRoomSVGTests {
         #expect(first == second)
     }
 
+    @Test func eachCatWearsItsLevelTagInPixels() {
+        let levelled = [CatRoomSVGCat(id: "black-1", coat: "black", level: 42),
+                        CatRoomSVGCat(id: "white-1", coat: "white", level: 7)]
+        // The calendar is taken down: cozy's ink is also the calendar's paper colour.
+        let svg = CatRoomSVG.render(calendar: october(), cats: levelled, frames: frames, theme: .cozy,
+                                    showsCalendar: false, showsLevels: true)
+        let ink = RoomTheme.cozy.ink
+        // Letters in ink on a plaque in the panel colour: the pair the card's stats already use, readable on any floor.
+        let letterFill = #"fill="\#(ink.hex)"/>"#
+        let plaqueFill = #"class="level" "#
+        let expected = PixelGlyphs.rects("LV 42", left: 0, top: 0, color: ink).count
+            + PixelGlyphs.rects("LV 7", left: 0, top: 0, color: ink).count
+        #expect(occurrences(letterFill, in: svg) == expected)
+        #expect(occurrences(plaqueFill, in: svg) == 2)
+        #expect(svg.contains(#"fill="\#(RoomTheme.cozy.panel.hex)"/>"#))
+        #expect(!svg.contains("<text"))
+        // The tag sits in the floor gap under the cat: inside the cat's own svg, below its 96 pixels.
+        #expect(svg.contains(#"y="\#(CatRoomSVG.levelTagTop)""#))
+        // Level 1 is the default and is drawn too.
+        let plain = CatRoomSVG.render(calendar: october(), cats: cats, frames: frames, theme: .cozy,
+                                      showsCalendar: false, showsLevels: true)
+        #expect(occurrences(letterFill, in: plain) == 2 * PixelGlyphs.rects("LV 1", left: 0, top: 0, color: ink).count)
+    }
+
+    /// Levels are private until the user switches them on: the default card carries no tag at all.
+    @Test func levelTagsStayOffTheCardUnlessAsked() {
+        let levelled = [CatRoomSVGCat(id: "black-1", coat: "black", level: 42)]
+        let off = CatRoomSVG.render(calendar: october(), cats: levelled, frames: frames, theme: .cozy)
+        #expect(!off.contains(#"class="level""#))
+        let on = CatRoomSVG.render(calendar: october(), cats: levelled, frames: frames, theme: .cozy, showsLevels: true)
+        #expect(on.contains(#"class="level""#))
+        #expect(off != on)
+    }
+
     @Test func carriesNoTextDatesOrTokenNumbers() {
         let svg = CatRoomSVG.render(calendar: october(), cats: cats, frames: frames)
         #expect(!svg.contains("<text"))

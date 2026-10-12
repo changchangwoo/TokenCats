@@ -111,6 +111,7 @@ struct GitHubConnectSection: View {
             switch item {
             case .numbers: language.string("Token numbers")
             case .year: language.string("Contribution graph and streak")
+            case .levels: language.string("Cat bond levels")
             }
         }
         let shown = ([language.string("The cat room")] + items).joined(separator: ", ")

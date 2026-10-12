@@ -30,6 +30,7 @@ final class StoreModel: ObservableObject {
         let priced = StoreCatalog.bundled(coats: coats, themes: themes)
         catalog = isFreeForTesting ? priced?.freeForTesting() : priced
         service = StoreService(catalog: catalog, tracker: ChuruModel.shared.tracker,
+                               bonds: CatBondModel.shared.service,
                                catsFile: DataFiles.live.cats,
                                inventoryFile: DataFiles.live.inventory,
                                defaultBackground: themes.defaultID,
@@ -50,6 +51,7 @@ final class StoreModel: ObservableObject {
         let outcome = await ChuruModel.shared.perform { service.purchase(product) }
         household = outcome.household
         inventory = outcome.inventory
+        CatBondModel.shared.publish(outcome.bonds)
         ChuruModel.shared.publish(outcome.snapshot)
         return outcome.result
     }
@@ -64,10 +66,20 @@ final class StoreModel: ObservableObject {
         return saved
     }
 
-    /// Nil on success. A full room brings a stored cat in this way.
+    /// Nil on success. A blank name takes the coat name back.
+    func rename(id: String, to name: String) async -> CatHousehold.MoveError? {
+        let service = service
+        return apply(await ChuruModel.shared.perform { service.rename(id: id, to: name) })
+    }
+
+    /// Nil on success. The released cat's bond is forgotten with it.
     func release(id: String) async -> CatHousehold.MoveError? {
         let service = service
-        return apply(await ChuruModel.shared.perform { service.release(id: id) })
+        // The book is read on the churu queue, where the bond service lives.
+        let (result, bonds) = await ChuruModel.shared.perform { (service.release(id: id), service.bondBook) }
+        let error = apply(result)
+        if error == nil { CatBondModel.shared.publish(bonds) }
+        return error
     }
 
     func swap(roomID: String, storedID: String) async -> CatHousehold.MoveError? {

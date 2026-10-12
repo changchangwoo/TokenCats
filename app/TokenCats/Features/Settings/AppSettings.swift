@@ -13,6 +13,7 @@ enum AppSettings {
         static let missionsExpanded = "companionMissionsExpanded"
         static let profileShowsNumbers = "profileShowsTokenNumbers"
         static let profileShowsYear = "profileShowsYear"
+        static let profileShowsLevels = "profileShowsLevels"
         static let profileSyncMode = "profileSyncMode"
         /// The applied room background.
         static let roomTheme = RoomThemeSelection.key
@@ -45,7 +46,8 @@ enum AppSettings {
 
     static var profileCardOptions: ProfileCardOptions {
         ProfileCardOptions(showsNumbers: bool(Key.profileShowsNumbers, default: Default.profileShowsNumbers),
-                           showsYear: bool(Key.profileShowsYear, default: Default.profileShowsYear))
+                           showsYear: bool(Key.profileShowsYear, default: Default.profileShowsYear),
+                           showsLevels: bool(Key.profileShowsLevels, default: Default.profileShowsLevels))
     }
 
     static var profileSyncMode: ProfileSyncMode {

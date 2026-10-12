@@ -14,12 +14,14 @@ struct DataFilesTests {
         #expect(files.dailyHistory.url.lastPathComponent == "daily-history.json")
         #expect(files.results.url.lastPathComponent == "results.json")
         #expect(files.sessions.url.lastPathComponent == "sessions.json")
+        #expect(files.bonds.url.lastPathComponent == "bonds.json")
     }
 
     /// A backup carries exactly the user's data, and the list lives with the file names.
     @Test func backupCarriesTheUserDataFiles() {
         #expect(Backup.files == DataFiles.userDataNames)
-        #expect(Set(DataFiles.userDataNames) == ["cats.json", "churu.json", "inventory.json", "ui-display.json", "profile-sync.json"])
+        #expect(Set(DataFiles.userDataNames) == ["cats.json", "churu.json", "inventory.json", "ui-display.json",
+                                                 "profile-sync.json", "bonds.json"])
     }
 
     @Test func liveFilesSitInTheSupportDirectory() {

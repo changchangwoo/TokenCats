@@ -29,6 +29,11 @@ struct StoreCatalog: Equatable, Sendable {
         let price: Int
     }
 
+    /// Churu given to one cat for bond points. Optional; a catalog without it sells no treats.
+    struct TreatOffer: Codable, Equatable, Sendable {
+        let price: Int
+    }
+
     /// A tier's real chance once coats without art are left out, with the coats it can still give.
     struct BoxOdds: Equatable, Sendable {
         let tier: Tier
@@ -48,11 +53,13 @@ struct StoreCatalog: Equatable, Sendable {
         case schema, boxPrice, tierWeight, duplicateCoat, unknownCoat(String)
         case duplicateBackground, unknownBackground(String), freeBackground
         case duplicateProp, unknownProp(String), propPrice
+        case treatPrice
     }
 
     let catBox: CatBox
     let backgrounds: [BackgroundOffer]
     let props: [PropOffer]
+    let treat: TreatOffer?
 
     /// `coats` are the coats in `cat-assets.json`; the background ids and default come from the room themes.
     init(data: Data, coats: Set<String>, backgroundIDs: Set<String>, defaultBackgroundID: String) throws {
@@ -79,22 +86,26 @@ struct StoreCatalog: Equatable, Sendable {
             throw Invalid.unknownProp(unknown)
         }
         guard props.allSatisfy({ $0.price > 0 }) else { throw Invalid.propPrice }
+        if let treat = manifest.treat { guard treat.price > 0 else { throw Invalid.treatPrice } }
         catBox = manifest.catBox
         backgrounds = manifest.backgrounds
         self.props = props
+        treat = manifest.treat
     }
 
     /// The same catalog with every price at zero, for trying the store without spending churu.
     func freeForTesting() -> StoreCatalog {
         StoreCatalog(catBox: CatBox(price: 0, tiers: catBox.tiers, showcase: catBox.showcase),
                      backgrounds: backgrounds.map { BackgroundOffer(id: $0.id, price: 0) },
-                     props: props.map { PropOffer(id: $0.id, price: 0) })
+                     props: props.map { PropOffer(id: $0.id, price: 0) },
+                     treat: treat.map { _ in TreatOffer(price: 0) })
     }
 
-    private init(catBox: CatBox, backgrounds: [BackgroundOffer], props: [PropOffer]) {
+    private init(catBox: CatBox, backgrounds: [BackgroundOffer], props: [PropOffer], treat: TreatOffer?) {
         self.catBox = catBox
         self.backgrounds = backgrounds
         self.props = props
+        self.treat = treat
     }
 
     func price(ofBackground id: String) -> Int? {
@@ -104,6 +115,9 @@ struct StoreCatalog: Equatable, Sendable {
     func price(ofProp prop: RoomProp) -> Int? {
         props.first { $0.id == prop.rawValue }?.price
     }
+
+    /// The treat's price, or nil when the catalog sells none.
+    var treatPrice: Int? { treat?.price }
 
     /// The coats the store's teaser shows around the box, at most `limit` (four a side): the catalog's showcase
     /// order first, then the box's other coats in tier order. Coats without art are skipped.
@@ -178,4 +192,5 @@ private struct Manifest: Decodable {
     let catBox: StoreCatalog.CatBox
     let backgrounds: [StoreCatalog.BackgroundOffer]
     let props: [StoreCatalog.PropOffer]?
+    let treat: StoreCatalog.TreatOffer?
 }

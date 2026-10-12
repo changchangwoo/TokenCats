@@ -4,6 +4,7 @@ import SwiftUI
 struct ProfileSettings: View {
     @AppStorage(AppSettings.Key.profileShowsNumbers) private var showsNumbers = AppSettings.Default.profileShowsNumbers
     @AppStorage(AppSettings.Key.profileShowsYear) private var showsYear = AppSettings.Default.profileShowsYear
+    @AppStorage(AppSettings.Key.profileShowsLevels) private var showsLevels = AppSettings.Default.profileShowsLevels
     @AppStorage(AppSettings.Key.profileSyncMode) private var syncMode = AppSettings.Default.profileSyncMode
     @ObservedObject private var sync = ProfileSync.shared
     @State private var notice: LocalizedStringResource?
@@ -14,6 +15,7 @@ struct ProfileSettings: View {
             Section {
                 Toggle("Contribution graph and streak", isOn: $showsYear)
                 Toggle("Token numbers", isOn: $showsNumbers)
+                Toggle("Cat bond levels", isOn: $showsLevels)
             } header: {
                 Text("Card contents")
             } footer: {

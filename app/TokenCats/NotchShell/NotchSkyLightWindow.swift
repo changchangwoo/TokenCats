@@ -77,6 +77,28 @@ class NotchSkyLightWindow: NSPanel {
                 self?.updateSharingType()
             }
             .store(in: &observers)
+        // TokenCats: while a notch screen takes typing, the window under the pointer becomes key so a text field
+        // inside it gets the keyboard; it gives the keyboard back as soon as the typing is over.
+        NotchCoordinator.shared.$takesTyping
+            .receive(on: RunLoop.main)
+            .sink { [weak self] typing in
+                self?.setTakesTyping(typing)
+            }
+            .store(in: &observers)
+    }
+
+    /// True only while a text field inside the notch needs the keyboard (`NotchCoordinator.takesTyping`).
+    private var acceptsKeyboard = false
+
+    private func setTakesTyping(_ typing: Bool) {
+        if typing {
+            guard frame.contains(NSEvent.mouseLocation) else { return }
+            acceptsKeyboard = true
+            makeKey()
+        } else {
+            acceptsKeyboard = false
+            if isKeyWindow { resignKey() }
+        }
     }
     
     private func updateSharingType() {
@@ -103,6 +125,6 @@ class NotchSkyLightWindow: NSPanel {
     
     private var observers: Set<AnyCancellable> = []
     
-    override var canBecomeKey: Bool { false }
+    override var canBecomeKey: Bool { acceptsKeyboard }
     override var canBecomeMain: Bool { false }
 }

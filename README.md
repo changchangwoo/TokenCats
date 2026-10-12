@@ -41,6 +41,7 @@
 
 - With the notch closed, the cats sit on either side of it.
 - Hover the notch and the room opens. Inside, the cats walk around, groom themselves, and float a heart when you pet them.
+- Pet a cat, or right-click it to give churu, and its bond level climbs toward 99. Hover a cat to see the level, and switch on "Cat bond levels" in Settings › GitHub profile to show it on your card.
 - Below the room you can see your churu, today's tokens, and your Claude and Codex usage limits.
 
 ### How it works

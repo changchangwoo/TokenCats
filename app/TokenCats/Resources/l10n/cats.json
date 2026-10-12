@@ -53,5 +53,18 @@
   "%@ room preview": "%@ 방 미리보기",
   "Cat room": "고양이 방",
   "%lld cats in the room": "방 고양이 %lld마리",
-  "%lld cats in the room|one": "%lld cat in the room"
+  "%lld cats in the room|one": "%lld cat in the room",
+  "Lv.%lld": "Lv.%lld",
+  "Bond level %lld": "친밀도 %lld레벨",
+  "Give churu · %@": "츄르 주기 · %@",
+  "Not enough churu · %@ short": "츄르가 부족해요 · %@ 모자람",
+  "Could not give churu. Please try again": "츄르를 주지 못했어요. 다시 시도해 주세요",
+  "%@ enjoyed the churu · Lv.%lld": "%@, 츄르 맛있게 먹었어요 · Lv.%lld",
+  "Already at Lv.%lld": "이미 Lv.%lld이에요",
+  "Rename…": "이름 바꾸기…",
+  "Name this cat": "고양이 이름 짓기",
+  "Leave it blank to use the coat name again.": "비워 두면 다시 코트 이름으로 불러요. 최대 16자.",
+  "Save": "저장",
+  "Now called %@": "이제 %@ 라고 불러요",
+  "Name": "이름"
 }
