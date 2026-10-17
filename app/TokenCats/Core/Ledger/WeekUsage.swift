@@ -4,6 +4,8 @@ struct WeekUsageDay: Equatable, Sendable {
     let dayKey: String
     let weekday: Int
     let tokens: Int
+    /// Empty when only the day totals are known (the history file, before the first log scan).
+    var providers: [TokenProvider: Int] = [:]
 }
 
 /// A rolling seven-day window ending today, in the user's local calendar.
@@ -12,13 +14,16 @@ struct WeekUsage: Equatable, Sendable {
     var total: Int { days.reduce(0) { $0 + $1.tokens } }
     var peak: Int { days.map(\.tokens).max() ?? 0 }
 
-    static func make(dailyTokens: [String: Int], today: Date, calendar: Calendar) -> WeekUsage {
+    func total(of provider: TokenProvider) -> Int { days.reduce(0) { $0 + ($1.providers[provider] ?? 0) } }
+
+    static func make(dailyTokens: [String: Int], today: Date, calendar: Calendar,
+                     byProvider: [String: [TokenProvider: Int]] = [:]) -> WeekUsage {
         let noon = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: today) ?? today
         let days = (0..<7).reversed().map { offset in
             let date = calendar.date(byAdding: .day, value: -offset, to: noon) ?? noon
             let key = ChuruLedger.dayKey(date, calendar)
             return WeekUsageDay(dayKey: key, weekday: calendar.component(.weekday, from: date),
-                                tokens: dailyTokens[key] ?? 0)
+                                tokens: dailyTokens[key] ?? 0, providers: byProvider[key] ?? [:])
         }
         return WeekUsage(days: days)
     }

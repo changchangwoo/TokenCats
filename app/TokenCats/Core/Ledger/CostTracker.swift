@@ -23,6 +23,8 @@ struct CostSnapshot: Equatable, Sendable {
     let today: [TokenProvider: ProviderCostSummary]
     let week: [TokenProvider: ProviderCostSummary]
     let dailyTokens: [String: Int]
+    /// The same days split by provider, for the stacked bars in Statistics.
+    let dailyByProvider: [String: [TokenProvider: Int]]
 
     var todayTotal: ProviderCostSummary { Self.total(today) }
     var weekTotal: ProviderCostSummary { Self.total(week) }
@@ -56,14 +58,16 @@ final class CostTracker: @unchecked Sendable {
         var today: [TokenProvider: ProviderCostSummary] = [:]
         var week: [TokenProvider: ProviderCostSummary] = [:]
         var dailyTokens: [String: Int] = [:]
+        var dailyByProvider: [String: [TokenProvider: Int]] = [:]
         for entry in reader.entries(modifiedSince: start) where entry.timestamp >= start && entry.timestamp <= now {
             week[entry.provider, default: ProviderCostSummary()].add(entry, catalog: catalog)
             let day = ChuruLedger.dayKey(entry.timestamp, calendar)
             dailyTokens[day, default: 0] += entry.processed
+            dailyByProvider[day, default: [:]][entry.provider, default: 0] += entry.processed
             if day == todayKey {
                 today[entry.provider, default: ProviderCostSummary()].add(entry, catalog: catalog)
             }
         }
-        return CostSnapshot(today: today, week: week, dailyTokens: dailyTokens)
+        return CostSnapshot(today: today, week: week, dailyTokens: dailyTokens, dailyByProvider: dailyByProvider)
     }
 }

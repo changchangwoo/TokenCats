@@ -16,6 +16,18 @@ struct WeekUsageTests {
         #expect(week.total == 600)
     }
 
+    /// The Statistics chart stacks each day's bar by provider.
+    @Test func daysCarryTheirProviderSplit() {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
+        let today = calendar.date(from: DateComponents(year: 2026, month: 10, day: 10, hour: 20))!
+        let week = WeekUsage.make(dailyTokens: ["2026-10-10": 300], today: today, calendar: calendar,
+                                  byProvider: ["2026-10-10": [.claude: 200, .codex: 100]])
+        #expect(week.days.last?.providers == [.claude: 200, .codex: 100])
+        #expect(week.days.first?.providers == [:])
+        #expect(week.total(of: .codex) == 100)
+    }
+
     /// Missions sit last: the balance and the agent limits are what a working day glances at.
     @Test func homeLedgerIsBalanceThenLimitsThenHistoryThenMissions() {
         #expect(HomeLayout.sections(for: .default) == [.balance, .limits, .history, .missions])

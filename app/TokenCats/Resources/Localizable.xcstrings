@@ -111,6 +111,17 @@
         }
       }
     },
+    "%@ estimated": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "예상 %@"
+          }
+        }
+      }
+    },
     "%@ hook removed": {
       "extractionState": "manual",
       "localizations": {
@@ -162,6 +173,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ 토큰"
+          }
+        }
+      }
+    },
+    "%@ tokens · Last 365 days": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 토큰 · 지난 365일"
           }
         }
       }
@@ -417,17 +439,6 @@
         }
       }
     },
-    "365-day total": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "365일 합계"
-          }
-        }
-      }
-    },
     "5-hour": {
       "extractionState": "manual",
       "localizations": {
@@ -439,13 +450,13 @@
         }
       }
     },
-    "7 days by provider": {
+    "7 days": {
       "extractionState": "manual",
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "7일 제공자별"
+            "value": "7일"
           }
         }
       }
@@ -490,6 +501,35 @@
           "stringUnit": {
             "state": "translated",
             "value": "강조색"
+          }
+        }
+      }
+    },
+    "Active %lld days in a row!": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Active %lld day in a row!"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Active %lld days in a row!"
+                }
+              }
+            }
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld일 연속 활동 중!"
           }
         }
       }
@@ -1990,6 +2030,17 @@
         }
       }
     },
+    "Current streak": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "현재 연속 기록"
+          }
+        }
+      }
+    },
     "Custom": {
       "extractionState": "manual",
       "localizations": {
@@ -2008,6 +2059,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "일간"
+          }
+        }
+      }
+    },
+    "Daily token consumption": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일별 토큰 사용량"
           }
         }
       }
@@ -2672,6 +2734,17 @@
         }
       }
     },
+    "Keep the streak alive": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연속 기록을 이어가요"
+          }
+        }
+      }
+    },
     "Language": {
       "extractionState": "manual",
       "localizations": {
@@ -2712,6 +2785,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "홈에 최근 7일 요약"
+          }
+        }
+      }
+    },
+    "Last 7 days · Token share": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최근 7일 · 토큰 비중"
           }
         }
       }
@@ -2800,6 +2884,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "벽 왼쪽"
+          }
+        }
+      }
+    },
+    "Less": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "적음"
           }
         }
       }
@@ -2932,6 +3027,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "월"
+          }
+        }
+      }
+    },
+    "More": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "많음"
           }
         }
       }
@@ -3651,6 +3757,17 @@
         }
       }
     },
+    "Providers": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "제공자"
+          }
+        }
+      }
+    },
     "Publish the card on your GitHub profile?": {
       "extractionState": "manual",
       "localizations": {
@@ -4157,6 +4274,17 @@
         }
       }
     },
+    "Scroll down": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "아래로 스크롤"
+          }
+        }
+      }
+    },
     "See your Claude limits": {
       "extractionState": "manual",
       "localizations": {
@@ -4406,6 +4534,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "스핑크스"
+          }
+        }
+      }
+    },
+    "Start a streak today": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘부터 연속 기록을 시작해요"
           }
         }
       }
@@ -4905,6 +5044,17 @@
         }
       }
     },
+    "Today so far": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "오늘은 집계 중"
+          }
+        }
+      }
+    },
     "Today's missions": {
       "extractionState": "manual",
       "localizations": {
@@ -4934,6 +5084,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "오늘 사용량"
+          }
+        }
+      }
+    },
+    "Token activity": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "토큰 활동"
           }
         }
       }
@@ -5191,17 +5352,6 @@
         }
       }
     },
-    "Usage streak": {
-      "extractionState": "manual",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "연속 사용"
-          }
-        }
-      }
-    },
     "Use 1M tokens": {
       "extractionState": "manual",
       "localizations": {
@@ -5433,6 +5583,17 @@
         }
       }
     },
+    "Your coding journey": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "나의 코딩 여정"
+          }
+        }
+      }
+    },
     "Your current status line keeps showing as it is.": {
       "extractionState": "manual",
       "localizations": {
@@ -5462,6 +5623,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "츄르"
+          }
+        }
+      }
+    },
+    "day": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일"
+          }
+        }
+      }
+    },
+    "days": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일"
           }
         }
       }

@@ -104,6 +104,15 @@ enum DebugSnapshots {
             await drawInWindow(CatRoomView(theme: store.theme(id: AppSettings.roomThemeID)),
                                size: CGSize(width: 616, height: 190),
                                to: URL(fileURLWithPath: dir).appendingPathComponent("cat-room.png"))
+            // Statistics scrolls (an AppKit scroll view), so it goes through the window too, once the year is built.
+            let history = HomeUsageHistoryModel.shared
+            if let churu = ChuruModel.shared.snapshot {
+                history.refresh(day: churu.day, todayTokens: churu.todayTokens)
+            }
+            for _ in 0..<40 where history.year == nil { try? await Task.sleep(for: .milliseconds(250)) }
+            await drawInWindow(StatisticsTabView().background(Color.black).environment(\.colorScheme, .dark),
+                               size: CGSize(width: 640, height: statisticsNotchHeight - 40),
+                               to: URL(fileURLWithPath: dir).appendingPathComponent("statistics.png"))
             for (name, view) in pages {
                 switch name {
                 case "store-adopt": store.route = .adopt

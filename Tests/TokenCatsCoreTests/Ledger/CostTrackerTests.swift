@@ -25,5 +25,7 @@ struct CostTrackerTests {
         #expect(snapshot.week[.claude]?.tokens == 2_000_000)
         #expect(snapshot.todayTotal.estimate.label == "$4.00")
         #expect(snapshot.weekTotal.estimate.label == "$8.00")
+        #expect(snapshot.dailyByProvider["2026-10-09"] == [.claude: 1_000_000])
+        #expect(snapshot.dailyByProvider["2026-10-10"] == [.claude: 1_000_000])
     }
 }
