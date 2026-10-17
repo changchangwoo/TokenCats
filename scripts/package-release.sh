@@ -7,7 +7,9 @@
 #   CHANGELOG.md                            (a new section for this version from the notes, above the last one)
 # Usage: scripts/package-release.sh [release-notes.md]
 #   The notes file's "- " lines become the update's release notes, shown by the app before installing, and the
-#   version's CHANGELOG section (the [Unreleased] section is emptied).
+#   version's CHANGELOG section (the [Unreleased] section is emptied). A Korean copy next to it (release-notes.ko.md)
+#   becomes the notes Macs set to Korean show; the CHANGELOG stays English. In the update window both end with a line
+#   asking for a star on GitHub.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
@@ -26,10 +28,29 @@ sed -e "s/\"VERSION\"/\"$VERSION\"/" -e "s/\"SHA256\"/\"$SHA\"/" packaging/homeb
 # The appcast: generate_appcast signs every zip in the folder with the key in the keychain and embeds the notes
 # next to it (<zip name>.html). Only the current zip is kept there, so the feed carries the newest version.
 NOTES="${1:-}"
+NOTES_KO="${NOTES%.md}.ko.md"
 HTML="$OUT/TokenCats-$VERSION.html"
-rm -f "$OUT"/*.html "$OUT"/*.delta
+# Outside $OUT: generate_appcast would take any notes file in there for its own.
+HTML_KO="build/TokenCats-$VERSION.ko.html"
+REPO_URL="https://github.com/changchangwoo/TokenCats"
+STAR_EN="If you like the cats, please <a href=\"$REPO_URL\">⭐ star the repo on GitHub</a>. It really helps! 🐟"
+STAR_KO="고양이가 마음에 들었다면 <a href=\"$REPO_URL\">GitHub에서 ⭐ 스타</a>를 눌러 주세요. 큰 도움이 돼요! 🐟"
+rm -f "$OUT"/*.html "$OUT"/*.delta "$HTML_KO"
+# The "- " lines as a list, then the line asking for a star. The ask is for the update window only; the CHANGELOG
+# takes the "- " lines alone.
+notes_html() {
+  echo "<ul>"
+  grep '^- ' "$1" | sed -e 's/^- //' -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/^/<li>/' -e 's/$/<\/li>/'
+  echo "</ul>"
+  echo "<p>$2</p>"
+}
 if [[ -n "$NOTES" ]]; then
-  { echo "<ul>"; grep '^- ' "$NOTES" | sed -e 's/^- //' -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/^/<li>/' -e 's/$/<\/li>/'; echo "</ul>"; } > "$HTML"
+  notes_html "$NOTES" "$STAR_EN" > "$HTML"
+  if [[ -f "$NOTES_KO" ]]; then
+    notes_html "$NOTES_KO" "$STAR_KO" > "$HTML_KO"
+    [[ "$(grep -c '^- ' "$NOTES")" == "$(grep -c '^- ' "$NOTES_KO")" ]] ||
+      echo "warning: $NOTES and $NOTES_KO have a different number of \"- \" lines"
+  fi
 fi
 # generate_appcast updates an existing feed in place and keeps entries whose zips are gone, so start fresh: the
 # feed lists only the version in the folder, which is all an older app needs to find.
@@ -59,11 +80,20 @@ KEY_ARGS=()
   --link "https://github.com/changchangwoo/TokenCats" \
   --full-release-notes-url "https://github.com/changchangwoo/TokenCats/releases/tag/v$VERSION" \
   --embed-release-notes -o appcast.xml "$OUT"
+# The Korean notes go in as a second description; Sparkle shows the one in the Mac's language.
+[[ -f "$HTML_KO" ]] && python3 scripts/localize-appcast.py appcast.xml ko "$HTML_KO"
 echo "zip:     $ZIP"
 echo "sha256:  $SHA"
 echo "cask:    $OUT/tokencats.rb"
 echo "appcast: appcast.xml (commit it with the release; the app reads it from main)"
-[[ -n "$NOTES" ]] && echo "changelog: CHANGELOG.md has a $VERSION section (commit it too)"
+if [[ -n "$NOTES" ]]; then
+  echo "changelog: CHANGELOG.md has a $VERSION section (commit it too)"
+  if [[ -f "$HTML_KO" ]]; then
+    echo "notes:   English, and Korean for Macs set to Korean ($NOTES_KO)"
+  else
+    echo "notes:   English only, also on Macs set to Korean (no $NOTES_KO)"
+  fi
+fi
 echo
 echo "To publish (the TokenCats repo must be public for anonymous downloads):"
 echo "  commit appcast.xml and push main, then"

@@ -13,17 +13,33 @@ scripts/package-release.sh release-notes.md
   `ditto`, so the bundle's signature survives intact.
 - `build/release/tokencats.rb`: the cask, which is `packaging/homebrew/tokencats.rb.template` with the version and
   sha256 filled in.
-- `appcast.xml` at the repository root: the Sparkle feed, with the zip's EdDSA signature and the release notes from
-  the "- " lines of the notes file. Commit it with the release; the app reads it from `main`.
+- `appcast.xml` at the repository root: the Sparkle feed, with the zip's EdDSA signature and the release notes (see
+  below). Commit it with the release; the app reads it from `main`.
 - The script uploads nothing. The commands it prints at the end create the GitHub Release and put the cask at
   `Casks/tokencats.rb` in the tap.
 - The repository must be public for release files to be downloaded anonymously.
 
+### Release notes in the update window
+
+- The "- " lines of the notes file become the list the update window shows before installing, and the version's
+  `CHANGELOG.md` section.
+- A Korean copy next to it, `release-notes.ko.md` (the notes file's name with `.ko` before `.md`), becomes the notes
+  that Macs set to Korean show. Every other language gets the English notes. Sparkle chooses by the Mac's language,
+  not by the language picked in TokenCats' settings. The CHANGELOG stays English.
+- The script warns when the two files have a different number of "- " lines, and its last lines say whether the
+  Korean notes went in.
+- In the update window both versions end with a line asking for a star on GitHub. The script adds it, so neither the
+  notes files nor the CHANGELOG carry it.
+- `scripts/localize-appcast.py` adds the Korean notes after `generate_appcast` has written the feed. It refuses a
+  signed feed, since the edit would break the signature; if the app ever requires a signed appcast, the Korean notes
+  have to go in before signing.
+
 ## Releasing, in order
 
 1. Bump `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION` in `app/TokenCats.xcodeproj/project.pbxproj`.
-2. `scripts/package-release.sh notes.md`, then commit `appcast.xml` and `CHANGELOG.md` (the script opens the
-   version's section from the notes) with the bump as `chore(release): x.y.z`.
+2. `scripts/package-release.sh notes.md` (with `notes.ko.md` next to it for the Korean update notes), then commit
+   `appcast.xml` and `CHANGELOG.md` (the script opens the version's section from the notes) with the bump as
+   `chore(release): x.y.z`.
 3. Push `main` first (the feed must point at a zip that is about to exist), then
    `gh release create vx.y.z build/release/TokenCats-x.y.z.zip --title "TokenCats x.y.z"`.
 4. Copy `build/release/tokencats.rb` to the tap's `Casks/tokencats.rb` and push.
