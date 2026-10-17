@@ -110,7 +110,7 @@ struct UsageDashboardView: View {
                     .font(.system(size: 9, weight: .semibold))
             }
             .buttonStyle(.plain)
-            .help(statusHelp(for: providerID))
+            .help(Text(statusHelp(for: providerID)))
         }
         .foregroundStyle(theme.ink.swiftUI)
         .padding(.top, 5)
