@@ -6,6 +6,10 @@ versions follow [Semantic Versioning](https://semver.org/). Each release's notes
 
 ## [Unreleased]
 
+- When a connected Claude Code session ends with a server or overload error, TokenCats checks Claude's public status page. Home shows whether a Claude Code/API incident is reported, and a reported incident can also trigger a macOS notification. Checks are limited to once every five minutes and send no session details. Existing hook connections gain the new failure event on app launch; it takes effect in new or restarted Claude sessions
+- Home now keeps a Claude Code service-status row below the usage limits and refreshes the public status every five minutes while open. A recent server error stays red until a Claude turn succeeds. When Claude Code's `/usage` reports a separate Fable weekly limit, Home shows that percentage too; this best-effort read runs at most every 15 minutes while Home is open
+- The Codex tab now shows OpenAI's published Codex Desktop service status in the same row; a newly reported issue appears in Home and can trigger a macOS notification. Codex CLI does not yet expose a reliable API-failure hook, so an individual CLI failure cannot turn the row red on its own
+
 ## [0.1.6] - 2026-10-13
 
 - Three daily missions on Home — check in, pet a cat, use 1M tokens — each paying a small churu bonus when you tap Claim. The usage streak multiplies the rewards, up to 2× from ten days. Unclaimed rewards expire at midnight. Settings › Home display can hide the section

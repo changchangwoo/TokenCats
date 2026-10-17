@@ -2,6 +2,7 @@ import Combine
 import Defaults
 import KeyboardShortcuts
 import SwiftUI
+import UserNotifications
 
 @main
 struct TokenCatsApp: App {
@@ -59,6 +60,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var firstRunOnboardingShown = false
     private var screenLockedObserver: Any?
     private var screenUnlockedObserver: Any?
+    private var serviceNoticeSubscription: AnyCancellable?
+    private var openAIIncidentSubscription: AnyCancellable?
+    private var lastNotifiedService: String?
     private var isScreenLocked: Bool = false
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
@@ -67,6 +71,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillTerminate(_ notification: Notification) {
         AgentHub.shared.stop()
+        serviceNoticeSubscription = nil
+        openAIIncidentSubscription = nil
         NotificationCenter.default.removeObserver(self)
         if let observer = screenLockedObserver {
             DistributedNotificationCenter.default().removeObserver(observer)
@@ -202,6 +208,40 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         AppSettings.migrateLegacy()
         AgentHub.shared.start()
         AgentHub.shared.restoreLive()
+        serviceNoticeSubscription = AgentHub.shared.$serviceNotice
+            .compactMap { $0 }
+            .sink { [weak self] notice in
+                guard let self else { return }
+                guard case .incident(let service) = notice.status else {
+                    if case .operational = notice.status { lastNotifiedService = nil }
+                    return
+                }
+                guard lastNotifiedService != service else { return }
+                lastNotifiedService = service
+                Task { @MainActor in
+                    let center = UNUserNotificationCenter.current()
+                    guard (try? await center.requestAuthorization(options: [.alert])) == true else { return }
+                    let content = UNMutableNotificationContent()
+                    content.title = AppLanguage.shared.string("Claude service issue reported")
+                    content.body = AppLanguage.shared.string("Your Claude Code request failed. Check the official status page.")
+                    try? await center.add(UNNotificationRequest(identifier: UUID().uuidString,
+                                                                 content: content, trigger: nil))
+                }
+            }
+        openAIIncidentSubscription = AgentHub.shared.$openAIIncidentNotice
+            .compactMap { $0 }
+            .sink { status in
+                guard case .incident = status else { return }
+                Task { @MainActor in
+                    let center = UNUserNotificationCenter.current()
+                    guard (try? await center.requestAuthorization(options: [.alert])) == true else { return }
+                    let content = UNMutableNotificationContent()
+                    content.title = AppLanguage.shared.string("OpenAI Codex service issue reported")
+                    content.body = AppLanguage.shared.string("Codex Desktop is affected; CLI impact is unknown. Check OpenAI status.")
+                    try? await center.add(UNNotificationRequest(identifier: UUID().uuidString,
+                                                                 content: content, trigger: nil))
+                }
+            }
         LegacyDataMigration.upgradeAgentCommands(
             hookScript: Bundle.main.url(forResource: "tokencats-hook", withExtension: "py"),
             statusLineScript: Bundle.main.url(forResource: "tokencats-statusline", withExtension: "py"))

@@ -63,6 +63,7 @@ def main():
         "orca_terminal": os.environ.get("ORCA_TERMINAL_HANDLE"),
         "ts": time.time(),
         "hook_ppid": os.getppid(),
+        "failure_kind": data.get("error") if event == "StopFailure" else None,
     }
 
     sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)

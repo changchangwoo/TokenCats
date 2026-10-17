@@ -17,6 +17,8 @@ struct HookEnvelope: Decodable, Equatable, Sendable {
     let ts: Double
     /// Parent of the hook process; the app walks up from it to find the agent process.
     let hookPpid: Int32?
+    /// Claude StopFailure's error category. Never includes the raw error message or prompt.
+    var failureKind: String? = nil
 
     enum CodingKeys: String, CodingKey {
         case provider, event, cwd, tool, ts
@@ -24,6 +26,7 @@ struct HookEnvelope: Decodable, Equatable, Sendable {
         case toolSummary = "tool_summary"
         case orcaTerminal = "orca_terminal"
         case hookPpid = "hook_ppid"
+        case failureKind = "failure_kind"
     }
 }
 

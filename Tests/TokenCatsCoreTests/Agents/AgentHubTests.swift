@@ -69,6 +69,21 @@ struct SocketIntegrationTests {
         #expect(received.value?.toolSummary == "rm -rf build")
         #expect(received.value?.orcaTerminal == "term_1")
     }
+
+    @Test func scriptForwardsOnlyTheFailureKind() throws {
+        let path = try makeTempDirectory().appendingPathComponent("failure.sock").path
+        let server = SocketServer(socketPath: path, clientReadTimeout: 0.5)
+        let received = Box<HookEnvelope?>(nil)
+        server.start { envelope in received.value = envelope; return nil }
+        defer { server.stop() }
+        let deadline = Date().addingTimeInterval(2)
+        while !FileManager.default.fileExists(atPath: path) && Date() < deadline { Thread.sleep(forTimeInterval: 0.02) }
+        let input = #"{"hook_event_name":"StopFailure","session_id":"s","cwd":"/tmp","error":"overloaded","error_details":"private details"}"#
+        let run = try runHookScript(socketPath: path, provider: "claude", input: input)
+        #expect(run.status == 0)
+        #expect(received.value?.failureKind == "overloaded")
+        #expect(received.value?.toolSummary == "")
+    }
 }
 
 struct AgentLocatorTests {
@@ -238,6 +253,76 @@ struct AgentHubResultTests {
         try await waitUntil { hub.sessions.first?.state == .error }
         #expect(hub.results.isEmpty)
         #expect(hub.sessions.first?.unseenDone == false)
+    }
+}
+
+@MainActor
+struct AgentHubServiceStatusTests {
+    @Test func codexOfficialStatusRefreshesWithoutARequestFailure() async throws {
+        let hub = AgentHub(source: FakeEventSource(), locator: AgentLocator(inspector: FakeInspector([:])),
+                           titles: FakeTitles([:]), storage: .inDirectory(try makeTempDirectory()),
+                           openAIStatusCheck: { .incident("Codex in ChatGPT Desktop") })
+        hub.refreshOpenAIStatusIfNeeded()
+        try await waitUntil { hub.openAIStatus == .incident("Codex in ChatGPT Desktop") }
+        #expect(hub.serviceNotice == nil)
+        #expect(hub.openAIIncidentNotice == .incident("Codex in ChatGPT Desktop"))
+        hub.dismissOpenAIIncidentNotice()
+        #expect(hub.openAIIncidentNotice == nil)
+    }
+
+    @Test func homeCheckPublishesOfficialStatusWithoutAClaudeFailure() async throws {
+        let calls = Box(0)
+        let hub = AgentHub(source: FakeEventSource(), locator: AgentLocator(inspector: FakeInspector([:])),
+                           titles: FakeTitles([:]), storage: .inDirectory(try makeTempDirectory()),
+                           statusCheck: { calls.value += 1; return .operational })
+        hub.refreshClaudeStatusIfNeeded()
+        try await waitUntil { hub.serviceStatus == .operational }
+        hub.refreshClaudeStatusIfNeeded()
+        #expect(calls.value == 1)
+        #expect(hub.serviceNotice == nil)
+    }
+
+    @Test func checksClaudeServiceOnceForApiFailureAndPublishesResult() async throws {
+        let source = FakeEventSource()
+        let calls = Box(0)
+        let hub = AgentHub(source: source, locator: AgentLocator(inspector: FakeInspector([:])),
+                           titles: FakeTitles([:]), storage: .inDirectory(try makeTempDirectory()),
+                           statusCheck: {
+                               calls.value += 1
+                               return .incident("Claude Code")
+                           })
+        hub.start()
+        var failed = envelope("StopFailure", ts: 1)
+        failed.failureKind = "server_error"
+        _ = source.send(failed)
+        try await waitUntil { hub.serviceNotice?.status == .incident("Claude Code") }
+        #expect(hub.serviceNotice?.failureKind == "server_error")
+        #expect(hub.claudeRequestFailed)
+        _ = source.send(failed)
+        try await Task.sleep(for: .milliseconds(50))
+        #expect(calls.value == 1)
+        _ = source.send(envelope("Stop", ts: 2))
+        try await waitUntil { !hub.claudeRequestFailed }
+        #expect(hub.serviceNotice == nil)
+    }
+
+    @Test func ignoresLocalFailuresAndCodex() async throws {
+        let source = FakeEventSource()
+        let calls = Box(0)
+        let hub = AgentHub(source: source, locator: AgentLocator(inspector: FakeInspector([:])),
+                           titles: FakeTitles([:]), storage: .inDirectory(try makeTempDirectory()),
+                           statusCheck: { calls.value += 1; return .operational })
+        hub.start()
+        var rateLimit = envelope("StopFailure", ts: 1)
+        rateLimit.failureKind = "rate_limit"
+        _ = source.send(rateLimit)
+        _ = source.send(envelope("PostToolUseFailure", ts: 2))
+        var codexFailure = envelope("StopFailure", provider: .codex, ts: 3)
+        codexFailure.failureKind = "server_error"
+        _ = source.send(codexFailure)
+        try await Task.sleep(for: .milliseconds(100))
+        #expect(calls.value == 0)
+        #expect(hub.serviceNotice == nil)
     }
 }
 

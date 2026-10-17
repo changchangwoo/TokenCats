@@ -35,7 +35,7 @@ struct WeekUsageTests {
         let full = Layout.height(for: display)
         #expect(full == Layout.roomOnlyHeight + Layout.ledgerPadding + Layout.balanceHeight + Layout.missionsHeight
                 + Layout.limitsHeight + Layout.historyHeight + Layout.dividerHeight * 3)
-        #expect(Layout.maximumHeight == full)
+        #expect(Layout.maximumHeight == full + 27)
         display.showMissions = false
         #expect(Layout.height(for: display) == full - Layout.missionsHeight - Layout.dividerHeight)
     }
@@ -59,7 +59,7 @@ struct WeekUsageTests {
         let full = Layout.height(for: display)
         #expect(full == Layout.roomOnlyHeight + Layout.ledgerPadding + Layout.balanceHeight + Layout.missionsHeight
                 + Layout.limitsHeight + Layout.historyHeight + Layout.dividerHeight * 3)
-        #expect(Layout.maximumHeight == full)
+        #expect(Layout.maximumHeight == full + 27)
         display.showContributionGraph = false
         display.showWeeklyChart = false
         #expect(Layout.height(for: display) == full)
@@ -74,5 +74,12 @@ struct WeekUsageTests {
         display.showBalance = false
         display.showAdoptionProgress = false
         #expect(Layout.height(for: display) == Layout.roomOnlyHeight)
+    }
+
+    @Test func limitSectionFollowsTheNumberOfVisibleWindows() {
+        typealias Layout = HomeLayout
+        let standard = Layout.height(for: .default)
+        #expect(Layout.height(for: .default, limitRows: 1) == standard - 27)
+        #expect(Layout.height(for: .default, limitRows: 3) == standard + 27)
     }
 }

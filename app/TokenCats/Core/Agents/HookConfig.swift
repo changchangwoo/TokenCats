@@ -134,13 +134,19 @@ struct HookIntegration {
         try file.write(cleaned)
     }
 
-    /// Rewrites an older form of our command (e.g. the unguarded one) in place; true when the file was written.
+    /// Refreshes our existing registrations as well as older commands, so new events reach connected agents.
     /// Leaves agents the user never connected untouched.
     @discardableResult
     func upgradeCommandIfNeeded() -> Bool {
         guard let data = file.read(), isInstalled(),
               let root = try? JSONSettingsFile.object(from: data),
-              HookConfigMerger.commands(in: root).contains(where: { $0 != command }),
+              (HookConfigMerger.commands(in: root).contains(where: { $0 != command })
+               || agent.hookEvents.contains { registration in
+                   let groups = (root["hooks"] as? [String: Any])?[registration.event] as? [[String: Any]] ?? []
+                   return !groups.contains { group in
+                       (group["hooks"] as? [[String: Any]] ?? []).contains { ($0["command"] as? String) == command }
+                   }
+               }),
               let merged = try? HookConfigMerger.install(into: data, command: command, registrations: agent.hookEvents)
         else { return false }
         return (try? file.write(merged)) != nil

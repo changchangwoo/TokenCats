@@ -13,13 +13,14 @@ let companionStoreNotchHeight: CGFloat = 380
 let windowSize: CGSize = .init(width: openNotchSize.width,
                                height: max(statisticsNotchHeight, CGFloat(HomeLayout.maximumHeight)) + shadowPadding)
 
-func companionHomeNotchHeight() -> CGFloat {
+@MainActor func companionHomeNotchHeight() -> CGFloat {
     let display = UIDisplaySettings.load(from: DataFiles.live.uiDisplay).home
-    return CGFloat(HomeLayout.height(for: display, missionsExpanded: AppSettings.missionsExpanded))
+    return CGFloat(HomeLayout.height(for: display, missionsExpanded: AppSettings.missionsExpanded,
+                                    limitRows: UsageLimitsModel.shared.visibleLimitRows(for: display)))
 }
 
 /// Open notch size per tab: the agent home gets extra height, other tabs keep boring.notch's size.
-func openNotchSize(for view: NotchViews) -> CGSize {
+@MainActor func openNotchSize(for view: NotchViews) -> CGSize {
     switch view {
     case .home: return CGSize(width: openNotchSize.width, height: companionHomeNotchHeight())
     case .statistics: return CGSize(width: openNotchSize.width, height: statisticsNotchHeight)

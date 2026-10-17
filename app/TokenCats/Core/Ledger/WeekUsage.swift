@@ -41,11 +41,13 @@ enum HomeLayout {
     static let missionsHeight = 88.0
     /// The missions section folded to its title line by the user (the chevron on its title row).
     static let missionsFoldedHeight = 20.0
-    static let limitsHeight = 84.0
+    /// Two usage windows and a provider status line. A third window adds one row.
+    static let limitsHeight = 116.0
+    static let limitRowHeight = 27.0
     static let historyHeight = 66.0
     /// A divider line with the space above and below it.
     static let dividerHeight = 17.0
-    static let maximumHeight = height(for: .default)
+    static let maximumHeight = height(for: .default, limitRows: 3)
 
     static func sections(for display: HomeDisplaySettings) -> [HomeSection] {
         var sections: [HomeSection] = []
@@ -59,19 +61,21 @@ enum HomeLayout {
         return sections
     }
 
-    static func height(of section: HomeSection, expanded: Bool = true) -> Double {
+    static func height(of section: HomeSection, expanded: Bool = true, limitRows: Int = 2) -> Double {
         switch section {
         case .balance: return balanceHeight
         case .missions: return expanded ? missionsHeight : missionsFoldedHeight
-        case .limits: return limitsHeight
+        case .limits: return limitsHeight + Double(min(max(limitRows, 1), 3) - 2) * limitRowHeight
         case .history: return historyHeight
         }
     }
 
-    static func height(for display: HomeDisplaySettings, missionsExpanded: Bool = true) -> Double {
+    static func height(for display: HomeDisplaySettings, missionsExpanded: Bool = true,
+                       limitRows: Int = 2) -> Double {
         let sections = sections(for: display)
         guard !sections.isEmpty else { return roomOnlyHeight }
-        return roomOnlyHeight + ledgerPadding + sections.map { height(of: $0, expanded: missionsExpanded) }.reduce(0, +)
+        return roomOnlyHeight + ledgerPadding + sections.map { height(of: $0, expanded: missionsExpanded,
+                                                                      limitRows: limitRows) }.reduce(0, +)
             + dividerHeight * Double(sections.count - 1)
     }
 }

@@ -5,6 +5,7 @@ import SwiftUI
 struct HomeLedgerView: View {
     let theme: RoomTheme
     let display: HomeDisplaySettings
+    @ObservedObject private var limits = UsageLimitsModel.shared
     @AppStorage(AppSettings.Key.missionsExpanded) private var missionsExpanded = AppSettings.Default.missionsExpanded
 
     var body: some View {
@@ -25,7 +26,8 @@ struct HomeLedgerView: View {
                     case .history: HomeHistorySection(theme: theme, display: display)
                     }
                 }
-                .frame(height: HomeLayout.height(of: section, expanded: missionsExpanded), alignment: .top)
+                .frame(height: HomeLayout.height(of: section, expanded: missionsExpanded,
+                                                 limitRows: limits.visibleLimitRows(for: display)), alignment: .top)
                 .animation(.smooth(duration: 0.25), value: missionsExpanded)
             }
         }

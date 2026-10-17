@@ -226,4 +226,20 @@ struct HookCommandSafetyTests {
         #expect(!sut.upgradeCommandIfNeeded())
         #expect(try String(contentsOf: config, encoding: .utf8) == #"{"model":"opus"}"#)
     }
+
+    @Test func upgradeAddsClaudeFailureHookToExistingConnection() throws {
+        let config = dir.appendingPathComponent("settings.json")
+        let sut = HookIntegration(.claudeCode, hooksFile: config,
+                                  scriptURL: dir.appendingPathComponent("support/tokencats-hook.py"))
+        let previous = AgentIntegration.claudeCode.hookEvents.filter { $0.event != "StopFailure" }
+        let old = try HookConfigMerger.install(into: Data(#"{"model":"opus"}"#.utf8),
+                                               command: sut.command, registrations: previous)
+        try old.write(to: config)
+
+        #expect(sut.upgradeCommandIfNeeded())
+        let root = try json(Data(contentsOf: config))
+        #expect(commands(root, "StopFailure") == [sut.command])
+        #expect(root["model"] as? String == "opus")
+        #expect(!sut.upgradeCommandIfNeeded())
+    }
 }

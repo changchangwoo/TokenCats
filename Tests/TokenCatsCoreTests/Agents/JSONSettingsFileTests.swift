@@ -55,7 +55,9 @@ struct AgentIntegrationTests {
         #expect(AgentIntegration.claudeCode.hooksFile.path.hasSuffix("/.claude/settings.json"))
         #expect(AgentIntegration.codex.hooksFile.path.hasSuffix("/.codex/hooks.json"))
         #expect(AgentIntegration.claudeCode.hookEvents.map(\.event).contains("SessionEnd"))
+        #expect(AgentIntegration.claudeCode.hookEvents.map(\.event).contains("StopFailure"))
         #expect(!AgentIntegration.codex.hookEvents.map(\.event).contains("SessionEnd"))
+        #expect(!AgentIntegration.codex.hookEvents.map(\.event).contains("StopFailure"))
         #expect(AgentIntegration.allCases.filter(\.supportsStatusLine) == [.claudeCode])
     }
 }

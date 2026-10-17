@@ -7,8 +7,10 @@ struct HomeView: View {
     @AppStorage(AppSettings.Key.roomTheme) private var backgroundID = AppSettings.Default.roomTheme
     @ObservedObject private var store = StoreModel.shared
     @ObservedObject private var uiDisplay = UIDisplayModel.shared
+    @ObservedObject private var limits = UsageLimitsModel.shared
     @AppStorage(AppSettings.Key.unreadDataNoticedAt) private var unreadNoticedAt = 0.0
     @ObservedObject private var updater = AppUpdater.shared
+    @ObservedObject private var agents = AgentHub.shared
     @AppStorage(AppSettings.Key.missionsExpanded) private var missionsExpanded = AppSettings.Default.missionsExpanded
     /// Data files that could not be read and started fresh since the user last dismissed the notice.
     @State private var unreadFiles: [String] = []
@@ -20,6 +22,16 @@ struct HomeView: View {
                 .frame(height: 190)
                 .overlay(alignment: .top) {
                     VStack(spacing: 6) {
+                        if agents.openAIIncidentNotice != nil {
+                            OpenAIStatusBanner(theme: theme,
+                                               onDismiss: agents.dismissOpenAIIncidentNotice)
+                                .transition(.opacity)
+                        }
+                        if let notice = agents.serviceNotice {
+                            ServiceStatusBanner(notice: notice, theme: theme,
+                                                onDismiss: agents.dismissServiceNotice)
+                                .transition(.opacity)
+                        }
                         if let version = updater.pendingVersion, !updater.bannerDismissed {
                             UpdateBanner(version: version, theme: theme,
                                          onUpdate: updater.checkForUpdates, onLater: updater.dismissBanner)
@@ -34,6 +46,8 @@ struct HomeView: View {
                         }
                     }
                     .padding(8)
+                    .animation(.smooth, value: agents.serviceNotice)
+                    .animation(.smooth, value: agents.openAIIncidentNotice)
                     .animation(.smooth, value: updater.pendingVersion == nil || updater.bannerDismissed)
                 }
             if !HomeLayout.sections(for: uiDisplay.settings.home).isEmpty {
@@ -66,8 +80,69 @@ struct HomeView: View {
             }
         }
         .onChange(of: uiDisplay.settings.home) { _, _ in resizeNotch() }
+        .onChange(of: limits.visibleLimitRows(for: uiDisplay.settings.home)) { _, _ in resizeNotch() }
         // The chevron on the missions section folds it to one line; the notch follows.
         .onChange(of: missionsExpanded) { _, _ in resizeNotch() }
+    }
+}
+
+/// The official OpenAI status page currently names Codex Desktop; it does not establish CLI availability.
+private struct OpenAIStatusBanner: View {
+    let theme: RoomTheme
+    let onDismiss: () -> Void
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(theme.accent.swiftUI)
+            Text("OpenAI reports a Codex Desktop service issue. Codex CLI impact is unknown.")
+                .font(.system(size: 11, weight: .semibold, design: .rounded))
+            Spacer(minLength: 4)
+            Button("View status") { NSWorkspace.shared.open(URL(string: "https://status.openai.com")!) }
+                .font(.system(size: 10, weight: .semibold, design: .rounded))
+            Button("Got it", action: onDismiss)
+                .font(.system(size: 10, weight: .bold, design: .rounded))
+        }
+        .foregroundStyle(theme.ink.swiftUI)
+        .padding(.horizontal, 10).padding(.vertical, 7)
+        .background(RoundedRectangle(cornerRadius: 8).fill(theme.surface.swiftUI))
+    }
+}
+
+/// An API failure was checked against the public Claude status page. It never asserts the cause of that failure.
+private struct ServiceStatusBanner: View {
+    let notice: ServiceNotice
+    let theme: RoomTheme
+    let onDismiss: () -> Void
+
+    private var message: LocalizedStringResource {
+        switch notice.status {
+        case .incident(let component) where component == "Claude Code":
+            return "Claude Code has a reported service issue. Your error may be related."
+        case .incident:
+            return "Claude API has a reported service issue. Your error may be related."
+        case .operational:
+            return "No Claude service issue is reported. The cause of your error is unknown."
+        case .unavailable:
+            return "Could not check Claude service status."
+        }
+    }
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(theme.accent.swiftUI)
+            Text(message)
+                .font(.system(size: 11, weight: .semibold, design: .rounded))
+            Spacer(minLength: 4)
+            Button("View status") {
+                NSWorkspace.shared.open(URL(string: "https://status.claude.com")!)
+            }
+            .font(.system(size: 10, weight: .semibold, design: .rounded))
+            Button("Got it", action: onDismiss)
+                .font(.system(size: 10, weight: .bold, design: .rounded))
+        }
+        .foregroundStyle(theme.ink.swiftUI)
+        .padding(.horizontal, 10).padding(.vertical, 7)
+        .background(RoundedRectangle(cornerRadius: 8).fill(theme.surface.swiftUI))
     }
 }
 

@@ -44,6 +44,9 @@
 - 쓰다듬거나 우클릭으로 츄르를 주면 친밀도 레벨이 99까지 올라요. 고양이에 마우스를 올리면 레벨이 보이고, 설정 › GitHub 프로필에서 "고양이 친밀도 레벨"을 켜면 카드에도 나와요.
 - 보관함에서 고양이를 우클릭하면 이름을 지어 줄 수 있어요. 최대 16자이고, 비워 두면 다시 코트 이름으로 불러요.
 - 방 아래에는 보유 츄르, 오늘 쓴 토큰, Claude·Codex 사용 한도가 함께 보여요.
+- 홈의 사용 한도 아래에 Claude Code 서비스 상태를 보여 줘요. 요청 오류가 나면 공식 상태를 다시 확인하고 상태 줄을 빨간색으로 바꾸며, 공지된 장애가 있으면 배너로 설명해요.
+- Codex 탭의 같은 자리에는 OpenAI가 공개한 Codex Desktop 상태를 보여 줘요. Codex CLI 전용 상태나 요청 실패를 확인하는 신호는 아직 없어요.
+- Claude Code의 `/usage`에 페이블 주간 한도가 따로 나오면 5시간·전체 주간 한도와 함께 보여 줘요.
 
 ### 어떻게 키우나요
 
@@ -169,7 +172,7 @@ brew install --cask changchangwoo/tap/tokencats
 |---|---|
 | **읽는 것** | `~/.claude`, `~/.codex`의 사용 기록. 토큰 수와 모델만 셉니다. 프롬프트 내용은 저장하거나 보내지 않아요 |
 | **쓰는 것** | 켰을 때만: Claude Code·Codex 설정 파일에 훅 한 줄, Claude Code 상태줄 한 줄. 원래 설정은 백업하고, 끄면 원래대로 돌아가요 |
-| **보내는 것** | GitHub App으로 연결하면 기기 인증에 `github.com`을 사용해요. GitHub 카드를 켜면 `api.github.com`을 통해 카드 SVG를 올리고 프로필 README를 읽고 저장해요. README에서는 표시한 구간만 바꿔요. 하루 한 번 `raw.githubusercontent.com`에서 새 버전이 있는지 확인하고, 설치 전에 물어봐요(설정 › 정보에서 끌 수 있어요). 에이전트 사용 기록과 프롬프트는 Mac에 남아요 |
+| **보내는 것** | 홈을 열어 둔 동안 `status.claude.com`과 `status.openai.com`의 공개 상태 정보를 조회하고, Claude Code API 오류가 나면 Claude 상태를 다시 확인해요. 요청에는 세션 내용이나 프롬프트가 들어가지 않아요. 페이블 주간 한도를 보여주기 위해 홈이 열려 있을 때 최대 15분에 한 번 설치된 Claude Code의 `/usage` 명령을 실행해요. 이 명령은 계정 사용량을 확인하려고 Anthropic에 연결할 수 있으며, TokenCats는 전체 결과 대신 페이블 사용률만 보관해요. GitHub App으로 연결하면 기기 인증에 `github.com`을 사용해요. GitHub 카드를 켜면 `api.github.com`을 통해 카드 SVG를 올리고 프로필 README를 읽고 저장해요. README에서는 표시한 구간만 바꿔요. 하루 한 번 `raw.githubusercontent.com`에서 새 버전이 있는지 확인하고, 설치 전에 물어봐요(설정 › 정보에서 끌 수 있어요). 에이전트 사용 기록과 프롬프트는 Mac에 남아요 |
 | **사용 통계** | 수집하지 않아요 |
 | **계정** | GitHub 연결은 선택이에요. gh 로그인을 쓰거나, TokenCats GitHub App에 프로필 저장소 접근만 허락하면 돼요 |
 

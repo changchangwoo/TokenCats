@@ -8,7 +8,7 @@ enum LimitProvider: String, Sendable {
 
 /// What a usage window measures. Providers report these; the screens name them.
 enum LimitWindowKind: Equatable, Sendable {
-    case fiveHour, daily, weekly, requests
+    case fiveHour, daily, weekly, fableWeekly, requests
     /// Any other rolling window, in whole hours.
     case hours(Int)
 }

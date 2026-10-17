@@ -7,6 +7,7 @@ extension LimitWindowKind {
         case .fiveHour: return "5-hour"
         case .daily: return "Daily"
         case .weekly: return "Weekly"
+        case .fableWeekly: return "Weekly · Fable"
         case .requests: return "Requests"
         case .hours(let hours): return "\(hours)-hour"
         }

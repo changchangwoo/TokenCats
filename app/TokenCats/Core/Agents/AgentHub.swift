@@ -1,6 +1,12 @@
 import Combine
 import Foundation
 
+struct ServiceNotice: Equatable, Sendable {
+    let status: ServiceStatus
+    let failureKind: String
+    let checkedAt: Date
+}
+
 /// Live agent sessions and their recent results, fed by the hook socket.
 @MainActor
 final class AgentHub: ObservableObject {
@@ -10,9 +16,22 @@ final class AgentHub: ObservableObject {
     @Published private(set) var mood: CharacterMood = .idle
     @Published private(set) var summary = SessionSummary()
     @Published private(set) var results: [RecentResult] = []
+    @Published private(set) var serviceNotice: ServiceNotice?
+    @Published private(set) var serviceStatus: ServiceStatus?
+    @Published private(set) var openAIStatus: ServiceStatus?
+    @Published private(set) var openAIIncidentNotice: ServiceStatus?
+    @Published private(set) var claudeRequestFailed = false
 
     private let storage: DataFiles
     private let now: () -> Date
+    private let statusCheck: @Sendable () async -> ServiceStatus
+    private let openAIStatusCheck: @Sendable () async -> ServiceStatus
+    private var lastStatusCheckAt: Date?
+    private var lastOpenAIStatusCheckAt: Date?
+    private var lastFailureCheckAt: Date?
+    private var checkingStatus = false
+    private var checkingOpenAIStatus = false
+    private var pendingFailureKind: String?
     private var recent: RecentResults
     private var snapshots: [SessionSnapshot] = []
     /// Snapshots are only written after recovery told which sessions still live.
@@ -30,13 +49,17 @@ final class AgentHub: ObservableObject {
         locator: AgentLocator = AgentLocator(inspector: SystemProcessInspector()),
         titles: any TerminalTitleProvider = OrcaTerminalTitles(),
         storage: DataFiles = .live,
-        now: @escaping () -> Date = Date.init
+        now: @escaping () -> Date = Date.init,
+        statusCheck: @escaping @Sendable () async -> ServiceStatus = { await ServiceStatusClient().claudeCode() },
+        openAIStatusCheck: @escaping @Sendable () async -> ServiceStatus = { await ServiceStatusClient().codex() }
     ) {
         self.source = source
         self.locator = locator
         self.titles = titles
         self.storage = storage
         self.now = now
+        self.statusCheck = statusCheck
+        self.openAIStatusCheck = openAIStatusCheck
         var recent = storage.results.load() ?? RecentResults()
         recent.prune(now: now())
         self.recent = recent
@@ -72,6 +95,32 @@ final class AgentHub: ObservableObject {
         guard recent.markSeen(id) else { return }
         storage.results.save(recent)
         publish()
+    }
+
+    func dismissServiceNotice() { serviceNotice = nil }
+    func dismissOpenAIIncidentNotice() { openAIIncidentNotice = nil }
+
+    /// The Home status row refreshes the public status while it is visible, at most once every five minutes.
+    func refreshClaudeStatusIfNeeded() {
+        let checkedAt = now()
+        guard lastStatusCheckAt.map({ checkedAt.timeIntervalSince($0) >= 300 }) ?? true else { return }
+        startStatusCheck()
+    }
+
+    func refreshOpenAIStatusIfNeeded() {
+        let checkedAt = now()
+        guard !checkingOpenAIStatus,
+              lastOpenAIStatusCheckAt.map({ checkedAt.timeIntervalSince($0) >= 300 }) ?? true else { return }
+        lastOpenAIStatusCheckAt = checkedAt
+        checkingOpenAIStatus = true
+        Task { [weak self] in
+            guard let self else { return }
+            let status = await openAIStatusCheck()
+            if case .incident = status, status != openAIStatus { openAIIncidentNotice = status }
+            if case .operational = status { openAIIncidentNotice = nil }
+            openAIStatus = status
+            checkingOpenAIStatus = false
+        }
     }
 
     /// Only a successful jump counts as looking at the result.
@@ -112,15 +161,53 @@ final class AgentHub: ObservableObject {
         let id = "\(envelope.provider.rawValue):\(envelope.sessionId)"
         if let session = book.sessions[id] {
             switch envelope.event {
-            case "Stop": recordResult(session, .success)
+            case "Stop":
+                recordResult(session, .success)
+                if envelope.provider == .claude {
+                    claudeRequestFailed = false
+                    pendingFailureKind = nil
+                    serviceNotice = nil
+                }
             // A failed tool mid-turn is only a state; the turn has not ended.
-            case "StopFailure": recordResult(session, .error)
+            case "StopFailure":
+                recordResult(session, .error)
+                checkClaudeStatus(for: envelope)
             case "UserPromptSubmit": if recent.markSeen(id) { storage.results.save(recent) }
             default: break
             }
         }
         publish()
         if let handle = envelope.orcaTerminal { requestTitle(handle) }
+    }
+
+    /// Only provider/API failures warrant a status-page check; tool and quota failures have local explanations.
+    private func checkClaudeStatus(for envelope: HookEnvelope) {
+        guard envelope.provider == .claude,
+              let kind = envelope.failureKind,
+              ["server_error", "overloaded", "unknown"].contains(kind) else { return }
+        claudeRequestFailed = true
+        let checkedAt = now()
+        if let lastFailureCheckAt, checkedAt.timeIntervalSince(lastFailureCheckAt) < 300 { return }
+        lastFailureCheckAt = checkedAt
+        startStatusCheck(failureKind: kind)
+    }
+
+    private func startStatusCheck(failureKind: String? = nil) {
+        if let failureKind { pendingFailureKind = failureKind }
+        guard !checkingStatus else { return }
+        let checkedAt = now()
+        lastStatusCheckAt = checkedAt
+        checkingStatus = true
+        Task { [weak self] in
+            guard let self else { return }
+            let status = await statusCheck()
+            serviceStatus = status
+            if let kind = pendingFailureKind, claudeRequestFailed {
+                serviceNotice = ServiceNotice(status: status, failureKind: kind, checkedAt: checkedAt)
+            }
+            pendingFailureKind = nil
+            checkingStatus = false
+        }
     }
 
     private func recordResult(_ session: AgentSession, _ outcome: ResultOutcome) {

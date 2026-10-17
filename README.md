@@ -44,6 +44,9 @@
 - Pet a cat, or right-click it to give churu, and its bond level climbs toward 99. Hover a cat to see the level, and switch on "Cat bond levels" in Settings › GitHub profile to show it on your card.
 - Give a cat its own name by right-clicking it in the collection. Up to 16 characters, and a blank name brings back the coat name.
 - Below the room you can see your churu, today's tokens, and your Claude and Codex usage limits.
+- Home shows Claude Code's service status below its usage limits. If a Claude request fails, TokenCats checks the public status page, marks the row red, and explains any reported issue in a banner.
+- The Codex tab shows OpenAI's published Codex Desktop status in the same row. OpenAI does not publish a separate Codex CLI component, and Codex does not currently send TokenCats a reliable API-failure hook.
+- When Claude Code's `/usage` command reports a separate Fable weekly limit, Home shows it beside the 5-hour and weekly limits.
 
 ### How it works
 
@@ -169,7 +172,7 @@ brew install --cask changchangwoo/tap/tokencats
 |---|---|
 | **Reads** | Usage logs under `~/.claude` and `~/.codex`. Only token counts and model names are counted. Prompt contents are never stored or sent |
 | **Writes** | Only when enabled: one hook line in the Claude Code and Codex settings files, and one status line entry for Claude Code. The original settings are backed up, and turning it off restores them |
-| **Sends** | If you connect with the GitHub App, device authorization uses `github.com`. When you turn on the GitHub card, the app uploads the card SVG through `api.github.com` and reads and saves your profile README there, changing only the marked section. Once a day the app reads `raw.githubusercontent.com` to see if a newer version exists, and asks before installing one (Settings › About to turn off). Agent usage logs and prompts stay on your Mac |
+| **Sends** | While Home is open, the app requests public status summaries from `status.claude.com` and `status.openai.com`; it also rechecks Claude status after a Claude Code API failure. These requests contain no session details or prompts. To show Fable's weekly limit, it runs the installed Claude Code `/usage` command at most once every 15 minutes while Home is open; Claude Code may contact Anthropic for that account's usage. TokenCats keeps only the Fable percentage, not the full report. If you connect with the GitHub App, device authorization uses `github.com`. When you turn on the GitHub card, the app uploads the card SVG through `api.github.com` and reads and saves your profile README there, changing only the marked section. Once a day the app reads `raw.githubusercontent.com` to see if a newer version exists, and asks before installing one (Settings › About to turn off). Agent usage logs and prompts stay on your Mac |
 | **Analytics** | None |
 | **Accounts** | Connecting GitHub is optional. Use your gh login, or grant the TokenCats GitHub App access to your profile repository only |
 

@@ -32,7 +32,10 @@ enum AgentIntegration: CaseIterable, Sendable {
             .init(event: "Stop", matcher: nil, timeout: 5),
         ]
         switch self {
-        case .claudeCode: return common + [.init(event: "SessionEnd", matcher: nil, timeout: 5)]
+        case .claudeCode: return common + [
+            .init(event: "StopFailure", matcher: nil, timeout: 5),
+            .init(event: "SessionEnd", matcher: nil, timeout: 5),
+        ]
         case .codex: return common
         }
     }
