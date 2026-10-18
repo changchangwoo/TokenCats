@@ -6,9 +6,15 @@ versions follow [Semantic Versioning](https://semver.org/). Each release's notes
 
 ## [Unreleased]
 
-- When a connected Claude Code session ends with a server or overload error, TokenCats checks Claude's public status page. Home shows whether a Claude Code/API incident is reported, and a reported incident can also trigger a macOS notification. Checks are limited to once every five minutes and send no session details. Existing hook connections gain the new failure event on app launch; it takes effect in new or restarted Claude sessions
-- Home now keeps a Claude Code service-status row below the usage limits and refreshes the public status every five minutes while open. A recent server error stays red until a Claude turn succeeds. When Claude Code's `/usage` reports a separate Fable weekly limit, Home shows that percentage too; this best-effort read runs at most every 15 minutes while Home is open
-- The Codex tab now shows OpenAI's published Codex Desktop service status in the same row; a newly reported issue appears in Home and can trigger a macOS notification. Codex CLI does not yet expose a reliable API-failure hook, so an individual CLI failure cannot turn the row red on its own
+## [0.1.7] - 2026-10-18
+
+- Home shows Claude Code's service status under the usage limits. When a Claude request fails with a server or overload error, TokenCats checks Claude's public status page (at most every five minutes, with no session details), turns the row red, explains any reported incident and can send a macOS notification. Connected hooks pick up the new failure event when the app starts, for Claude sessions opened after that
+- The Codex tab shows OpenAI's published Codex Desktop status in the same row, and a newly reported issue can send a notification too
+- When Claude Code's `/usage` reports a separate Fable weekly limit, Home shows it beside the 5-hour and weekly limits (read at most every 15 minutes while Home is open)
+- Statistics is now a card dashboard: today, the last 7 days and your streak on top, the week's tokens stacked by Claude and Codex, and the year graph below
+- Every cat now has the same black outline as the black cat, with stray pixels cleaned up
+- Update notes like these now come in Korean on Macs set to Korean
+- README: new Statistics screenshot, notch GIF and cat portraits
 
 ## [0.1.6] - 2026-10-13
 
@@ -58,7 +64,8 @@ versions follow [Semantic Versioning](https://semver.org/). Each release's notes
 First public release. Cats in your MacBook notch that grow on the tokens you spend in Claude Code and Codex, with a
 GitHub profile card.
 
-[Unreleased]: https://github.com/changchangwoo/TokenCats/compare/v0.1.6...HEAD
+[Unreleased]: https://github.com/changchangwoo/TokenCats/compare/v0.1.7...HEAD
+[0.1.7]: https://github.com/changchangwoo/TokenCats/releases/tag/v0.1.7
 [0.1.6]: https://github.com/changchangwoo/TokenCats/releases/tag/v0.1.6
 [0.1.5]: https://github.com/changchangwoo/TokenCats/releases/tag/v0.1.5
 [0.1.4]: https://github.com/changchangwoo/TokenCats/releases/tag/v0.1.4

@@ -3,23 +3,36 @@
     <channel>
         <title>TokenCats</title>
         <item>
-            <title>0.1.6</title>
-            <pubDate>Tue, 13 Oct 2026 00:54:58 +0900</pubDate>
+            <title>0.1.7</title>
+            <pubDate>Sun, 18 Oct 2026 19:15:42 +0900</pubDate>
             <link>https://github.com/changchangwoo/TokenCats</link>
-            <sparkle:fullReleaseNotesLink>https://github.com/changchangwoo/TokenCats/releases/tag/v0.1.6</sparkle:fullReleaseNotesLink>
-            <sparkle:version>7</sparkle:version>
-            <sparkle:shortVersionString>0.1.6</sparkle:shortVersionString>
+            <sparkle:fullReleaseNotesLink>https://github.com/changchangwoo/TokenCats/releases/tag/v0.1.7</sparkle:fullReleaseNotesLink>
+            <sparkle:version>8</sparkle:version>
+            <sparkle:shortVersionString>0.1.7</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-            <description><![CDATA[<ul>
-<li>Three daily missions on Home — check in, pet a cat, use 1M tokens — each paying a small churu bonus when you tap Claim. The usage streak multiplies the rewards, up to 2× from ten days. Unclaimed rewards expire at midnight. Settings › Home display can hide the section</li>
-<li>Every cat has a bond level, 1 to 99. It rises when you pet the cat, give it churu (right-click a cat in the room or the collection, 1M churu), and while the app runs with the cat in the room. Hover a cat to see its level and bar. Settings › GitHub profile can put each cat's level on the profile card (off by default)</li>
-<li>Give a cat its own name: right-click it in the collection and type inside the notch. Up to 16 characters, and a blank name brings back the coat name</li>
-<li>Two new cats in the adoption box: the Sphynx (Rare) and the Norwegian (Unique). The tier odds are unchanged, so each cat in those tiers is now half as likely</li>
-<li>Fresh art for every cat's walk, and for the sitting and grooming poses of every coat except the black cat</li>
-<li>The 365-day graph in Statistics fits its panel instead of cutting off the newest weeks</li>
+            <description xml:lang="en"><![CDATA[<ul>
+<li>Home shows Claude Code's service status under the usage limits. When a Claude request fails with a server or overload error, TokenCats checks Claude's public status page (at most every five minutes, with no session details), turns the row red, explains any reported incident and can send a macOS notification. Connected hooks pick up the new failure event when the app starts, for Claude sessions opened after that</li>
+<li>The Codex tab shows OpenAI's published Codex Desktop status in the same row, and a newly reported issue can send a notification too</li>
+<li>When Claude Code's `/usage` reports a separate Fable weekly limit, Home shows it beside the 5-hour and weekly limits (read at most every 15 minutes while Home is open)</li>
+<li>Statistics is now a card dashboard: today, the last 7 days and your streak on top, the week's tokens stacked by Claude and Codex, and the year graph below</li>
+<li>Every cat now has the same black outline as the black cat, with stray pixels cleaned up</li>
+<li>Update notes like these now come in Korean on Macs set to Korean</li>
+<li>README: new Statistics screenshot, notch GIF and cat portraits</li>
 </ul>
+<p>If you like the cats, please <a href="https://github.com/changchangwoo/TokenCats">⭐ star the repo on GitHub</a>. It really helps! 🐟</p>
 ]]></description>
-            <enclosure url="https://github.com/changchangwoo/TokenCats/releases/download/v0.1.6/TokenCats-0.1.6.zip" length="12458338" type="application/octet-stream" sparkle:edSignature="AzSHEm4I49IJeTG5Vd25m1vkhL39V4a2HbfmomLOlCQfu5pnef5CkqLPm71rOB6V78Yst/GOHRRxYSEGKTqlDQ=="/>
+            <description xml:lang="ko"><![CDATA[<ul>
+<li>홈의 사용 한도 아래에 Claude Code 서비스 상태가 나와요. Claude 요청이 서버 오류나 과부하로 실패하면 Claude 공개 상태 페이지를 확인하고(최대 5분에 한 번, 세션 정보는 보내지 않아요) 그 줄을 빨갛게 바꾼 뒤, 보고된 장애를 알려 주고 macOS 알림도 보낼 수 있어요. 연결된 훅은 앱이 시작될 때 새 실패 이벤트를 받고, 그 뒤에 연 Claude 세션부터 적용돼요</li>
+<li>Codex 탭에서도 같은 줄에 OpenAI가 공개하는 Codex Desktop 상태가 나오고, 새로 보고된 장애는 알림으로도 알려 줘요</li>
+<li>Claude Code의 `/usage`가 Fable 주간 한도를 따로 알려 주면 홈에서 5시간·주간 한도 옆에 함께 보여 줘요(홈이 열려 있을 때 최대 15분에 한 번 읽어요)</li>
+<li>통계가 카드형 대시보드로 바뀌었어요. 위에는 오늘·최근 7일·연속일, 가운데는 Claude와 Codex로 나눠 쌓은 일주일 토큰, 아래에는 1년 그래프가 있어요</li>
+<li>모든 고양이가 검정 고양이와 같은 검정 외곽선을 갖게 됐고, 자잘하게 튀던 픽셀도 정리했어요</li>
+<li>이런 업데이트 안내가 이제 한국어로 설정된 맥에서는 한국어로 나와요</li>
+<li>README: 통계 화면, 노치 GIF, 고양이 얼굴 그림을 새로 바꿨어요</li>
+</ul>
+<p>고양이가 마음에 들었다면 <a href="https://github.com/changchangwoo/TokenCats">GitHub에서 ⭐ 스타</a>를 눌러 주세요. 큰 도움이 돼요! 🐟</p>
+]]></description>
+            <enclosure url="https://github.com/changchangwoo/TokenCats/releases/download/v0.1.7/TokenCats-0.1.7.zip" length="11596102" type="application/octet-stream" sparkle:edSignature="0WJbuGe5w0T01+XCWFTK3/PPJvQmeFZU3joMrBGyMXsVBswVq+vVS3XVF/BrC0f+7/cqQ4NZk+BE7GRC2basBw=="/>
         </item>
     </channel>
 </rss>
