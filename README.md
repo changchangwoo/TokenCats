@@ -36,7 +36,7 @@
 > Going forward, we plan to support more agents such as Gemini CLI and Kiro. Contributors are always welcome!
 
 <p align="center">
-  <img src="docs/readme/notch.gif" width="720" alt="Hover the notch and the room opens; pet a cat and it floats a heart">
+  <img src="docs/readme/notch.gif" width="636" alt="Hover the notch and the room opens; pet a cat and it floats a heart">
 </p>
 
 - With the notch closed, the cats sit on either side of it.

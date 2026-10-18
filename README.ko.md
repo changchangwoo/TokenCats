@@ -36,7 +36,7 @@
 > 앞으로 Gemini CLI, Kiro 등 더 많은 에이전트를 지원할 예정이에요. 함께 만들어 갈 기여자를 언제나 환영해요!
 
 <p align="center">
-  <img src="docs/readme/notch.gif" width="720" alt="노치에 마우스를 올리면 방이 열리고, 쓰다듬으면 하트를 띄우는 고양이들">
+  <img src="docs/readme/notch.gif" width="636" alt="노치에 마우스를 올리면 방이 열리고, 쓰다듬으면 하트를 띄우는 고양이들">
 </p>
 
 - 노치를 닫아 두면 고양이들이 노치 양옆에 앉아 있어요.
