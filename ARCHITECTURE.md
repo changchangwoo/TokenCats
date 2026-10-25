@@ -7,7 +7,7 @@ app/TokenCats/
   Core/        Rules and data. SwiftPM target TokenCatsCore. No UI; this is what the tests cover.
   Features/    Screens. One folder per screen (Home · Cats · Store · ClosedNotch · Profile · Settings · Shared).
   NotchShell/  The notch window taken from boring.notch: open/close, gestures, sizing, animation, welcome screen.
-  App/         Entry point (TokenCatsApp) and the menu bar.
+  App/         Entry point (TokenCatsApp), the shell switch (CompanionShell) and the menu bar panel (MenuBarShell/).
   Resources/   JSON catalogs, cat and room art (build output), fonts, hook scripts.
 Tests/TokenCatsCoreTests/   Mirrors the Core folder structure.
 art-src/      Art sources. Cat and room art is edited here only (art-src/README.md).
@@ -15,7 +15,7 @@ art-src/      Art sources. Cat and room art is edited here only (art-src/README.
 
 Dependencies point **Features → Core**; **NotchShell** opens the window and hosts the Features screens. Features reads
 only two pieces of NotchShell window state (`NotchCoordinator`: open tab and display, `BatteryStatusViewModel`:
-battery). Core imports only `Foundation`, `Combine`, `Darwin` and `os.log`, and knows nothing of SwiftUI, AppKit or
+battery). Core imports only `Foundation`, `Combine`, `Darwin`, `os.log` and `CoreGraphics` (geometry types only), and knows nothing of SwiftUI, AppKit or
 `Defaults`. That is why `swift test` runs without Xcode, and why every rule — card, ledger, room layout — is pinned by
 a test.
 
@@ -23,6 +23,15 @@ a test.
 work. TokenCats rules that have nothing to do with the notch must not end up in there. The one exception is
 `FullscreenDetector`, which does in-house what boring.notch did through an external package: detect full-screen apps
 (the closed notch and its cats hide over a full-screen app).
+
+### Two shells
+
+The open screens are hosted by one of two shells, picked once per launch by `ShellLaunch` from the
+`Automatic | Notch | Menu bar` preference (`ShellPreference` in Core; Automatic means the notch only on a display with
+a camera notch). `NotchShellController` runs the notch windows; `MenuBarShellController` runs a status item and a
+panel under it. Both conform to `CompanionShell` and show the same `NotchHeader` + `CompanionTabContent`, so a screen
+added to Features appears in both. Changing the preference relaunches the app. A new shell is a `ShellMode` case and
+a type conforming to `CompanionShell`; `AppDelegate` keeps only what every shell shares.
 
 ## Data flow
 
@@ -90,7 +99,7 @@ Add that language's column to `Resources/Localizable.xcstrings` and you are done
 built by `AppLanguage` from the languages in the bundle (`Bundle.main.localizations`), with each name shown in its own
 language. No code changes. To manage a language through translation fragments (`Resources/l10n/*.json`) the way Korean
 is, add its code to `TARGETS` in `scripts/build-string-catalog.py`. Language flows through a single
-`environment(\.locale)` that `.localized()` applies at the four root views (notch, settings, onboarding, menu bar), so
+`environment(\.locale)` that `.localized()` applies at the five root views (notch, menu bar panel, settings, onboarding, menu bar menu), so
 picking it in Settings takes effect without a relaunch. The profile card SVG is seen worldwide and is always English.
 
 ## Tests and verification
