@@ -2,10 +2,11 @@ import AppKit
 import Combine
 import Defaults
 
-/// The borderless window under the menu bar icon. Sized for the tallest tab plus room for the shadow; the visible
-/// panel is drawn top-aligned inside it and clicks on the transparent rest pass through to the app below.
+/// The borderless window under the menu bar icon. It never changes size: it is as tall as the tallest tab, the
+/// visible panel is drawn top-aligned inside it and grows or shrinks downward only, so its top edge stays put. The
+/// transparent rest lets clicks through, and the system shadow follows the visible panel's shape.
 final class MenuBarPanel: NSPanel {
-    static let size = CGSize(width: windowSize.width + 2 * shadowPadding, height: windowSize.height)
+    static let size = CGSize(width: openNotchSize.width, height: windowSize.height)
 
     init() {
         super.init(contentRect: NSRect(origin: .zero, size: Self.size),
@@ -14,7 +15,7 @@ final class MenuBarPanel: NSPanel {
         isFloatingPanel = true
         isOpaque = false
         backgroundColor = .clear
-        hasShadow = false
+        hasShadow = true
         isMovable = false
         isReleasedWhenClosed = false
         level = .statusBar

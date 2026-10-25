@@ -1,4 +1,5 @@
 import AppKit
+import Combine
 import KeyboardShortcuts
 import SwiftUI
 
@@ -15,13 +16,17 @@ final class MenuBarShellController: NSObject, CompanionShell {
     private var isOpen = false
     private var outsideClickMonitor: Any?
     private var otherWindowObserver: NSObjectProtocol?
+    private var sizeObserver: AnyCancellable?
 
     // MARK: - CompanionShell
 
     func start() {
         // No notch, so no hello scene in it.
         NotchCoordinator.shared.helloAnimationRunning = false
-        panel.contentView = NSHostingView(rootView: MenuBarPanelView().environmentObject(vm).localized())
+        let host = NSHostingView(rootView: MenuBarPanelView().environmentObject(vm).localized())
+        // The window keeps its fixed size; the SwiftUI content must not resize it.
+        host.sizingOptions = []
+        panel.contentView = host
 
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         if let button = item.button {
@@ -44,6 +49,14 @@ final class MenuBarShellController: NSObject, CompanionShell {
                 self.hide()
             }
         }
+        // Each tab has its own height and Home grows with its sections. The panel animates downward inside the
+        // fixed window; once it settles, the system shadow is recomputed around the new shape.
+        sizeObserver = vm.$notchSize
+            .removeDuplicates()
+            .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
+            .sink { [weak self] _ in
+                MainActor.assumeIsolated { self?.panel.invalidateShadow() }
+            }
         KeyboardShortcuts.onKeyDown(for: .toggleNotchOpen) { [weak self] in
             Task { @MainActor in self?.toggle() }
         }
@@ -76,17 +89,17 @@ final class MenuBarShellController: NSObject, CompanionShell {
     }
 
     private func show() {
-        guard !isOpen, let button = statusItem?.button, let buttonWindow = button.window else { return }
-        let iconFrame = buttonWindow.convertToScreen(button.convert(button.bounds, to: nil))
-        let visible = (buttonWindow.screen ?? NSScreen.main)?.visibleFrame ?? .zero
-        panel.setFrameOrigin(MenuBarPanelPlacement.origin(iconMidX: iconFrame.midX, visibleFrame: visible,
-                                                          panelSize: MenuBarPanel.size))
+        guard !isOpen, let button = statusItem?.button else { return }
+        guard let frame = frame() else { return }
         isOpen = true
-        vm.open()
+        panel.setFrame(frame, display: true)
         panel.orderFrontRegardless()
         panel.makeKey()
-        button.highlight(true)
-        // Global monitors see only clicks that go to other apps, including clicks on the panel's transparent area.
+        // Content goes in once the window is on screen, so its unrolling animation is seen from the start.
+        vm.open()
+        // After the click's own mouse-up, which would clear the highlight again.
+        DispatchQueue.main.async { button.highlight(true) }
+        // Global monitors see only clicks that go to other apps.
         outsideClickMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] _ in
             DispatchQueue.main.async { self?.hide() }
         }
@@ -95,13 +108,23 @@ final class MenuBarShellController: NSObject, CompanionShell {
     private func hide() {
         guard isOpen else { return }
         isOpen = false
-        panel.orderOut(nil)
-        vm.close()
         statusItem?.button?.highlight(false)
         if let monitor = outsideClickMonitor {
             NSEvent.removeMonitor(monitor)
             outsideClickMonitor = nil
         }
+        // Closing is immediate, like a system menu.
+        panel.orderOut(nil)
+        vm.close()
+    }
+
+    /// The window's frame under the icon, on the icon's screen.
+    private func frame() -> NSRect? {
+        guard let button = statusItem?.button, let buttonWindow = button.window else { return nil }
+        let icon = buttonWindow.convertToScreen(button.convert(button.bounds, to: nil))
+        let visible = (buttonWindow.screen ?? NSScreen.main)?.visibleFrame ?? .zero
+        let origin = MenuBarPanelPlacement.origin(icon: icon, visibleFrame: visible, panelSize: MenuBarPanel.size)
+        return NSRect(origin: origin, size: MenuBarPanel.size)
     }
 
     // MARK: - Menu
