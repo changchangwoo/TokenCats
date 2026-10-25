@@ -19,6 +19,8 @@ enum AppSettings {
         static let roomTheme = RoomThemeSelection.key
         /// The notch tab to reopen on.
         static let lastNotchTab = "companionLastNotchTab"
+        /// `ShellPreference` raw value: Automatic, Notch or Menu bar. Read once per launch (`ShellLaunch`).
+        static let shellPreference = "shellPreference"
         /// Every store price is 0 (Debug default; `defaults write … storeFreeForTesting -bool NO` to turn off).
         static let storeFreeForTesting = "storeFreeForTesting"
         /// Overrides for the GitHub connection, set with `defaults write` while testing.
