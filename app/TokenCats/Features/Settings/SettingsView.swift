@@ -11,14 +11,18 @@ struct SettingsView: View {
                 Section("TokenCats") {
                     NavigationLink(value: "CompanionGeneral") { Label("General", systemImage: "gear") }
                     NavigationLink(value: "Home") { Label("Home display", systemImage: "house") }
-                    NavigationLink(value: "ClosedNotch") { Label("Closed notch", systemImage: "pawprint") }
+                    if ShellLaunch.mode == .notch {
+                        NavigationLink(value: "ClosedNotch") { Label("Closed notch", systemImage: "pawprint") }
+                    }
                     NavigationLink(value: "Performance") { Label("Performance", systemImage: "bolt.badge.clock") }
                     NavigationLink(value: "Agents") { Label("Agents", systemImage: "terminal") }
                     NavigationLink(value: "Profile") { Label("GitHub profile", systemImage: "person.crop.square") }
                     NavigationLink(value: "Data") { Label("Data", systemImage: "externaldrive") }
                 }
                 Section("Advanced") {
-                    NavigationLink(value: "Notch") { Label("Notch", systemImage: "macbook") }
+                    if ShellLaunch.mode == .notch {
+                        NavigationLink(value: "Notch") { Label("Notch", systemImage: "macbook") }
+                    }
                     #if DEBUG
                     NavigationLink(value: "Developer") { Label("Developer", systemImage: "hammer") }
                     #endif

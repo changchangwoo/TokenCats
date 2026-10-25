@@ -875,6 +875,28 @@
         }
       }
     },
+    "Automatic": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "자동"
+          }
+        }
+      }
+    },
+    "Automatic uses the notch on a Mac with a camera notch and the menu bar everywhere else, where a drawn notch would cover browser tabs.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "자동은 카메라 노치가 있는 맥에서는 노치를, 그 밖의 화면에서는 메뉴 막대를 씁니다. 노치가 없는 화면에 노치를 그리면 브라우저 탭을 가릴 수 있기 때문입니다."
+          }
+        }
+      }
+    },
     "Average per active day": {
       "extractionState": "manual",
       "localizations": {
@@ -2976,6 +2998,17 @@
         }
       }
     },
+    "Menu bar": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "메뉴 막대"
+          }
+        }
+      }
+    },
     "Menu bar height": {
       "extractionState": "manual",
       "localizations": {
@@ -3456,6 +3489,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "노치 열기/닫기"
+          }
+        }
+      }
+    },
+    "Open or close the panel": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "패널 열기/닫기"
           }
         }
       }
@@ -4120,6 +4164,17 @@
         }
       }
     },
+    "Restart to apply": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다시 시작해서 적용"
+          }
+        }
+      }
+    },
     "Restore and restart": {
       "extractionState": "manual",
       "localizations": {
@@ -4358,6 +4413,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "단축키"
+          }
+        }
+      }
+    },
+    "Show TokenCats in": {
+      "extractionState": "manual",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TokenCats 표시 위치"
           }
         }
       }
