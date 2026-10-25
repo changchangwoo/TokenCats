@@ -11,6 +11,8 @@ final class MenuBarShellController: NSObject, CompanionShell {
     /// The panel's own model: `open()` on show, `close()` on hide, so Home's resizing and "Remember the last tab"
     /// work as in the notch.
     private let vm = NotchViewModel()
+    /// The panel's state as this controller set it; `panel.isVisible` alone can drift from it.
+    private var isOpen = false
     private var outsideClickMonitor: Any?
     private var otherWindowObserver: NSObjectProtocol?
 
@@ -31,13 +33,14 @@ final class MenuBarShellController: NSObject, CompanionShell {
         }
         statusItem = item
 
-        // Settings or onboarding coming forward closes the panel instead of hiding under it.
+        // Settings or onboarding coming forward closes the panel instead of hiding under it. Alerts, sheets and
+        // popovers the panel's own screens open are panels or attached windows, and leave it open.
         otherWindowObserver = NotificationCenter.default.addObserver(
             forName: NSWindow.didBecomeKeyNotification, object: nil, queue: .main
         ) { [weak self] note in
             let window = note.object as? NSWindow
             MainActor.assumeIsolated {
-                guard let self, let window, window !== self.panel else { return }
+                guard let self, let window, Self.isAppWindow(window) else { return }
                 self.hide()
             }
         }
@@ -65,16 +68,20 @@ final class MenuBarShellController: NSObject, CompanionShell {
 
     // MARK: - Panel
 
-    private var isShown: Bool { panel.isVisible }
+    private func toggle() { isOpen ? hide() : show() }
 
-    private func toggle() { isShown ? hide() : show() }
+    /// A titled, free-standing app window such as Settings or onboarding.
+    private static func isAppWindow(_ window: NSWindow) -> Bool {
+        window.styleMask.contains(.titled) && !(window is NSPanel) && window.sheetParent == nil && window.parent == nil
+    }
 
     private func show() {
-        guard !isShown, let button = statusItem?.button, let buttonWindow = button.window else { return }
+        guard !isOpen, let button = statusItem?.button, let buttonWindow = button.window else { return }
         let iconFrame = buttonWindow.convertToScreen(button.convert(button.bounds, to: nil))
         let visible = (buttonWindow.screen ?? NSScreen.main)?.visibleFrame ?? .zero
         panel.setFrameOrigin(MenuBarPanelPlacement.origin(iconMidX: iconFrame.midX, visibleFrame: visible,
                                                           panelSize: MenuBarPanel.size))
+        isOpen = true
         vm.open()
         panel.orderFrontRegardless()
         panel.makeKey()
@@ -86,7 +93,8 @@ final class MenuBarShellController: NSObject, CompanionShell {
     }
 
     private func hide() {
-        guard isShown else { return }
+        guard isOpen else { return }
+        isOpen = false
         panel.orderOut(nil)
         vm.close()
         statusItem?.button?.highlight(false)

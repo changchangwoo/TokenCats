@@ -18,15 +18,23 @@ protocol CompanionShell: AnyObject {
 /// The shell this launch runs in, decided once: changing the preference in Settings relaunches the app.
 @MainActor
 enum ShellLaunch {
-    static var hasNotchDisplay: Bool { NSScreen.screens.contains { $0.safeAreaInsets.top > 0 } }
+    /// Nil while no display is connected (asleep at login): nothing to tell yet.
+    static var hasNotchDisplay: Bool? {
+        let screens = NSScreen.screens
+        return screens.isEmpty ? nil : screens.contains { $0.safeAreaInsets.top > 0 }
+    }
 
     static let mode: ShellMode = {
         let defaults = UserDefaults.standard
         let preference = ShellPreference.stored(defaults.string(forKey: AppSettings.Key.shellPreference),
                                                 isFirstLaunch: NotchCoordinator.shared.firstLaunch)
-        // Written back so a new user who finishes onboarding (firstLaunch turns false) keeps Automatic next launch.
+        let lastMode = defaults.string(forKey: AppSettings.Key.shellLastMode).flatMap(ShellMode.init(rawValue:))
+        let mode = preference.resolve(hasNotchDisplay: hasNotchDisplay, lastMode: lastMode)
+        // Written back so a new user who finishes onboarding (firstLaunch turns false) keeps Automatic next launch,
+        // and so a launch with no display yet can follow this one.
         defaults.set(preference.rawValue, forKey: AppSettings.Key.shellPreference)
-        return preference.resolve(hasNotchDisplay: hasNotchDisplay)
+        defaults.set(mode.rawValue, forKey: AppSettings.Key.shellLastMode)
+        return mode
     }()
 
     static func makeShell() -> CompanionShell {

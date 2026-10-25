@@ -1,4 +1,6 @@
 import AppKit
+import Combine
+import Defaults
 
 /// The borderless window under the menu bar icon. Sized for the tallest tab plus room for the shadow; the visible
 /// panel is drawn top-aligned inside it and clicks on the transparent rest pass through to the app below.
@@ -18,7 +20,14 @@ final class MenuBarPanel: NSPanel {
         level = .statusBar
         appearance = NSAppearance(named: .darkAqua)
         collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .ignoresCycle]
+        // The controller decides when the panel goes away; AppKit hiding it on deactivate would leave the two out
+        // of step.
+        hidesOnDeactivate = false
+        sharingObserver = Defaults.publisher(.hideFromScreenRecording)
+            .sink { [weak self] change in self?.sharingType = change.newValue ? .none : .readWrite }
     }
+
+    private var sharingObserver: AnyCancellable?
 
     /// A text field inside (naming a cat) needs the keyboard.
     override var canBecomeKey: Bool { true }

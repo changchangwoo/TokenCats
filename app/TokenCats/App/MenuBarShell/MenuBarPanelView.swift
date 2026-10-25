@@ -32,6 +32,5 @@ struct MenuBarPanelView: View {
             }
         }
         .preferredColorScheme(.dark)
-        .environmentObject(vm)
     }
 }

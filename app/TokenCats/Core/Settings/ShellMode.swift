@@ -15,12 +15,15 @@ enum ShellPreference: String, CaseIterable, Sendable {
     static let `default` = ShellPreference.automatic
 
     /// An explicit choice always wins. `automatic` takes the notch only when a display has a camera notch: on any
-    /// other display a drawn notch covers usable pixels, such as a browser's tab strip.
-    func resolve(hasNotchDisplay: Bool) -> ShellMode {
+    /// other display a drawn notch covers usable pixels, such as a browser's tab strip. `hasNotchDisplay` is nil when
+    /// no display is connected yet (asleep at login); Automatic then keeps `lastMode`, or the notch without one.
+    func resolve(hasNotchDisplay: Bool?, lastMode: ShellMode?) -> ShellMode {
         switch self {
         case .notch: return .notch
         case .menuBar: return .menuBar
-        case .automatic: return hasNotchDisplay ? .notch : .menuBar
+        case .automatic:
+            guard let hasNotchDisplay else { return lastMode ?? .notch }
+            return hasNotchDisplay ? .notch : .menuBar
         }
     }
 
