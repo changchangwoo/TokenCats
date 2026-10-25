@@ -195,33 +195,15 @@ struct ContentView: View {
               }
               .zIndex(2)
             if vm.notchState == .open {
-                ZStack(alignment: .top) {
-                    Group {
-                        switch coordinator.currentView {
-                        case .home:
-                            HomeView()
-                        case .statistics:
-                            StatisticsTabView()
-                        case .store:
-                            StoreView()
-                        case .cats:
-                            MyCatsView()
-                        }
-                    }
-                    .id(coordinator.currentView)
-                    .transition(.asymmetric(
-                        insertion: .opacity.combined(with: .offset(y: 8)),
-                        removal: .opacity.combined(with: .offset(y: -8))))
-                }
-                .animation(.smooth(duration: 0.28), value: coordinator.currentView)
-                .transition(
-                    .scale(scale: 0.8, anchor: .top)
-                    .combined(with: .opacity)
-                    .animation(.smooth(duration: 0.35))
-                )
-                .zIndex(1)
-                .allowsHitTesting(vm.notchState == .open)
-                .opacity(gestureProgress != 0 ? 1.0 - min(abs(gestureProgress) * 0.1, 0.3) : 1.0)
+                CompanionTabContent()
+                    .transition(
+                        .scale(scale: 0.8, anchor: .top)
+                        .combined(with: .opacity)
+                        .animation(.smooth(duration: 0.35))
+                    )
+                    .zIndex(1)
+                    .allowsHitTesting(vm.notchState == .open)
+                    .opacity(gestureProgress != 0 ? 1.0 - min(abs(gestureProgress) * 0.1, 0.3) : 1.0)
             }
         }
     }

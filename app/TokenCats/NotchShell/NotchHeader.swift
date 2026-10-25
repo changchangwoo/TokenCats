@@ -7,6 +7,9 @@ import SwiftUI
 struct NotchHeader: View {
     @EnvironmentObject var vm: NotchViewModel
     @ObservedObject var coordinator = NotchCoordinator.shared
+    /// Off in the menu bar panel: there is no physical notch to cover, and the settings gear always shows because
+    /// the "Settings icon in the notch" switch lives on the Notch page, which menu bar mode hides.
+    var showsNotchMask: Bool = true
 
     var body: some View {
         HStack(spacing: 0) {
@@ -18,7 +21,7 @@ struct NotchHeader: View {
             .blur(radius: vm.notchState == .closed ? 20 : 0)
             .zIndex(2)
 
-            if vm.notchState == .open {
+            if showsNotchMask && vm.notchState == .open {
                 Rectangle()
                     .fill(NSScreen.screen(withUUID: coordinator.selectedScreenUUID)?.safeAreaInsets.top ?? 0 > 0 ? .black : .clear)
                     .frame(width: vm.closedNotchSize.width)
@@ -29,7 +32,7 @@ struct NotchHeader: View {
                 if vm.notchState == .open {
                     headerButton("pawprint.fill", label: "Collection", view: .cats)
                     headerButton("cart.fill", label: "Store", view: .store)
-                    if Defaults[.settingsIconInNotch] {
+                    if Defaults[.settingsIconInNotch] || !showsNotchMask {
                         Button {
                             DispatchQueue.main.async { SettingsWindowController.shared.showWindow() }
                         } label: {
