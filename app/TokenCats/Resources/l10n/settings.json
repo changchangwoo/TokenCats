@@ -137,5 +137,11 @@
   "Xcode Command Line Tools are missing, so nothing was connected. Run xcode-select --install in Terminal, then connect again": "Xcode 명령줄 도구가 없어 연결하지 않았습니다. 터미널에서 xcode-select --install 후 다시 연결하세요",
   "Show first-run setup again": "처음 설정 다시 보기",
   "Connect agents, Claude limits and the GitHub card step by step.": "에이전트, Claude 사용 한도, GitHub 카드를 한 단계씩 연결해요.",
-  "Cat bond levels": "고양이 친밀도 레벨"
+  "Cat bond levels": "고양이 친밀도 레벨",
+  "Show TokenCats in": "TokenCats 표시 위치",
+  "Automatic": "자동",
+  "Menu bar": "메뉴 막대",
+  "Open or close the panel": "패널 열기/닫기",
+  "Restart to apply": "다시 시작해서 적용",
+  "Automatic uses the notch on a Mac with a camera notch and the menu bar everywhere else, where a drawn notch would cover browser tabs.": "자동은 카메라 노치가 있는 맥에서는 노치를, 그 밖의 화면에서는 메뉴 막대를 씁니다. 노치가 없는 화면에 노치를 그리면 브라우저 탭을 가릴 수 있기 때문입니다."
 }
