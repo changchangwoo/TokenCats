@@ -1,5 +1,6 @@
 // Adapted from Notchi (https://github.com/sk-ruban/notchi) commit e6f8b8a, GPL-3.0.
-// Changes: envelope type renamed to HookEnvelope, socket path and log subsystem renamed, modifiers removed.
+// Changes: envelope type renamed to HookEnvelope, socket path and log subsystem renamed, modifiers removed; stopping
+// removes only the socket file this server bound, and startup keeps waiting for a busy socket instead of giving up.
 
 import Foundation
 import os.log
@@ -33,11 +34,12 @@ final class SocketServer: AgentHookEventSource, @unchecked Sendable {
     private static func fitsInSocketAddress(_ path: String) -> Bool {
         path.utf8.count <= maxSocketPathLength
     }
-    private static let startRetryDelay: DispatchTimeInterval = .milliseconds(250)
     private static let maxStartRetryAttempts = 8
 
     private let socketPath: String
     private let clientReadTimeout: TimeInterval
+    private let startRetryDelay: DispatchTimeInterval
+    private let slowStartRetryDelay: DispatchTimeInterval
     private var serverSocket: Int32 = -1
     /// The socket file this server bound, by device and inode. Stopping removes the file at `socketPath` only while it
     /// is still this one: a copy that found the socket busy never bound, and a file another copy bound after ours was
@@ -46,12 +48,18 @@ final class SocketServer: AgentHookEventSource, @unchecked Sendable {
     private var acceptSource: DispatchSourceRead?
     private var eventHandler: HookEnvelopeHandler?
     private var pendingStartRetry: DispatchWorkItem?
+    /// Set when the quick retries ran out with the socket still busy, so the slower checks after them log once.
+    private var waitingForBusySocket = false
     private let serverQueue = DispatchQueue(label: "io.github.changchangwoo.tokencats.socket.server", qos: .userInitiated)
     private let clientQueue = DispatchQueue(label: "io.github.changchangwoo.tokencats.socket.client", qos: .userInitiated, attributes: .concurrent)
 
-    init(socketPath: String = SocketServer.socketPath, clientReadTimeout: TimeInterval = 0.5) {
+    init(socketPath: String = SocketServer.socketPath, clientReadTimeout: TimeInterval = 0.5,
+         startRetryDelay: DispatchTimeInterval = .milliseconds(250),
+         slowStartRetryDelay: DispatchTimeInterval = .seconds(2)) {
         self.socketPath = socketPath
         self.clientReadTimeout = clientReadTimeout
+        self.startRetryDelay = startRetryDelay
+        self.slowStartRetryDelay = slowStartRetryDelay
     }
 
     func start(onEvent: @escaping HookEnvelopeHandler) {
@@ -445,27 +453,35 @@ final class SocketServer: AgentHookEventSource, @unchecked Sendable {
         onEvent: @escaping HookEnvelopeHandler,
         retryAttemptsRemaining: Int
     ) {
-        guard retryAttemptsRemaining > 0 else {
-            logger.error(
-                "Socket listener remained busy at \(self.socketPath, privacy: .public); giving up after retries"
+        let delay: DispatchTimeInterval
+        if retryAttemptsRemaining > 0 {
+            logger.warning(
+                "Socket listener already active at \(self.socketPath, privacy: .public); retrying startup (\(retryAttemptsRemaining - 1) attempts left)"
             )
-            return
+            delay = startRetryDelay
+        } else {
+            // WHY: another copy still holds the socket, such as an old copy slow to quit after a relaunch or a second
+            // build running. Giving up would leave this copy without hooks until its next launch; checking slowly
+            // lets it take the socket over once that copy quits.
+            if !waitingForBusySocket {
+                waitingForBusySocket = true
+                logger.warning(
+                    "Socket listener still busy at \(self.socketPath, privacy: .public); checking again until it is free"
+                )
+            }
+            delay = slowStartRetryDelay
         }
-
-        logger.warning(
-            "Socket listener already active at \(self.socketPath, privacy: .public); retrying startup (\(retryAttemptsRemaining - 1) attempts left)"
-        )
 
         pendingStartRetry?.cancel()
         let workItem = DispatchWorkItem { [weak self] in
             self?.startServer(
                 onEvent: onEvent,
-                retryAttemptsRemaining: retryAttemptsRemaining - 1
+                retryAttemptsRemaining: max(retryAttemptsRemaining - 1, 0)
             )
         }
         pendingStartRetry = workItem
         serverQueue.asyncAfter(
-            deadline: .now() + Self.startRetryDelay,
+            deadline: .now() + delay,
             execute: workItem
         )
     }

@@ -62,6 +62,30 @@ struct SocketHandoffTests {
         #expect(received.value?.event == "Stop")
     }
 
+    @Test func aWaitingCopyTakesTheSocketOverWhenTheOtherQuitsAfterTheQuickRetries() throws {
+        let path = try makeTempDirectory().appendingPathComponent("late.sock").path
+        let old = SocketServer(socketPath: path, clientReadTimeout: 0.5)
+        old.start { _ in nil }
+        #expect(Self.wait { FileManager.default.fileExists(atPath: path) })
+
+        let received = Box<HookEnvelope?>(nil)
+        let new = SocketServer(socketPath: path, clientReadTimeout: 0.5,
+                               startRetryDelay: .milliseconds(10), slowStartRetryDelay: .milliseconds(50))
+        new.start { envelope in received.value = envelope; return nil }
+        defer { new.stop() }
+        // The old copy quits long after the quick retries (8 × 10 ms) are over, like a relaunch whose old copy is
+        // slow to quit.
+        Thread.sleep(forTimeInterval: 0.3)
+        old.stop()
+
+        let deadline = Date().addingTimeInterval(2)
+        while received.value == nil, Date() < deadline {
+            _ = try runHookScript(socketPath: path, provider: "claude", input: Self.stopEvent)
+            Thread.sleep(forTimeInterval: 0.05)
+        }
+        #expect(received.value?.event == "Stop")
+    }
+
     /// Polls until `condition` holds or `timeout` passes; true when it held.
     private static func wait(timeout: TimeInterval = 2, _ condition: () -> Bool) -> Bool {
         let deadline = Date().addingTimeInterval(timeout)
