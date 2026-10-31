@@ -39,6 +39,10 @@ final class SocketServer: AgentHookEventSource, @unchecked Sendable {
     private let socketPath: String
     private let clientReadTimeout: TimeInterval
     private var serverSocket: Int32 = -1
+    /// The socket file this server bound, by device and inode. Stopping removes the file at `socketPath` only while it
+    /// is still this one: a copy that found the socket busy never bound, and a file another copy bound after ours was
+    /// removed belongs to that copy.
+    private var boundSocketFile: (device: dev_t, inode: ino_t)?
     private var acceptSource: DispatchSourceRead?
     private var eventHandler: HookEnvelopeHandler?
     private var pendingStartRetry: DispatchWorkItem?
@@ -122,6 +126,10 @@ final class SocketServer: AgentHookEventSource, @unchecked Sendable {
             close(serverSocket)
             serverSocket = -1
             return
+        }
+        var bound = stat()
+        if lstat(socketPath, &bound) == 0 {
+            boundSocketFile = (bound.st_dev, bound.st_ino)
         }
 
         if chmod(socketPath, 0o600) != 0 {
@@ -253,7 +261,13 @@ final class SocketServer: AgentHookEventSource, @unchecked Sendable {
             serverSocket = -1
         }
 
-        unlink(socketPath)
+        if let owned = boundSocketFile {
+            var current = stat()
+            if lstat(socketPath, &current) == 0, current.st_dev == owned.device, current.st_ino == owned.inode {
+                unlink(socketPath)
+            }
+            boundSocketFile = nil
+        }
     }
 
     private func acceptConnections() {
